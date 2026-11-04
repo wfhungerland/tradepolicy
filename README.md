@@ -60,7 +60,30 @@ Flat structure, at most one folder level. Scripts are numbered in run order.
 | `config.py` | loads `config.yaml`, checks paths |
 | `environment.yml` | Python environment |
 | `literature_gravity_nowcasting.md` | literature review, strand 1 |
+| `complexity.py` | RCA, ECI/PCI (eigenvector), proximity, density, COI/COG, Fitness-Complexity |
+| `panel.py` | fixed country-product panel, filters, smoothing, yearly runs |
+| `01_exports.py` | BACI raw CSV to country x HS6 x year exports, population from CEPII Gravity |
+| `02_complexity.py` | main complexity run (`hs4`, or `hs6` as argument) |
+| `03_germany.py` | Germany vs peers: ranks, gaps, complexity quintiles, gained/lost products, opportunities |
+| `04_robustness.py` | RCA thresholds, smoothing windows, HS6, without re-export hubs, Fitness-Complexity |
+| `test_complexity.py` | checks against py-ecomplexity formulas and the method of reflections |
 | `complexity_methods.md` | methods review and specification, strand 2 |
+
+## Running strand 2
+
+In the Anaconda Prompt, inside the project folder, with `conda activate tradepolicy`:
+
+```bash
+python -m pytest test_complexity.py
+python 01_exports.py
+python 02_complexity.py
+python 03_germany.py
+python 02_complexity.py hs6
+python 03_germany.py hs6
+python 04_robustness.py
+```
+
+`01_exports.py` reads the BACI CSV files once (roughly 10-20 minutes). Peers, filters and thresholds are set in the `complexity` block of `config.yaml`.
 
 Results (tables, figures, intermediate files) are written to the `output` folder set in `config.yaml`, outside the repository.
 
@@ -68,5 +91,6 @@ Results (tables, figures, intermediate files) are written to the `output` folder
 
 - [x] Repository and configuration
 - [x] Strand 1: literature review (verdict: gravity unsuitable for aggregate short-term forecasts; see review)
-- [ ] Strand 2: method review, RCA, ECI/PCI, proximity, density, COI, Germany analysis
-- [ ] Strand 1: gravity forecasts against benchmarks
+- [x] Strand 2: method review and code (tested on synthetic data)
+- [ ] Strand 2: run on BACI and interpret
+- [ ] Strand 1: gravity forecasts against benchmarks (on hold)

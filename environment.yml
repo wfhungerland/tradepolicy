@@ -12,6 +12,7 @@ dependencies:
   - statsmodels
   - pyreadstat
   - jupyterlab
+  - pytest
   - pip
   - pip:
       - pyfixest

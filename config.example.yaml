@@ -5,6 +5,7 @@ data:
   baci_derived: "E:/Daten/BACI/derived"          # BACI HS92 yearly .dta files
   baci_raw: "E:/Daten/BACI/raw/HS92_V202601"     # BACI raw CSV
   gravity: "E:/Daten/BACI/derived/gravity"       # CEPII Gravity V202211
+  gravity_raw: "E:/Daten/BACI/raw/Gravity_V202211"  # raw Gravity CSV (population)
   tariffs: "E:/Daten/BACI/derived/tariffs"       # MAcMap-HS6
   history: "E:/Daten/BACI/derived/history"       # TRADHIST, RICardo
   comext: "E:/Daten/COMEXT"                      # Eurostat Comext, German exports by SITC
@@ -15,3 +16,12 @@ output: "E:/Daten/tradepolicy_output"
 years:
   start: 1995
   end: 2024
+
+complexity:
+  focus: DEU
+  peers: [CHN, USA, JPN, KOR, ITA, FRA, GBR, NLD, CHE, MEX]
+  hubs: [NLD, BEL, SGP, HKG]        # re-export hubs, dropped in a robustness run
+  min_population_thousands: 1000    # mean population >= 1 million
+  min_exports_thousand_usd: 1000000 # mean exports >= USD 1 billion
+  min_world_exports_hs4: 40000      # thousand USD, mean over years
+  min_world_exports_hs6: 10000      # thousand USD, mean over years (OEC rule: a quarter of HS4)

@@ -134,8 +134,9 @@ def main(level="hs4"):
     # 4. Products gained and lost, first vs last year
     first = cpq[cpq.year == y0].set_index(["iso3", "prod"])
     last = cpq[cpq.year == y1].set_index(["iso3", "prod"])
-    both = first[["mcp", "density", "rca", "exports"]].join(
-        last[["mcp", "rca", "exports", "pci_pooled"]], lsuffix="_0", rsuffix="_1")
+    both = first[["mcp", "density", "rca", "exports"]].add_suffix("_0").join(
+        last[["mcp", "rca", "exports"]].add_suffix("_1")).join(last[["pci_pooled"]])
+    both = both.rename(columns={"density_0": "density"})
     both["status"] = np.select(
         [(both.mcp_0 == 0) & (both.mcp_1 == 1), (both.mcp_0 == 1) & (both.mcp_1 == 0),
          (both.mcp_0 == 1) & (both.mcp_1 == 1)], ["entry", "exit", "kept"], "never")

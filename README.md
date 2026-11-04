@@ -60,6 +60,7 @@ Flat structure, at most one folder level. Scripts are numbered in run order.
 | `config.py` | loads `config.yaml`, checks paths |
 | `environment.yml` | Python environment |
 | `literature_gravity_nowcasting.md` | literature review, strand 1 |
+| `complexity_methods.md` | methods review and specification, strand 2 |
 
 Results (tables, figures, intermediate files) are written to the `output` folder set in `config.yaml`, outside the repository.
 

@@ -1,0 +1,22 @@
+# Local configuration with data paths (never commit)
+config.yaml
+
+# Data and outputs stay outside the repository
+*.dta
+*.csv
+*.parquet
+*.feather
+*.xlsx
+*.zip
+*.log
+output/
+
+# Python
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini

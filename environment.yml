@@ -1,0 +1,17 @@
+name: tradepolicy
+channels:
+  - conda-forge
+dependencies:
+  - python=3.12
+  - numpy
+  - pandas
+  - scipy
+  - pyarrow
+  - pyyaml
+  - matplotlib
+  - statsmodels
+  - pyreadstat
+  - jupyterlab
+  - pip
+  - pip:
+      - pyfixest

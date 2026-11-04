@@ -66,6 +66,6 @@ Results (tables, figures, intermediate files) are written to the `output` folder
 ## Status
 
 - [x] Repository and configuration
-- [ ] Strand 1: literature review
+- [x] Strand 1: literature review (verdict: gravity unsuitable for aggregate short-term forecasts; see review)
 - [ ] Strand 2: method review, RCA, ECI/PCI, proximity, density, COI, Germany analysis
 - [ ] Strand 1: gravity forecasts against benchmarks

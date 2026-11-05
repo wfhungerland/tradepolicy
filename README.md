@@ -120,4 +120,4 @@ Results (tables, figures, intermediate files) are written to the `output` folder
 - [x] Strand 1: literature review (verdict: gravity unsuitable for aggregate short-term forecasts; see review)
 - [x] Strand 2: method review and code (tested on synthetic data)
 - [x] Strand 2: run on BACI and interpret (see results_strand2.md)
-- [ ] Strand 1: gravity forecasts against benchmarks (world done; Germany pending local Comext run)
+- [x] Strand 1: gravity forecasts against benchmarks (done, see results_strand1.md)

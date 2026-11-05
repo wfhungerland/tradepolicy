@@ -37,10 +37,33 @@ Gravity is worse than the bridge equation when one month of the quarter is known
 
 ## Germany (Comext)
 
-Pending: the full Comext panel (EU27 exporters x partners, EUR) is built on the local machine with `10_comext_panel.py`, followed by `12_forecast_germany.py`. A dry run of the same code on IMF data for the EU27 (USD, which adds exchange-rate noise) gave the same ranking: gravity 1.01 to 1.14 of AR, significantly worse at one month (p = 0.01); bottom-up AR 0.92 to 1.00; gravity better than AR for the minority of partners (27% to 47% of the 30 largest, depending on the horizon).
+Monthly exports of the EU27 to 254 partners, EUR, January 2002 to July 2026 (August 2026 dropped as incomplete). Target: Germany's total exports. 139 forecast origins.
+
+Relative RMSE against AR, full sample (p-values of the Diebold-Mariano test in brackets):
+
+| Horizon | Naive | Bottom-up AR | Gravity |
+|---|---|---|---|
+| 1 month | 1.10 (0.08) | 0.98 (0.09) | 1.27 (0.13) |
+| 2 months | 1.14 (0.002) | 0.99 (0.43) | 1.20 (0.25) |
+| 3 months | 1.12 (0.04) | 0.98 (0.19) | 1.19 (0.20) |
+| 6 months | 1.21 (0.06) | 0.99 (0.59) | 1.25 (0.05) |
+
+AR RMSE: 7.5% at one month, 9.4% at six months. Monthly German export values are volatile (working days, large single orders), which explains the size of the errors.
+
+Quarterly (46 quarters):
+
+| Months of the quarter known | Naive | Bridge (AR) RMSE | Bottom-up AR | Gravity |
+|---|---|---|---|---|
+| 0 (forecast) | 1.06 | 5.9% | 1.00 | 1.67 (p = 0.21) |
+| 1 | 1.59 (p = 0.002) | 3.1% | 1.05 (p = 0.02) | 1.32 (p = 0.009) |
+| 2 | 1.10 | 2.5% | 0.94 | 1.02 |
+
+By partner (30 largest), gravity beats AR for 24% to 47% of partners depending on the horizon; the median ratio is 1.02 to 1.08.
+
+Gravity is the worst model for Germany at every horizon: 19% to 27% higher RMSE than AR, significantly worse at six months (p = 0.05) and in the quarterly nowcast with one month known (p = 0.009). The bridge equation is the best quarterly nowcast with one month known; with two months known all models except naive are close.
 
 ## Assessment so far
 
-Gravity with three-way fixed effects does not improve on univariate benchmarks for aggregate trade at monthly or quarterly horizons, and it is clearly worse at six months, where errors in forecasting many exporter and importer effects add up. This matches the literature review. The modest gains of the bottom-up AR suggest that, if anything helps, it is disaggregation by destination, not the gravity structure.
+Gravity with three-way fixed effects does not improve on univariate benchmarks for aggregate trade at monthly or quarterly horizons, for the world or for Germany. For German exports it is significantly worse than a simple AR model at six months and in the quarterly nowcast; errors in forecasting many exporter and importer effects add up. This matches the literature review. The bottom-up AR is marginally better than AR for the world and for Germany (0.93 to 0.99) but rarely significantly so; if anything helps, it is disaggregation by destination, not the gravity structure. For short-term forecasting of German exports the existing toolkit (bridge equations with indicators) remains the right choice; gravity belongs in scenario analysis of trade-policy shocks, where its structure, not its forecasting record, is the point.
 
 Caveats: values are nominal (USD or EUR), so price and exchange-rate movements are part of the target; the evaluation ignores revisions and publication lags; the model has no time-varying covariates (tariffs, sanctions), where gravity could add information in scenario forecasts after policy shocks.

@@ -48,7 +48,7 @@ Relative RMSE against AR, full sample (p-values of the Diebold-Mariano test in b
 | 3 months | 1.12 (0.04) | 0.98 (0.19) | 1.19 (0.20) |
 | 6 months | 1.21 (0.06) | 0.99 (0.59) | 1.25 (0.05) |
 
-AR RMSE: 7.5% at one month, 9.4% at six months. Monthly German export values are volatile (working days, large single orders), which explains the size of the errors.
+AR RMSE: 7.5% at one month, 9.4% at six months. Excluding March 2020 to June 2021 makes gravity look worse, not better: 1.38 to 1.49 times the AR RMSE (p = 0.09 at six months), while bottom-up AR stays at 0.98 to 1.01 and naive at 1.18 to 1.29. Monthly German export values are volatile (working days, large single orders), which explains the size of the errors.
 
 Quarterly (46 quarters):
 

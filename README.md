@@ -15,7 +15,8 @@ The repository holds code and documentation only. No data is committed.
 | Gravity V202211 (distance, contiguity, colony, language) | CEPII | Strand 1 | `gravity` |
 | MAcMap-HS6 tariffs 2001-2019 | CEPII / ITC | Strand 1 | `tariffs` |
 | TRADHIST 1827-2014, RICardo | CEPII, Sciences Po | historical extensions | `history` |
-| Eurostat Comext, German exports by SITC, monthly and annual 1996-2019 | Eurostat | Strand 1 benchmarks | `comext` |
+| Eurostat Comext bulk files, EU27 exports by partner and product, monthly 2002-2026 | Eurostat | Strand 1 | `comext` |
+| IMF IMTS (formerly DOTS), bilateral exports, monthly 2000- | IMF, downloaded by `11_imts_download.py` | Strand 1 | none |
 
 Licences and citation notes for each dataset: <https://newswolf.eu/daten>.
 
@@ -69,6 +70,12 @@ Flat structure, at most one folder level. Scripts are numbered in run order.
 | `06_product_space.py` | product space network map with Germany's gained, kept and lost products |
 | `07_atlas_comparison.py` | downloads Atlas rankings and PCI from Harvard Dataverse, compares ECI, ranks and PCI |
 | `04_robustness.py` | RCA thresholds, smoothing windows, HS6, without re-export hubs, Fitness-Complexity, GENEPY, GENEPY |
+| `forecast.py` | strand 1: benchmarks (naive, AR, bottom-up), PPML gravity with three-way fixed effects, Diebold-Mariano test |
+| `10_comext_panel.py` | monthly bilateral export panel from Comext bulk files (EU27 x partners, 2002-) |
+| `11_imts_download.py` | monthly bilateral exports of all countries from IMF IMTS |
+| `12_forecast_germany.py` | out-of-sample test: German exports, total and by partner, monthly and quarterly |
+| `13_forecast_world.py` | out-of-sample test: world exports |
+| `test_forecast.py` | checks gravity estimates against pyfixest, AR and DM test |
 | `test_complexity.py` | checks against py-ecomplexity formulas and the method of reflections |
 | `complexity_methods.md` | methods review and specification, strand 2 |
 | `results_strand2.md` | results report, strand 2 |
@@ -92,6 +99,18 @@ python 07_atlas_comparison.py
 
 `01_exports.py` reads the BACI CSV files once (roughly 10-20 minutes). Peers, filters and thresholds are set in the `complexity` block of `config.yaml`.
 
+## Running strand 1
+
+```bash
+python -m pytest test_forecast.py
+python 10_comext_panel.py
+python 11_imts_download.py
+python 12_forecast_germany.py
+python 13_forecast_world.py
+```
+
+`10_comext_panel.py` unpacks about 300 monthly Comext files (one to two hours, resumable). `11_imts_download.py` needs internet access to api.imf.org.
+
 Results (tables, figures, intermediate files) are written to the `output` folder set in `config.yaml`, outside the repository.
 
 ## Status
@@ -100,4 +119,4 @@ Results (tables, figures, intermediate files) are written to the `output` folder
 - [x] Strand 1: literature review (verdict: gravity unsuitable for aggregate short-term forecasts; see review)
 - [x] Strand 2: method review and code (tested on synthetic data)
 - [x] Strand 2: run on BACI and interpret (see results_strand2.md)
-- [ ] Strand 1: gravity forecasts against benchmarks (on hold)
+- [ ] Strand 1: gravity forecasts against benchmarks (code ready, runs pending)

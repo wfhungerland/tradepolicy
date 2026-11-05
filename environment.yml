@@ -17,3 +17,4 @@ dependencies:
   - pip
   - pip:
       - pyfixest
+      - py7zr

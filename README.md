@@ -76,6 +76,7 @@ Flat structure, at most one folder level. Scripts are numbered in run order.
 | `12_forecast_germany.py` | out-of-sample test: German exports, total and by partner, monthly and quarterly |
 | `13_forecast_world.py` | out-of-sample test: world exports |
 | `test_forecast.py` | checks gravity estimates against pyfixest, AR and DM test |
+| `20_export_site.py` | exports derived results as JSON for the public site (repo tradepolicy-site) |
 | `test_complexity.py` | checks against py-ecomplexity formulas and the method of reflections |
 | `complexity_methods.md` | methods review and specification, strand 2 |
 | `results_strand1.md` | results report, strand 1 |

@@ -67,7 +67,8 @@ def run(cfg, spec=None, keep_products_for=None):
     """Run one specification. Returns dict of DataFrames.
 
     keep_products_for: ISO3 codes for which the full product-level results
-    (RCA, M, density, COG) are kept. Default: focus country and peers.
+    (RCA, M, density, COG) are kept. Default: focus country and peers;
+    "all" keeps every country in the panel.
     """
     spec = {**MAIN_SPEC, **(spec or {})}
     c = cfg["complexity"]
@@ -78,6 +79,8 @@ def run(cfg, spec=None, keep_products_for=None):
     pop = pd.read_parquet(cfg["output"] / "population.parquet")
     countries, products, years = select_panel(ex, pop, cfg, spec["level"], spec["exclude"])
     cube = smooth(to_cube(ex, countries, products, years), spec["window"])
+    if keep_products_for == "all":
+        keep_products_for = countries
     keep_idx = [countries.index(x) for x in keep_products_for if x in countries]
 
     country_rows, product_rows, cp_rows = [], [], []

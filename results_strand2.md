@@ -113,13 +113,25 @@ The map shows Germany's advantage concentrated in the connected core of machiner
 
 Spearman correlations are averages over years. Korea rises from places 21-37 to places 4-6 in every variant. Fitness-Complexity, which rewards diversification more, places Germany higher (1st or 2nd in most variants) and shows a smaller decline.
 
+## Comparison with the Atlas of Economic Complexity
+
+`07_atlas_comparison.py` compares the main run with the Growth Lab's published rankings (Growth Projections and Complexity Rankings, doi:10.7910/DVN/XTAQMC, version of February 2026, HS92 ECI) and its HS92 four-digit PCI (doi:10.7910/DVN/T4CHWJ). Ranks are recomputed on the 128 countries in both samples.
+
+- ECI agrees closely: Spearman 0.95 in 1995, 0.97 in 2010 and 2024; Pearson 0.93 to 0.95.
+- PCI agrees well: Spearman 0.91 across 1,202 common HS4 products, in 1995 and 2024.
+- Germany falls in both: from 2nd to 5th here, from 4th to 6th in the Atlas. The Atlas places Sweden and Switzerland ahead of Germany already in 1995, so its decline is smaller but starts from a lower rank.
+- Top 10 in 2024: JPN, CHE, TWN, KOR, DEU, SGP, CZE, SWE, AUT, GBR here; JPN, TWN, KOR, CHE, SGP, DEU, ISR, CZE, SVN, CHN in the Atlas. Eight of ten coincide in 1995 and seven in 2024.
+- The largest gaps among the peers: China ranks 10th in the Atlas against 19th here, the US 18th against 12th. Plausible reasons are the Growth Lab's own mirror-data reconciliation and filters, and the Atlas's change of method in 2026 (see caveats); our fixed panel and three-year smoothing also differ.
+
+The comparison supports the main finding: Germany's relative decline and Korea's and Taiwan's rise are not an artefact of this project's data or choices.
+
 ## Caveats
 
 - ECI rank is relative and depends on the country sample; the fixed-PCI measures should accompany any statement about rank.
 - Some product complexity values are implausible because rich countries happen to export the product (for example pig meat, 0203, pooled PCI 2.3). Product-level statements need a plausibility check.
 - Taiwan enters BACI under a non-standard code (mapped to TWN for population). Singapore is a re-export hub; dropping hubs does not change Germany's rank.
 - BACI values are in current USD. Exchange-rate swings affect RCA only through relative shares, but they move the value comparisons in finding 3.
-- The Atlas of Economic Complexity switched to a continuous method in 2026; its current rankings are not directly comparable.
+- The Atlas of Economic Complexity reportedly switched to a continuous RCA method in 2026 (not verified against Growth Lab documentation); its rankings are therefore a benchmark, not a replication target.
 
 ## Next steps
 

@@ -120,7 +120,7 @@ Spearman correlations are averages over years. Korea rises from places 21-37 to 
 - ECI agrees closely: Spearman 0.95 in 1995, 0.97 in 2010 and 2024; Pearson 0.93 to 0.95.
 - PCI agrees well: Spearman 0.91 across 1,202 common HS4 products, in 1995 and 2024.
 - Germany falls in both: from 2nd to 5th here, from 4th to 6th in the Atlas. The Atlas places Sweden and Switzerland ahead of Germany already in 1995, so its decline is smaller but starts from a lower rank.
-- Top 10 in 2024: JPN, CHE, TWN, KOR, DEU, SGP, CZE, SWE, AUT, GBR here; JPN, TWN, KOR, CHE, SGP, DEU, ISR, CZE, SVN, CHN in the Atlas. Eight of ten coincide in 1995 and seven in 2024.
+- Top 10 in 2024: JPN, CHE, TWN, KOR, DEU, SGP, CZE, SWE, AUT, GBR here; JPN, TWN, KOR, CHE, SGP, DEU, ISR, CZE, SVN, CHN in the Atlas. Seven of ten coincide in both years.
 - The largest gaps among the peers: China ranks 10th in the Atlas against 19th here, the US 18th against 12th. Plausible reasons are the Growth Lab's own mirror-data reconciliation and filters, and the Atlas's change of method in 2026 (see caveats); our fixed panel and three-year smoothing also differ.
 
 The comparison supports the main finding: Germany's relative decline and Korea's and Taiwan's rise are not an artefact of this project's data or choices.

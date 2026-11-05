@@ -92,6 +92,12 @@ Three results stand out.
 
 Figures: `sectors/sectors_deu.png` (world share by sector) and `sectors/sectors_deu_entries.png` (HS6 products gained and lost).
 
+## Product space map
+
+`06_product_space.py` draws the product space as in Hidalgo et al. (2007): the maximum spanning tree of the 2024 proximity matrix plus all links with proximity >= 0.55 (1,203 HS4 products, 3,420 links). The left panel colours products by eight groups, the right panel by Germany's status between 1995 and 2024 (`product_space/product_space_deu.png`).
+
+The map shows Germany's advantage concentrated in the connected core of machinery, chemicals, metals and vehicles, with little presence in the textile and raw-material branches. Lost products sit further out than kept ones. Measured as mean proximity to all other products, centrality is 0.206 for products Germany kept, 0.190 for products it gained, 0.169 for products it lost and 0.152 for products it never had. Germany shed advantage mainly at the edges of its cluster and kept the core. The layout uses the 2024 proximity matrix only, so it shows today's product space, not that of 1995.
+
 ## Robustness
 
 | Variant | Countries | DEU ECI rank 1995 | 2024 | DEU fitness rank 1995 | 2024 | Spearman ECI vs main | Spearman ECI vs fitness |
@@ -117,5 +123,4 @@ Spearman correlations are averages over years. Korea rises from places 21-37 to 
 
 ## Next steps
 
-- Product space network figure for Germany 1995 and 2024.
 - GENEPY as a further algorithm check (not yet implemented).

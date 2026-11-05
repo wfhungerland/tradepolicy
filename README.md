@@ -66,6 +66,7 @@ Flat structure, at most one folder level. Scripts are numbered in run order.
 | `02_complexity.py` | main complexity run (`hs4`, or `hs6` as argument) |
 | `03_germany.py` | Germany vs peers: ranks, gaps, complexity quintiles, gained/lost products, opportunities |
 | `05_sectors.py` | sector view: world market share, products gained and lost by HS chapter group |
+| `06_product_space.py` | product space network map with Germany's gained, kept and lost products |
 | `04_robustness.py` | RCA thresholds, smoothing windows, HS6, without re-export hubs, Fitness-Complexity |
 | `test_complexity.py` | checks against py-ecomplexity formulas and the method of reflections |
 | `complexity_methods.md` | methods review and specification, strand 2 |
@@ -84,6 +85,7 @@ python 02_complexity.py hs6
 python 03_germany.py hs6
 python 04_robustness.py
 python 05_sectors.py
+python 06_product_space.py
 ```
 
 `01_exports.py` reads the BACI CSV files once (roughly 10-20 minutes). Peers, filters and thresholds are set in the `complexity` block of `config.yaml`.

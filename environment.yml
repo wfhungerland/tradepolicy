@@ -9,6 +9,7 @@ dependencies:
   - pyarrow
   - pyyaml
   - matplotlib
+  - networkx
   - statsmodels
   - pyreadstat
   - jupyterlab

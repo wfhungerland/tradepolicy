@@ -5,7 +5,7 @@ XG_FOB_USD (exports, FOB, US dollars), monthly, from January 2000, one request
 per reporting country, via the IMF SDMX 2.1 API. Writes
   <output>/imts/raw/<ISO3>.csv     one file per reporter (resumable)
   <output>/imts/exports.parquet    reporter, partner, period, value_usd
-Regional and world aggregates (codes G..., GX...) are dropped.
+Regional, world and other aggregates (codes that are not three letters) are dropped.
 Source: IMF, International Trade in Goods (by partner country), IMTS.
 Usage: python 11_imts_download.py   (a few minutes; rerun to resume)
 """
@@ -34,8 +34,9 @@ def get(key: str, start: str) -> pd.DataFrame:
             time.sleep(2 ** attempt * 5)
 
 
-def is_aggregate(code: str) -> bool:
-    return code.startswith("GX") or (code.startswith("G") and code[1:].isdigit())
+def is_aggregate(code) -> bool:
+    """Regional, world and other aggregates have codes that are not 3 letters."""
+    return not (isinstance(code, str) and len(code) == 3 and code.isalpha())
 
 
 def main():
@@ -57,9 +58,10 @@ def main():
         print(f"{iso}: {len(df):,} rows")
         time.sleep(0.5)
 
-    parts = [pd.read_csv(f) for f in sorted(raw.glob("*.csv"))]
+    parts = [pd.read_csv(f, keep_default_na=False, na_values=[""]) for f in sorted(raw.glob("*.csv"))]
     d = pd.concat(parts, ignore_index=True)
     d.columns = ["reporter", "partner", "period", "value_usd"]
+    d = d.dropna(subset=["period", "value_usd"])  # series without observations
     d = d[~d.partner.map(is_aggregate)]
     d["period"] = d.period.str.replace("-M", "").astype(int)
     d.to_parquet(out / "exports.parquet", index=False)

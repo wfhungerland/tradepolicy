@@ -128,10 +128,8 @@ def genepy(m: np.ndarray):
 
     W_cp = M_cp / (k_c * k'_p) with k'_p = sum_c M_cp / k_c. The country
     proximity N = W W' (zero diagonal) gives eigenpairs (lambda_i, X_i);
-    GENEPY_c = (sum_i lambda_i X_ic^2)^2 + 2 sum_i lambda_i^2 X_ic^2 for the two
-    eigenvectors with the largest |lambda|. Formula checked against an
-    independent implementation (lady-bluecopper/NuDHy, helpers/run_genepy.py),
-    not against the published article.
+    GENEPY_c = (sum_i lambda_i X_ic^2)^2 + 2 sum_i lambda_i^2 X_ic^2 for the
+    eigenvectors of the two largest eigenvalues (article, Eqs. 5 and 15).
     """
     kc = m.sum(axis=1)
     kp1 = (m / kc[:, None]).sum(axis=0)
@@ -139,7 +137,7 @@ def genepy(m: np.ndarray):
     n = w @ w.T
     np.fill_diagonal(n, 0.0)
     vals, vecs = np.linalg.eigh(n)
-    order = np.argsort(np.abs(vals))[::-1][:2]
+    order = np.argsort(vals)[::-1][:2]
     lam = vals[order]
     x = vecs[:, order]
     x[:, 0] = np.abs(x[:, 0])

@@ -93,7 +93,7 @@ def test_genepy_matches_reference_and_recovers_capability():
     n = w @ w.T
     np.fill_diagonal(n, 0)
     vals, vecs = np.linalg.eigh(n)
-    o = np.argsort(np.abs(vals))[::-1][:2]
+    o = np.argsort(vals)[::-1][:2]
     lam, xv = vals[o], vecs[:, o]
     ref = np.array([(lam[0] * abs(xv[c, 0]) ** 2 + lam[1] * xv[c, 1] ** 2) ** 2
                     + 2 * (lam[0] ** 2 * xv[c, 0] ** 2 + lam[1] ** 2 * xv[c, 1] ** 2)

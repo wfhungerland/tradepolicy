@@ -113,7 +113,7 @@ The map shows Germany's advantage concentrated in the connected core of machiner
 
 Spearman correlations are averages over years. Korea rises from places 21-37 to places 4-6 in every variant. Fitness-Complexity, which rewards diversification more, places Germany higher (1st or 2nd in most variants) and shows a smaller decline.
 
-GENEPY (Sciarra, Chiarotti, Ridolfi and Laio 2020) combines the two views: it uses the first two eigenvectors of a country proximity matrix built from degree-normalised exports, so both diversification and the complexity of products count. It reproduces the ECI result for Germany: 2nd in 1995 in every variant, 2nd to 6th in 2024 (5th in the main run). It differs from ECI for diversified economies with a less exclusive basket. In 2024 China ranks 3rd by GENEPY, 1st by fitness and 19th by ECI; Switzerland ranks 2nd by ECI, 6th by GENEPY and 27th by fitness. Germany's ranks agree across all three methods: 5th by ECI and GENEPY, 2nd by fitness. The GENEPY formula in `complexity.py` was checked against an independent implementation, not yet against the published article.
+GENEPY (Sciarra, Chiarotti, Ridolfi and Laio 2020) combines the two views: it uses the first two eigenvectors of a country proximity matrix built from degree-normalised exports, so both diversification and the complexity of products count. It reproduces the ECI result for Germany: 2nd in 1995 in every variant, 2nd to 6th in 2024 (5th in the main run). It differs from ECI for diversified economies with a less exclusive basket. In 2024 China ranks 3rd by GENEPY, 1st by fitness and 19th by ECI; Switzerland ranks 2nd by ECI, 6th by GENEPY and 27th by fitness. Germany's ranks agree across all three methods: 5th by ECI and GENEPY, 2nd by fitness. The implementation follows Eqs. 5 and 15 of the article.
 
 ## Comparison with the Atlas of Economic Complexity
 
@@ -134,6 +134,3 @@ The comparison supports the main finding: Germany's relative decline and Korea's
 - Taiwan enters BACI under a non-standard code (mapped to TWN for population). Singapore is a re-export hub; dropping hubs does not change Germany's rank.
 - BACI values are in current USD. Exchange-rate swings affect RCA only through relative shares, but they move the value comparisons in finding 3.
 - The Atlas of Economic Complexity reportedly switched to a continuous RCA method in 2026 (not verified against Growth Lab documentation); its rankings are therefore a benchmark, not a replication target.
-
-## Next steps
-

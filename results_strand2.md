@@ -4,7 +4,7 @@ Results of strand 2 (economic complexity). Methods and specification choices are
 
 ## Bottom line
 
-Germany fell from 2nd to 5th place in the Economic Complexity Index (ECI) between 1995 and 2024. The fall is relative. Measured on a fixed yardstick, the complexity of Germany's export basket barely changed (HS4) or rose (HS6). Germany lost rank because others caught up, above all South Korea, Taiwan and China. The decline in rank survives every robustness check; whether Germany lost more complex products than it gained does not.
+Germany fell from 2nd to 5th place in the Economic Complexity Index (ECI) between 1995 and 2024. The fall is relative. Measured on a fixed yardstick, the complexity of Germany's export basket barely changed (HS4) or rose (HS6). Germany lost rank because others caught up, above all South Korea, Taiwan and China. The decline in rank survives every robustness check. Germany's world market share fell in every sector except aircraft and other transport, while the complexity of what it gains and loses within sectors is about the same.
 
 ## Data and specification
 
@@ -53,7 +53,7 @@ The export-weighted complexity of Germany's basket was 2.12 in 1995 and 2.13 in 
 
 Between 1995 and 2024 (smoothed endpoints), at HS4 Germany gained RCA in 89 products and lost it in 114. Lost products are more complex on average (pooled PCI 1.31 against 0.89). Losses include speciality chemicals (2933, 2934), doped semiconductor materials (3818) and stainless steel (7219); gains include aircraft (8802), engines (8407), medical devices (9021) and transformers (8504). By value the gains dominate: USD 126 billion of 2024 exports against USD 36 billion.
 
-At HS6 the pattern reverses: 399 gains with mean PCI 1.37 against 546 losses with mean PCI 1.25. This finding therefore depends on aggregation and should not be reported as robust.
+At HS6 the pattern reverses: 399 gains with mean PCI 1.37 against 546 losses with mean PCI 1.25. This finding therefore depends on aggregation and should not be reported as robust. The sector view below shows why: the comparison is driven by composition, not by a shift in the complex core.
 
 ### 4. Relatedness predicts entry
 
@@ -62,6 +62,35 @@ For Germany and the peers, the probability that a product without RCA gains RCA 
 ### 5. Opportunities
 
 Products without German RCA in 2024 that combine high complexity with high density (top by Complexity Outlook Gain) include glass products (7006), doped semiconductor materials (3818), integrated circuits (8542), telecom equipment (8517), recording media (8523) and stainless steel bars (7221). Several are products Germany held in 1995 and lost.
+
+## Sector view
+
+Products are grouped into 16 sectors by HS chapter (`05_sectors.py`). World market share is Germany's exports in the sector divided by world exports of the panel products in that sector.
+
+| Sector | World share 1995 | 2024 | Share of German exports 2024 | HS6 gained | HS6 lost |
+|---|---|---|---|---|---|
+| Motor vehicles | 18.1% | 15.3% | 18.5% | 11 | 2 |
+| Machinery | 13.0% | 9.6% | 16.7% | 36 | 45 |
+| Electrical and electronics | 8.0% | 4.7% | 10.3% | 29 | 31 |
+| Metals | 11.7% | 7.9% | 7.7% | 52 | 71 |
+| Pharmaceuticals | 14.4% | 13.2% | 7.5% | 4 | 3 |
+| Food and agriculture | 5.8% | 5.0% | 6.8% | 73 | 32 |
+| Plastics and rubber | 13.4% | 9.8% | 6.2% | 13 | 19 |
+| Instruments and medical | 11.7% | 10.8% | 5.2% | 20 | 18 |
+| Other chemicals | 14.5% | 9.1% | 4.3% | 23 | 33 |
+| Basic chemicals | 11.4% | 6.1% | 2.7% | 42 | 76 |
+| Other transport | 7.3% | 10.1% | 2.7% | 8 | 7 |
+| Textiles, apparel, footwear | 5.7% | 3.5% | 2.2% | 23 | 130 |
+
+World shares are from the HS4 run; HS6 gives the same values to within 0.2 points.
+
+Three results stand out.
+
+1. **Market share fell almost everywhere.** The steepest falls are in basic chemicals (11.4% to 6.1%), other chemicals, electronics and metals. Only other transport (aircraft) gained. Over the same period China's share rose from 3.5% to 19.0% in basic chemicals, from 2.1% to 22.8% in machinery and from 0.5% to 10.5% in motor vehicles. Japan, the US, France and the UK lost share in the same sectors, mostly by more than Germany.
+2. **The entries-exits puzzle is composition.** Germany gained many low-complexity food products and lost many low-complexity textile products. These two sectors decide the sign of the aggregate comparison. Without them, mean pooled PCI is 1.36 for gains and 1.56 for losses at HS4, and 1.65 against 1.69 at HS6: losses are marginally more complex, by a margin too small to matter.
+3. **Net losses concentrate in chemicals and metals.** Basic chemicals (42 gained, 76 lost at HS6), metals (52 against 71) and textiles account for most of the net decline in diversity. Motor vehicles, food and instruments show net gains. Machinery and electronics are close to balanced in counts, despite the fall in market share.
+
+Figures: `sectors/sectors_deu.png` (world share by sector) and `sectors/sectors_deu_entries.png` (HS6 products gained and lost).
 
 ## Robustness
 
@@ -88,6 +117,5 @@ Spearman correlations are averages over years. Korea rises from places 21-37 to 
 
 ## Next steps
 
-- Sector view: chemicals, vehicles, machinery and electronics separately.
 - Product space network figure for Germany 1995 and 2024.
 - GENEPY as a further algorithm check (not yet implemented).

@@ -2,16 +2,16 @@
 # config.yaml is listed in .gitignore and is never committed.
 
 data:
-  baci_derived: "E:/Daten/BACI/derived"          # BACI HS92 yearly .dta files
-  baci_raw: "E:/Daten/BACI/raw/HS92_V202601"     # BACI raw CSV
-  gravity: "E:/Daten/BACI/derived/gravity"       # CEPII Gravity V202211
-  gravity_raw: "E:/Daten/BACI/raw/Gravity_V202211"  # raw Gravity CSV (population)
-  tariffs: "E:/Daten/BACI/derived/tariffs"       # MAcMap-HS6
-  history: "E:/Daten/BACI/derived/history"       # TRADHIST, RICardo
-  comext: "E:/Daten/COMEXT"                      # Eurostat Comext, German exports by SITC
+  baci_derived: "C:/Daten/BACI/derived"          # BACI HS92 yearly .dta files
+  baci_raw: "C:/Daten/BACI/raw/HS92_V202601"     # BACI raw CSV
+  gravity: "C:/Daten/BACI/derived/gravity"       # CEPII Gravity V202211
+  gravity_raw: "C:/Daten/BACI/raw/Gravity_V202211"  # raw Gravity CSV (population)
+  tariffs: "C:/Daten/BACI/derived/tariffs"       # MAcMap-HS6
+  history: "C:/Daten/BACI/derived/history"       # TRADHIST, RICardo
+  comext: "C:/Daten/COMEXT"                      # Eurostat Comext, German exports by SITC
 
 # All results (tables, figures, intermediate files) go here, outside the repo.
-output: "E:/Daten/tradepolicy_output"
+output: "C:/Daten/tradepolicy_output"
 
 years:
   start: 1995

@@ -88,7 +88,7 @@ def run(cfg, spec=None, keep_products_for=None):
         country_rows.append(pd.DataFrame({
             "year": year, "iso3": countries, "exports": cube[t].sum(axis=1),
             "diversity": r["diversity"], "eci": r["eci"], "coi": r["coi"],
-            "fitness": r["fitness"],
+            "fitness": r["fitness"], "genepy": r["genepy"],
         }))
         product_rows.append(pd.DataFrame({
             "year": year, "prod": products, "world_exports": cube[t].sum(axis=0),

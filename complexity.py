@@ -123,6 +123,30 @@ def fitness_complexity(m: np.ndarray, n_iter: int = 200):
     return np.log(f), np.log(q)
 
 
+def genepy(m: np.ndarray):
+    """GENEPY index of countries (Sciarra, Chiarotti, Ridolfi & Laio 2020).
+
+    W_cp = M_cp / (k_c * k'_p) with k'_p = sum_c M_cp / k_c. The country
+    proximity N = W W' (zero diagonal) gives eigenpairs (lambda_i, X_i);
+    GENEPY_c = (sum_i lambda_i X_ic^2)^2 + 2 sum_i lambda_i^2 X_ic^2 for the two
+    eigenvectors with the largest |lambda|. Formula checked against an
+    independent implementation (lady-bluecopper/NuDHy, helpers/run_genepy.py),
+    not against the published article.
+    """
+    kc = m.sum(axis=1)
+    kp1 = (m / kc[:, None]).sum(axis=0)
+    w = m / np.outer(kc, kp1)
+    n = w @ w.T
+    np.fill_diagonal(n, 0.0)
+    vals, vecs = np.linalg.eigh(n)
+    order = np.argsort(np.abs(vals))[::-1][:2]
+    lam = vals[order]
+    x = vecs[:, order]
+    x[:, 0] = np.abs(x[:, 0])
+    x2 = x ** 2
+    return (x2 @ lam) ** 2 + 2 * (x2 @ lam ** 2)
+
+
 def compute_year(x: np.ndarray, threshold: float = 1.0) -> dict:
     """All measures for one year. x: exports, countries x products.
 
@@ -140,6 +164,7 @@ def compute_year(x: np.ndarray, threshold: float = 1.0) -> dict:
     d_k = density(m, phi_k)
     coi, cog_k = coi_cog(m, phi_k, d_k, pci_k)
     fit, q_k = fitness_complexity(m)
+    gen = genepy(m)
 
     n_c, n_p = x.shape
     pci = np.full(n_p, np.nan)
@@ -156,5 +181,5 @@ def compute_year(x: np.ndarray, threshold: float = 1.0) -> dict:
         "rca": r, "mcp": m_all, "diversity": m_all.sum(axis=1), "ubiquity": m_all.sum(axis=0),
         "eci": eci, "pci": pci, "phi": phi, "density": d,
         "coi": (coi - coi.mean()) / coi.std(), "cog": cog,
-        "fitness": fit, "fc_complexity": q,
+        "fitness": fit, "fc_complexity": q, "genepy": gen,
     }

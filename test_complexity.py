@@ -80,3 +80,23 @@ def test_fitness_correlates_with_eci():
     eci, _ = cx.eci_pci(m)
     fit, _ = cx.fitness_complexity(m)
     assert spearmanr(eci, fit).statistic > 0.7
+
+
+def test_genepy_matches_reference_and_recovers_capability():
+    x, cap = synthetic()
+    m = cx.mcp(cx.rca(x))
+    g = cx.genepy(m)
+    # reference: direct transcription of the published formula
+    kc = m.sum(1)
+    kp1 = (m / kc[:, None]).sum(0)
+    w = m / np.outer(kc, kp1)
+    n = w @ w.T
+    np.fill_diagonal(n, 0)
+    vals, vecs = np.linalg.eigh(n)
+    o = np.argsort(np.abs(vals))[::-1][:2]
+    lam, xv = vals[o], vecs[:, o]
+    ref = np.array([(lam[0] * abs(xv[c, 0]) ** 2 + lam[1] * xv[c, 1] ** 2) ** 2
+                    + 2 * (lam[0] ** 2 * xv[c, 0] ** 2 + lam[1] ** 2 * xv[c, 1] ** 2)
+                    for c in range(m.shape[0])])
+    assert np.allclose(g, ref)
+    assert spearmanr(g, cap).statistic > 0.7

@@ -4,7 +4,7 @@ Results of strand 2 (economic complexity). Methods and specification choices are
 
 ## Bottom line
 
-Germany fell from 2nd to 5th place in the Economic Complexity Index (ECI) between 1995 and 2024. The fall is relative. Measured on a fixed yardstick, the complexity of Germany's export basket barely changed (HS4) or rose (HS6). Germany lost rank because others caught up, above all South Korea, Taiwan and China. The decline in rank survives every robustness check. Germany's world market share fell in every sector except aircraft and other transport, while the complexity of what it gains and loses within sectors is about the same.
+Germany fell from 2nd to 5th place in the Economic Complexity Index (ECI) between 1995 and 2024. The fall is relative. Measured on a fixed yardstick, the complexity of Germany's export basket barely changed (HS4) or rose (HS6). Germany lost rank because others caught up, above all South Korea, Taiwan and China. The decline in rank survives every robustness check, including the Fitness-Complexity and GENEPY algorithms. Germany's world market share fell in every sector except aircraft and other transport, while the complexity of what it gains and loses within sectors is about the same.
 
 ## Data and specification
 
@@ -100,18 +100,20 @@ The map shows Germany's advantage concentrated in the connected core of machiner
 
 ## Robustness
 
-| Variant | Countries | DEU ECI rank 1995 | 2024 | DEU fitness rank 1995 | 2024 | Spearman ECI vs main | Spearman ECI vs fitness |
-|---|---|---|---|---|---|---|---|
-| Main (HS4, RCA >= 1, 3-year window) | 130 | 2 | 5 | 1 | 2 | 1.000 | 0.88 |
-| RCA >= 0.75 | 130 | 3 | 6 | 1 | 2 | 0.994 | 0.90 |
-| RCA >= 1.25 | 130 | 2 | 4 | 1 | 2 | 0.995 | 0.87 |
-| RCA >= 2 | 130 | 1 | 2 | 3 | 3 | 0.973 | 0.81 |
-| No smoothing | 130 | 2 | 5 | 1 | 2 | 0.988 | 0.88 |
-| 5-year window | 130 | 2 | 5 | 1 | 2 | 0.993 | 0.89 |
-| Without NLD, BEL, SGP, HKG | 126 | 2 | 5 | 1 | 2 | 0.998 | 0.89 |
-| HS6 | 130 | 2 | 6 | 1 | 2 | 0.961 | 0.79 |
+| Variant | Countries | DEU ECI rank 1995 | 2024 | DEU fitness rank 1995 | 2024 | DEU GENEPY rank 1995 | 2024 | Spearman ECI vs main | ECI vs fitness | ECI vs GENEPY |
+|---|---|---|---|---|---|---|---|---|---|---|
+| Main (HS4, RCA >= 1, 3-year window) | 130 | 2 | 5 | 1 | 2 | 2 | 5 | 1.000 | 0.88 | 0.91 |
+| RCA >= 0.75 | 130 | 3 | 6 | 1 | 2 | 2 | 6 | 0.994 | 0.90 | 0.93 |
+| RCA >= 1.25 | 130 | 2 | 4 | 1 | 2 | 2 | 3 | 0.995 | 0.87 | 0.89 |
+| RCA >= 2 | 130 | 1 | 2 | 3 | 3 | 1 | 2 | 0.973 | 0.81 | 0.82 |
+| No smoothing | 130 | 2 | 5 | 1 | 2 | 2 | 6 | 0.988 | 0.88 | 0.90 |
+| 5-year window | 130 | 2 | 5 | 1 | 2 | 2 | 6 | 0.993 | 0.89 | 0.91 |
+| Without NLD, BEL, SGP, HKG | 126 | 2 | 5 | 1 | 2 | 2 | 5 | 0.998 | 0.89 | 0.91 |
+| HS6 | 130 | 2 | 6 | 1 | 2 | 2 | 3 | 0.961 | 0.79 | 0.82 |
 
 Spearman correlations are averages over years. Korea rises from places 21-37 to places 4-6 in every variant. Fitness-Complexity, which rewards diversification more, places Germany higher (1st or 2nd in most variants) and shows a smaller decline.
+
+GENEPY (Sciarra, Chiarotti, Ridolfi and Laio 2020) combines the two views: it uses the first two eigenvectors of a country proximity matrix built from degree-normalised exports, so both diversification and the complexity of products count. It reproduces the ECI result for Germany: 2nd in 1995 in every variant, 2nd to 6th in 2024 (5th in the main run). It differs from ECI for diversified economies with a less exclusive basket. In 2024 China ranks 3rd by GENEPY, 1st by fitness and 19th by ECI; Switzerland ranks 2nd by ECI, 6th by GENEPY and 27th by fitness. Germany's ranks agree across all three methods: 5th by ECI and GENEPY, 2nd by fitness. The GENEPY formula in `complexity.py` was checked against an independent implementation, not yet against the published article.
 
 ## Comparison with the Atlas of Economic Complexity
 
@@ -135,4 +137,3 @@ The comparison supports the main finding: Germany's relative decline and Korea's
 
 ## Next steps
 
-- GENEPY as a further algorithm check (not yet implemented).

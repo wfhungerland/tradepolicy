@@ -60,7 +60,7 @@ Flat structure, at most one folder level. Scripts are numbered in run order.
 | `config.py` | loads `config.yaml`, checks paths |
 | `environment.yml` | Python environment |
 | `literature_gravity_nowcasting.md` | literature review, strand 1 |
-| `complexity.py` | RCA, ECI/PCI (eigenvector), proximity, density, COI/COG, Fitness-Complexity |
+| `complexity.py` | RCA, ECI/PCI (eigenvector), proximity, density, COI/COG, Fitness-Complexity, GENEPY |
 | `panel.py` | fixed country-product panel, filters, smoothing, yearly runs |
 | `01_exports.py` | BACI raw CSV to country x HS6 x year exports, population from CEPII Gravity |
 | `02_complexity.py` | main complexity run (`hs4`, or `hs6` as argument) |
@@ -68,7 +68,7 @@ Flat structure, at most one folder level. Scripts are numbered in run order.
 | `05_sectors.py` | sector view: world market share, products gained and lost by HS chapter group |
 | `06_product_space.py` | product space network map with Germany's gained, kept and lost products |
 | `07_atlas_comparison.py` | downloads Atlas rankings and PCI from Harvard Dataverse, compares ECI, ranks and PCI |
-| `04_robustness.py` | RCA thresholds, smoothing windows, HS6, without re-export hubs, Fitness-Complexity |
+| `04_robustness.py` | RCA thresholds, smoothing windows, HS6, without re-export hubs, Fitness-Complexity, GENEPY, GENEPY |
 | `test_complexity.py` | checks against py-ecomplexity formulas and the method of reflections |
 | `complexity_methods.md` | methods review and specification, strand 2 |
 | `results_strand2.md` | results report, strand 2 |

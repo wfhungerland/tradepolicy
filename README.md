@@ -68,6 +68,7 @@ Flat structure, at most one folder level. Scripts are numbered in run order.
 | `04_robustness.py` | RCA thresholds, smoothing windows, HS6, without re-export hubs, Fitness-Complexity |
 | `test_complexity.py` | checks against py-ecomplexity formulas and the method of reflections |
 | `complexity_methods.md` | methods review and specification, strand 2 |
+| `results_strand2.md` | results report, strand 2 |
 
 ## Running strand 2
 
@@ -92,5 +93,5 @@ Results (tables, figures, intermediate files) are written to the `output` folder
 - [x] Repository and configuration
 - [x] Strand 1: literature review (verdict: gravity unsuitable for aggregate short-term forecasts; see review)
 - [x] Strand 2: method review and code (tested on synthetic data)
-- [ ] Strand 2: run on BACI and interpret
+- [x] Strand 2: run on BACI and interpret (see results_strand2.md)
 - [ ] Strand 1: gravity forecasts against benchmarks (on hold)

@@ -44,16 +44,12 @@ Commit author: Wolf-Fabian Hungerland <w.f.hungerland@gmail.com>.
    tradepolicy-site), with imprint and privacy pages, self-hosted fonts, no cookies or localStorage.
 4. Shared German summary page of both strands: https://claude.ai/artifact/HgXQY1BwernM86cQz2dEfb
 5. Data inventory for gravity scenario analysis (tariffs, trade agreements, transport costs):
-   data_inventory_gravity.md. All entries are marked unverified, because the official sites
-   were blocked from the cloud session.
+   data_inventory_gravity.md. Each fact carries a verification tag.
 
 ## Open
 
-1. Allow domains in the environment network settings so the inventory can be verified and
-   downloads scripted: www.cepii.fr, www.usitc.gov, www.wto.org, ttd.wto.org, rtais.wto.org,
-   wits.worldbank.org, datatopics.worldbank.org, oecd.org, portwatch.imf.org, newyorkfed.org,
-   feodorateti.github.io, ewf.uni-bayreuth.de, designoftradeagreements.org, zenodo.org.
-   Not yet decided by the owner.
+1. Data inventory verified on 2026-11-05: 114 of 160 facts checked on official pages, the rest
+   mostly blocked by www.oecd.org (refuses automated requests). Download URLs are in the file.
 2. Possible strand 3: structural gravity scenarios (GE-PPML) for tariffs, EU integration and
    transport cost shocks. Likely core data: ITPD-E (with domestic flows), tariffs (Teti GTD,
    WTO IDB), Larch RTA database, OECD ITIC, CEPII ProTEE. Not yet approved.

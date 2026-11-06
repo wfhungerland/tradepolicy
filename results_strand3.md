@@ -51,7 +51,7 @@ taxed at 5 %) EU exports to the US fall in every variant (-1.4 to -5.3 %).
 | One-sector limit equals one-sector tariff model | exact | | passes (tests) |
 | NAFTA example of Yotov et al. (2016) | RTA coefficient 0.5572, effects within 0.75 pp | book | passes |
 | US imports from China | -24 % (current), -59 % (Sep 2025 tariffs) | -30 % in 2025 (Census, as reported by news and PIIE) | plausible: model is long-run, 2025 mixed tariff levels over the year |
-| US tariff revenue | USD 183 to 280 bn a year, 6 to 9 % of imports | USD 195 bn in FY2025 (CRFB from Monthly Treasury Statement), tariffs only partly in force that year | right order of magnitude |
+| US tariff revenue | USD 183 to 280 bn a year before the MAcMap baseline, 192 to 256 bn after | USD 195 bn in FY2025 (CRFB from Monthly Treasury Statement), tariffs only partly in force that year | right order of magnitude |
 | Sign of US welfare without retaliation | -0.6 to +0.04 %, positive only with low elasticity | small gain without retaliation (Ignatenko et al. 2025, JIE) | consistent in direction for low elasticities; our central case is more negative because of high sector elasticities |
 | Germany | -0.07 to -0.09 %, robust to elasticity | | small, as expected for a 6 to 9 % average tariff on about 4 % of German output |
 

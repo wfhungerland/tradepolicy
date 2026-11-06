@@ -53,6 +53,7 @@ Commit author: Wolf-Fabian Hungerland <w.f.hungerland@gmail.com>.
 2. Strand 3 built (2026-11-06): US tariff and EU single market scenarios (scripts 30 to 37,
    results_strand3.md), shown on the site under Szenarien. Open: retaliation, MAcMap baseline
    tariffs for non-US countries, transport cost shocks, price convergence (Head and Mayer 2021).
+   Policy brief (German, Claude Docs): https://claude.ai/artifact/CRtTJnuC6yZ5VfRja4QLUf
    Former note: structural gravity scenarios (GE-PPML) for tariffs, EU integration and
    transport cost shocks. Likely core data: ITPD-E (with domestic flows), tariffs (Teti GTD,
    WTO IDB), Larch RTA database, OECD ITIC, CEPII ProTEE. Not yet approved.

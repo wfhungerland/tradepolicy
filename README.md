@@ -80,6 +80,8 @@ Flat structure, at most one folder level. Scripts are numbered in run order.
 | `30_scenario_download.py` | strand 3: downloads ITPD-E, Larch RTA, CEPII US tariffs, ProTEE, CERDI sea distances |
 | `31_itpd_panel.py` | strand 3: converts ITPD-E to compact Parquet (industry and broad-sector panels) |
 | `32_validate_yotov.py` | strand 3: reproduces the NAFTA example of Yotov et al. (2016) with gravity_ge.py |
+| `33_tariff_inputs.py` | strand 3: US tariffs 2025-26 and ProTEE elasticities by ICIO sector |
+| `34_scenario_us_tariffs.py` | strand 3: US tariff scenarios in a Caliendo-Parro model on ICIO 2022 |
 | `gravity_ge.py` | strand 3: structural gravity GE solver (exact hat algebra, with tariff revenue option) |
 | `test_gravity_ge.py` | checks the GE solver (market clearing, ACR welfare formula, tariff solver) |
 | `test_complexity.py` | checks against py-ecomplexity formulas and the method of reflections |

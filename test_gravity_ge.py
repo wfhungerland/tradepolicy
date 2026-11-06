@@ -69,3 +69,56 @@ def test_sinkhorn_margins():
     Y, E = X.sum(axis=1), X.sum(axis=0)
     F = gg.sinkhorn(T, Y, E)
     assert np.allclose(F.sum(axis=1), Y) and np.allclose(F.sum(axis=0), E)
+
+
+def cp_toy(N=5, J=3, seed=1):
+    rng = np.random.default_rng(seed)
+    Z = rng.uniform(0.1, 1, (N, J, N, J))
+    for i in range(N):
+        Z[i, :, i, :] *= 8                        # home bias in inputs
+    F = rng.uniform(0.5, 2, (N, J, N))
+    for i in range(N):
+        F[i, :, i] *= 10
+    out = Z.sum(axis=(2, 3)) + F.sum(axis=2)      # output = all uses
+    va = out * rng.uniform(0.3, 0.6, (N, J))
+    # rescale inputs so that inputs + value added = output for each user sector
+    inputs = Z.sum(axis=(0, 1))                   # [n, k]
+    Z = Z * ((out - va) / inputs)[None, None, :, :]
+    X = Z.sum(axis=3).transpose(2, 0, 1) + F.transpose(2, 0, 1)
+    return X, Z, F
+
+
+def test_cp_no_shock():
+    X, Z, F = cp_toy()
+    tau0 = np.zeros_like(X)
+    base = gg.cp_baseline(X, Z, F, tau0)
+    r = gg.cp_solve(base, tau0, 5.0)
+    assert np.allclose(r["W_hat"], 1, atol=1e-7) and np.allclose(r["X_new"], r["X_old"], rtol=1e-6)
+
+
+def test_cp_one_sector_matches_tariff_solver():
+    # J = 1 and no intermediates: Caliendo-Parro reduces to the one-sector tariff model
+    rng = np.random.default_rng(3)
+    n = 6
+    X = rng.uniform(1, 10, (n, n))
+    X = X + X.T
+    X[np.diag_indices(n)] *= 20
+    Z = np.zeros((n, 1, n, 1))
+    F = X.T[:, None, :].copy()                    # F[i, 0, n] = X[n, i]
+    tau0 = np.zeros((n, n, 1))
+    tau1 = tau0.copy()
+    tau1[0, 1:, 0] = 0.25
+    base = gg.cp_baseline(X[:, :, None], Z, F, tau0)
+    r = gg.cp_solve(base, tau1, 4.0)
+    t = gg.ge_tariff(X, tau0[:, :, 0].T, tau1[:, :, 0].T, 4.0)
+    assert np.allclose(r["W_hat"], t["W_hat"], rtol=1e-6)
+
+
+def test_cp_tariff_signs():
+    X, Z, F = cp_toy()
+    tau0 = np.zeros_like(X)
+    tau1 = tau0.copy()
+    tau1[0, 1:, :] = 0.3                          # country 0 taxes all imports
+    base = gg.cp_baseline(X, Z, F, tau0)
+    r = gg.cp_solve(base, tau1, np.array([4.0, 6.0, 8.0]))
+    assert r["revenue"][0] > 0 and np.all(r["W_hat"][1:] < 1)

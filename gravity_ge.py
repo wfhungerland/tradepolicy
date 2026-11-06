@@ -178,3 +178,117 @@ def ge_tariff(X, tau0, tau1, theta, T_hat=None, tol=1e-12, max_iter=20000):
     return {"w_hat": w, "P_hat": P_hat, "W_hat": (inc1 / inc0) / P_hat, "X_new": Xn,
             "exports_hat": ((Xn / (1 + tau1)) * off).sum(axis=1) / ((X / (1 + tau0)) * off).sum(axis=1),
             "revenue": rev1, "revenue0": rev0}
+
+
+# ---------------------------------------------------------------- multi-sector model
+
+def cp_baseline(X, Z, F, tau0, eps=1e-9):
+    """Baseline objects for the Caliendo and Parro (2015) model.
+
+    X     N x N x J  trade at producer prices: X[n, i, j] = sales of sector j
+                     from origin i to destination n (intermediate + final use)
+    Z     N x J x N x J  intermediate use at producer prices: Z[i, j, n, k] =
+                     sector j goods from i used by sector k in n (ICIO block)
+    F     N x J x N  final use at producer prices: F[i, j, n]
+    tau0  N x N x J  baseline ad valorem tariffs of importer n on origin i
+    Cost and expenditure shares are taken at tariff-inclusive prices; value
+    added is the residual of output, so tariffs on inputs lower the value added
+    share. Deficits are the residual between final spending and value added
+    plus tariff revenue, rescaled to sum to zero.
+    """
+    N, _, J = X.shape
+    Y = X.sum(axis=0).copy()                                   # Y[i, j] gross output
+    Y = np.maximum(Y, eps)
+    gross = 1 + np.transpose(tau0, (1, 2, 0))                  # [i, j, n]
+    Zg = Z * gross[:, :, :, None]                              # tariffs on inputs by origin
+    G = Zg.sum(axis=0).transpose(1, 0, 2) / Y[:, None, :]      # G[n, j, k] share of j in k's costs
+    colsum = G.sum(axis=1)
+    over = colsum > 0.999
+    G[over.nonzero()[0], :, over.nonzero()[1]] /= (colsum[over][:, None] / 0.999)
+    b = 1 - G.sum(axis=1)                                      # value added share [n, k]
+    Fg = (F * gross).sum(axis=0).T.copy()                      # Fg[n, j] final spending
+    E = np.einsum("njk,nk->nj", G, Y) + Fg                     # expenditure on j in n
+    Xg = X * (1 + tau0)
+    pi = Xg / np.maximum(Xg.sum(axis=1, keepdims=True), eps)
+    empty = Xg.sum(axis=1) <= eps                              # no use of sector j in n
+    nn, jj = empty.nonzero()
+    pi[nn, nn, jj] = 1.0                                       # home good, keeps prices defined
+    I = Fg.sum(axis=1)
+    alpha = Fg / np.maximum(I[:, None], eps)
+    VA = (b * Y).sum(axis=1)
+    R0 = (tau0 / (1 + tau0) * pi * E[:, None, :]).sum(axis=(1, 2))
+    D = I - VA - R0
+    D -= D.sum() * I / I.sum()
+    return {"Y": Y, "G": G, "b": b, "alpha": alpha, "pi": pi, "E": E, "I": VA + R0 + D,
+            "VA": VA, "R0": R0, "D": D, "tau0": tau0}
+
+
+def cp_solve(base, tau1, theta, kappa_hat=None, tol=1e-9, max_iter=20000, damp=0.3):
+    """Counterfactual equilibrium in changes (Caliendo and Parro 2015, static,
+    with input-output links, sector elasticities theta[j] and tariff revenue
+    rebated to consumers). Deficits fixed; world value added is the numeraire.
+
+    Returns w_hat (wage = value added price), P_hat [n, j], P_hat_c (consumer
+    price index), W_hat (real income), Y_new [n, j], X_new [n, i, j] at
+    producer prices, revenue, exports_hat (excluding domestic sales).
+    """
+    Y0, G, b, alpha, pi, E0 = base["Y"], base["G"], base["b"], base["alpha"], base["pi"], base["E"]
+    VA, D, tau0 = base["VA"], base["D"], base["tau0"]
+    N, J = Y0.shape
+    theta = np.broadcast_to(np.asarray(theta, float), (J,))
+    kap = (1 + tau1) / (1 + tau0)
+    if kappa_hat is not None:
+        kap = kap * kappa_hat
+    kap_t = kap ** (-theta[None, None, :])
+    w = np.ones(N)
+    P = np.ones((N, J))
+    E = E0.copy()
+    for it in range(max_iter):
+        # prices given wages
+        for _ in range(2000):
+            lnc = b * np.log(w)[:, None] + np.einsum("ikj,ik->ij", G, np.log(P))
+            c = np.exp(lnc)
+            a = pi * kap_t * (c ** (-theta[None, :]))[None, :, :]
+            P_new = a.sum(axis=1) ** (-1 / theta[None, :])
+            if np.max(np.abs(P_new / P - 1)) < tol * 0.1:
+                P = P_new
+                break
+            P = P_new
+        share = a / a.sum(axis=1, keepdims=True)                   # pi'[n, i, j]
+        # expenditure given prices and wages
+        net = share / (1 + tau1)
+        tax = (share * tau1 / (1 + tau1))
+        for _ in range(5000):
+            Y = np.einsum("nij,nj->ij", net, E)
+            R = (tax * E[:, None, :]).sum(axis=(1, 2))
+            I = w * VA + R + D
+            E_new = np.einsum("njk,nk->nj", G, Y) + alpha * I[:, None]
+            if np.max(np.abs(E_new - E) / (E0 + 1e-12)) < tol * 0.1:
+                E = E_new
+                break
+            E = E_new
+        Y = np.einsum("nij,nj->ij", net, E)
+        va_dem = (b * Y).sum(axis=1)
+        z = va_dem / (w * VA) - 1
+        zmax = np.max(np.abs(z))
+        if zmax < tol:
+            break
+        if it and zmax > last:       # adaptive damping against oscillation
+            damp = max(damp * 0.5, 1e-3)
+        last = zmax
+        w = w * (1 + damp * z)
+        w = w * VA.sum() / (w * VA).sum()
+    else:
+        raise RuntimeError("cp_solve did not converge")
+    R = (tax * E[:, None, :]).sum(axis=(1, 2))
+    I = w * VA + R + D
+    I0 = base["I"]
+    Pc = np.exp((alpha * np.log(P)).sum(axis=1))
+    Xn = share / (1 + tau1) * E[:, None, :]
+    Xo = pi / (1 + tau0) * E0[:, None, :]
+    off = ~np.eye(N, dtype=bool)
+    exp_new = (Xn * off[:, :, None]).sum(axis=(0, 2))
+    exp_old = (Xo * off[:, :, None]).sum(axis=(0, 2))
+    return {"w_hat": w, "P_hat": P, "P_hat_c": Pc, "W_hat": (I / I0) / Pc, "Y_new": Y,
+            "Y_hat": Y / Y0, "X_new": Xn, "X_old": Xo, "revenue": R, "E_new": E,
+            "exports_hat": exp_new / exp_old, "iterations": it}

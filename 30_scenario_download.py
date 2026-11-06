@@ -38,6 +38,9 @@ FILES = {
     "BACI_HS22_V202601.zip": "https://www.cepii.fr/DATA_DOWNLOAD/baci/data/BACI_HS22_V202601.zip",
     "conc/Concordance_H6_to_H3.zip": "https://wits.worldbank.org/data/public/concordance/Concordance_H6_to_H3.zip",
     "conc/Concordance_H3_to_I3.zip": "https://wits.worldbank.org/data/public/concordance/Concordance_H3_to_I3.zip",
+    # MAcMap-HS6 2001-2019 (ITC-CEPII), 2.7 GB, link from the CEPII MAcMap page (Dropbox)
+    "macmap/Tariffs_2001_2019.zip": "https://dl.dropboxusercontent.com/scl/fi/rfow5essm4b5kt30o0gdx/"
+                                    "Tariffs_2001_2019.zip?rlkey=yd3d66fegws2yv58ng0kmlryl&dl=1",
 }
 SEAROUTE = "https://files.pythonhosted.org/packages/source/s/searoute/searoute-1.6.0.tar.gz"
 

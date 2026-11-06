@@ -60,7 +60,7 @@ def main():
     theta_raw = np.array([el.get(s, us_mod.DEFAULT_THETA) for s in sectors])
     thetas = {"protee": np.minimum(theta_raw, us_mod.THETA_CAP), "protee_uncapped": theta_raw,
               "uniform4": np.full(J, 4.0), "uniform8": np.full(J, 8.0)}
-    tau0 = np.zeros((N, N, J))
+    tau0 = us_mod.baseline_tariffs(out, pd.read_parquet(out / "us_tariffs_icio.parquet"), countries, sectors)
     base = gg.cp_baseline(X, Z, F, tau0)
     eu = np.array([c in EU for c in countries])
     pair = np.outer(eu, eu) & ~np.eye(N, dtype=bool)          # [n, i] distinct EU members

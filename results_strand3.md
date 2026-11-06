@@ -139,3 +139,32 @@ Germany: exports on the longer routes fall by about 4 % (2024 case), most in
 electronics, chemicals, electrical equipment and machinery (about -6 to -7 %).
 Mediterranean and Gulf economies lose most. Not modelled: Suez Canal fees for
 Egypt, freight rate spikes and capacity shortages, air freight substitution.
+
+
+# Retaliation and full tariff baseline (2026-11-06)
+
+Baseline tariffs of all importers now from MAcMap-HS6 2019 (script 39; ITC-CEPII,
+HS 2007, aggregated to ICIO sectors with 2024 BACI bilateral weights; trade-weighted
+averages: US 1.3 %, China 2.3 %, India 7.3 %, Brazil 8.8 %, Germany 0.8 % incl.
+duty-free intra-EU trade); US row from the CEPII schedule of 1 January 2025.
+All scenarios re-run: results change by at most 0.02 points for Germany and the EU
+(e.g. Red Sea 2024: Germany -0.058 % instead of -0.050 %).
+
+Retaliation (script 34): partners add, sector by sector, the increase in the US
+tariff on their goods since January 2025 to their own tariff on US goods
+(mirror retaliation). The EU list of July 2025 (Implementing Regulation
+2025/1564, about EUR 93 bn) is suspended and not coded.
+
+| Real income, central (range over elasticities) | US tariffs Aug 2026 | + EU mirror tariffs | + all countries mirror |
+|---|---|---|---|
+| Germany | -0.07 % | -0.07 % | -0.05 % |
+| EU27 | -0.06 % | -0.06 % | -0.05 % |
+| USA | -0.12 % (-0.16 to +0.04) | -0.13 % (-0.17 to +0.02) | -0.25 % (-0.28 to -0.14) |
+| China | -0.11 % | -0.11 % | -0.10 % |
+
+EU mirror retaliation barely changes EU welfare (tariff revenue offsets higher
+prices of US goods) and costs the US about 0.01 points; global retaliation
+doubles the US loss and turns its result negative under every elasticity, in line
+with the direction found by Ignatenko et al. (2025). EU exports to the US fall
+more with retaliation (-6.0 % instead of -4.6 %) because trade balances are held
+fixed: when US exports fall, US imports must fall too.

@@ -3,6 +3,8 @@
 Model: Caliendo and Parro (2015), static, solved in changes (gravity_ge.cp_solve),
 81 economies (80 + rest of world) and 50 sectors of OECD ICIO 2025, base year
 2022. Tariff revenue is rebated to consumers, trade deficits are held fixed.
+Baseline tariffs: MAcMap-HS6 2019 for all importers (39_macmap_baseline.py),
+CEPII schedule of 1 January 2025 for the US.
 No retaliation unless stated.
 
 Inputs
@@ -29,7 +31,14 @@ from config import load_config
 
 YEAR = 2022
 BASE_DATE = "20250101"
-SCENARIOS = {"peak_2025_04": "20250410", "deal_2025_09": "20250905", "current_2026_08": "20260822"}
+SCENARIOS = {"peak_2025_04": "20250410", "deal_2025_09": "20250905", "current_2026_08": "20260822",
+             "retaliation_eu": "20260822", "retaliation_all": "20260822"}
+# Retaliation: partners answer with mirror tariffs, i.e. on their imports from the US
+# they add the increase in the US tariff on their own exports, sector by sector
+# (on top of their baseline tariffs). retaliation_eu: EU27 only; retaliation_all:
+# every economy. The EU's countermeasure list of July 2025 (Implementing Regulation
+# 2025/1564, about EUR 93 bn of US goods) is suspended and not coded product by product.
+RETALIATORS = {"retaliation_eu": "EU", "retaliation_all": "ALL"}
 GOODS = ("A", "B", "C")          # tariffs apply only to goods sectors
 DEFAULT_THETA = 5.0
 THETA_CAP = 15.0     # ProTEE HS6 medians above this are product-level, not sector-level elasticities
@@ -70,6 +79,47 @@ def tariff_matrix(t, date, countries, sectors):
     return tau
 
 
+def baseline_tariffs(out, t, countries, sectors):
+    """Baseline tariffs of every importer: MAcMap-HS6 2019 (39_macmap_baseline.py),
+    except the US, whose row is the CEPII schedule of 1 January 2025. Goods only."""
+    N, J = len(countries), len(sectors)
+    pos = {c: k for k, c in enumerate(countries)}
+    spos = {s: k for k, s in enumerate(sectors)}
+    tau = np.zeros((N, N, J))
+    path = out / "macmap_2019_icio.parquet"
+    if path.exists():
+        m = pd.read_parquet(path)
+        m = m[m.importer.isin(pos) & m.exporter.isin(pos) & m.sector.isin(spos) & m.sector.str.startswith(GOODS)]
+        tau[m.importer.map(pos).to_numpy(), m.exporter.map(pos).to_numpy(), m.sector.map(spos).to_numpy()] = m.tariff.to_numpy()
+    else:
+        print("MAcMap baseline missing: tariffs of non-US importers set to zero")
+    us = pos["USA"]
+    tau[us] = tariff_matrix(t, BASE_DATE, countries, sectors)[us]
+    np.einsum("iij->ij", tau)[:] = 0.0                            # no tariffs on domestic sales
+    return tau
+
+
+def with_us_tariffs(tau0, t, date, countries, sectors):
+    """Baseline of all importers with the US row replaced by the US schedule at date."""
+    us = countries.index("USA")
+    tau1 = tau0.copy()
+    tau1[us] = tariff_matrix(t, date, countries, sectors)[us]
+    return tau1
+
+
+def add_retaliation(tau0, tau1, countries, who):
+    """Mirror retaliation: importer n raises its tariff on US goods in sector j by the
+    increase of the US tariff on n's goods in sector j."""
+    us = countries.index("USA")
+    out = tau1.copy()
+    rise = np.maximum(tau1[us] - tau0[us], 0.0)               # [origin n, sector j]
+    for n, c in enumerate(countries):
+        if c in ("USA", "ROW") or (who == "EU" and c not in EU):
+            continue
+        out[n, us, :] = tau1[n, us, :] + rise[n]
+    return out
+
+
 def main():
     cfg = load_config()
     out = cfg["output"] / "scenarios"
@@ -83,7 +133,7 @@ def main():
     thetas = {"protee": np.minimum(theta_raw, THETA_CAP), "protee_uncapped": theta_raw,
               "uniform4": np.full(J, 4.0), "uniform8": np.full(J, 8.0)}
 
-    tau0 = tariff_matrix(t, BASE_DATE, countries, sectors)
+    tau0 = baseline_tariffs(out, t, countries, sectors)
     base = gg.cp_baseline(X, Z, F, tau0)
     us, deu = countries.index("USA"), countries.index("DEU")
     eu = [countries.index(c) for c in EU if c in countries]
@@ -91,7 +141,9 @@ def main():
     rows, sector_rows = [], []
     runs = [(s, "protee") for s in SCENARIOS] + [(s, v) for s in SCENARIOS for v in ("protee_uncapped", "uniform4", "uniform8")]
     for scen, th in runs:
-        tau1 = tariff_matrix(t, SCENARIOS[scen], countries, sectors)
+        tau1 = with_us_tariffs(tau0, t, SCENARIOS[scen], countries, sectors)
+        if scen in RETALIATORS:
+            tau1 = add_retaliation(tau0, tau1, countries, RETALIATORS[scen])
         r = gg.cp_solve(base, tau1, thetas[th])
         to_us_old = r["X_old"][us].sum(axis=1)      # exports of each origin to the US
         to_us_new = r["X_new"][us].sum(axis=1)

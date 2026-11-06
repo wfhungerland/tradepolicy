@@ -88,7 +88,8 @@ def main():
     thetas = {"protee": np.minimum(theta_raw, us_mod.THETA_CAP), "protee_uncapped": theta_raw,
               "uniform4": np.full(J, 4.0), "uniform8": np.full(J, 8.0)}
     goods = np.array([s[0] in "ABC" for s in sectors])
-    base = gg.cp_baseline(X, Z, F, np.zeros((N, N, J)))
+    tau0 = us_mod.baseline_tariffs(out, pd.read_parquet(out / "us_tariffs_icio.parquet"), countries, sectors)
+    base = gg.cp_baseline(X, Z, F, tau0)
     deu = countries.index("DEU")
     eu = np.array([c in us_mod.EU for c in countries])
 
@@ -109,7 +110,7 @@ def main():
             kappa = np.ones((N, N, J))
             lr = scale * np.log(ratio).T                                  # [destination, origin]
             kappa[:, :, goods] = np.exp(lr[:, :, None] * DELTA[ave] / thetas[th][goods][None, None, :])
-            r = gg.cp_solve(base, np.zeros((N, N, J)), thetas[th], kappa_hat=kappa)
+            r = gg.cp_solve(base, tau0, thetas[th], kappa_hat=kappa)
             variant = th if ave == "central" else f"delta_{ave}"
             for k, c in enumerate(countries):
                 dest = affected[k]                                       # destinations on longer routes

@@ -80,6 +80,7 @@ Flat structure, at most one folder level. Scripts are numbered in run order.
 | `test_complexity.py` | checks against py-ecomplexity formulas and the method of reflections |
 | `complexity_methods.md` | methods review and specification, strand 2 |
 | `HANDOVER.md` | project state and open items for a new session |
+| `literature_gravity_scenarios.md` | literature review for strand 3 (tariff, integration and transport scenarios) |
 | `data_inventory_gravity.md` | inventory of datasets for gravity scenario analysis (tariffs, RTAs, transport costs) |
 | `results_strand1.md` | results report, strand 1 |
 | `results_strand2.md` | results report, strand 2 |

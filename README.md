@@ -77,6 +77,11 @@ Flat structure, at most one folder level. Scripts are numbered in run order.
 | `13_forecast_world.py` | out-of-sample test: world exports |
 | `test_forecast.py` | checks gravity estimates against pyfixest, AR and DM test |
 | `20_export_site.py` | exports derived results as JSON for the public site (repo tradepolicy-site) |
+| `30_scenario_download.py` | strand 3: downloads ITPD-E, Larch RTA, CEPII US tariffs, ProTEE, CERDI sea distances |
+| `31_itpd_panel.py` | strand 3: converts ITPD-E to compact Parquet (industry and broad-sector panels) |
+| `32_validate_yotov.py` | strand 3: reproduces the NAFTA example of Yotov et al. (2016) with gravity_ge.py |
+| `gravity_ge.py` | strand 3: structural gravity GE solver (exact hat algebra, with tariff revenue option) |
+| `test_gravity_ge.py` | checks the GE solver (market clearing, ACR welfare formula, tariff solver) |
 | `test_complexity.py` | checks against py-ecomplexity formulas and the method of reflections |
 | `complexity_methods.md` | methods review and specification, strand 2 |
 | `HANDOVER.md` | project state and open items for a new session |
@@ -108,6 +113,7 @@ python 07_atlas_comparison.py
 
 ```bash
 python -m pytest test_forecast.py
+python -m pytest test_gravity_ge.py
 python 10_comext_panel.py
 python 11_imts_download.py
 python 12_forecast_germany.py

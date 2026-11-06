@@ -9,6 +9,8 @@ data:
   tariffs: "C:/Daten/BACI/derived/tariffs"       # MAcMap-HS6
   history: "C:/Daten/BACI/derived/history"       # TRADHIST, RICardo
   comext: "C:/Daten/COMEXT"                      # Eurostat Comext, German exports by SITC
+  scenarios: "C:/Daten/scenarios"                # strand 3 downloads (30_scenario_download.py)
+  yotov_guide: "C:/Daten/yotov_guide/Chapter2"   # Advanced Guide application files (32_validate_yotov.py)
 
 # All results (tables, figures, intermediate files) go here, outside the repo.
 output: "C:/Daten/tradepolicy_output"

@@ -57,7 +57,12 @@ def product_names(cfg):
         urllib.request.urlretrieve(ATLAS_PRODUCTS, target)
     p = pd.read_csv(target, dtype=str)
     p = p[p.product_level == "4"]
-    return dict(zip(p.product_hs92_code, p.product_name)), dict(zip(p.product_hs92_code, p.product_name_short))
+    names = dict(zip(p.product_hs92_code, p.product_name))
+    de = Path(__file__).resolve().parent / "product_names_de.csv"
+    if de.exists():   # German names for the site, see product_names_de.csv
+        d = pd.read_csv(de, dtype=str)
+        names.update(dict(zip(d.hs4, d.name_de)))
+    return names, dict(zip(p.product_hs92_code, p.product_name_short))
 
 
 def country_codes(cfg):
@@ -177,7 +182,7 @@ def main(target=None):
               "BACI HS92 V202601 (CEPII), Etalab Open Licence 2.0",
               "Eurostat Comext, re-use with acknowledgement",
               "IMF International Trade in Goods (IMTS)",
-              "Harvard Growth Lab, Atlas of Economic Complexity, product names, CC BY 4.0",
+              "Harvard Growth Lab, Atlas of Economic Complexity, product names (translated), CC BY 4.0",
           ]}, out / "meta.json")
     total = sum(f.stat().st_size for f in out.rglob("*.json"))
     print(f"{len(countries_all)} countries, {len(prods)} products, {total / 1e6:.1f} MB -> {out}")

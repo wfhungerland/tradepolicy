@@ -66,3 +66,40 @@ mainly for the US and China.
 - 2022 trade structure; ICIO country coverage puts small exporters into ROW.
 - ProTEE HS6 medians are product-level elasticities; at sector level they are
   likely too high for some sectors (refined petroleum, mining, electricity).
+
+
+# EU integration (2026-11-06)
+
+## Border effects with flows to self (Head and Mayer 2021 method)
+
+Script 35: PPML on import shares, pair, exporter-year and importer-year fixed
+effects, year-specific dummies for EU-to-EU, non-EU-to-EU and non-EU-destination
+border flows; ITPD-E R2025, 2000-2019, balanced countries with domestic flows,
+China, Japan and Taiwan excluded (domestic-flow breaks); eps = 5.
+
+| Sector (countries) | EU to EU | non-EU to EU | to non-EU |
+|---|---|---|---|
+| Manufacturing (52) | -2.9 % (2000) to -14.5 % (2019) | 0 to -9.5 % | 0 to -6.7 % |
+| Agriculture (86) | -18.4 % to -28.2 % | -11.4 % to -15.7 % | 0 to -14.5 % |
+| Mining and energy (34) | noisy, no clear trend | | |
+| Services (45) | not estimated: fixed-effect demeaning does not converge | | |
+
+Changes in trade costs relative to non-EU destinations in 2000. Check against
+Head and Mayer (2021, Figure 1, goods): over 2000-2018 their EU-to-EU costs fall
+by roughly 8 to 10 points (read off the figure), ours by 11.6 points in
+manufacturing; outsiders' access to the EU also improves in both ("no Fortress
+Europe"). Our levels start from 2000 and are identified only from accessions
+since then, so they do not measure the full EU effect.
+
+## Scenarios (script 36, same Caliendo-Parro model, ICIO 2022, EU27)
+
+| Scenario | Shock | Germany | EU27 | Intra-EU trade |
+|---|---|---|---|---|
+| No single market | intra-EU gravity coefficient -1.1 for goods (Head and Mayer 2021), -0.18 for services (Mayer, Vicard and Zignago 2019) | -1.48 % | -1.91 % | -40 % |
+| Trend to 2030 | ten more years of the 2000-2019 trend in intra-EU goods integration (+0.04 a year) | +0.77 % | +0.95 % | +18.5 % |
+| Deeper services market | services EU effect up to the goods level on a comparable sample (+0.14) | +0.22 % | +0.29 % | +5.4 % |
+
+Real income changes. Smaller, more open members gain or lose most (Ireland,
+Poland, Netherlands); third countries barely move (US within 0.01 %).
+Limits: services effect from the literature, not estimated here; the trend
+scenario extrapolates a linear path.

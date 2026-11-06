@@ -13,7 +13,7 @@ Scenarios (US applied tariffs at the date shown, against 1 January 2025):
   peak_2025_04   10 April 2025, US-China escalation, 90-day pause for others
   deal_2025_09   5 September 2025, framework deals with EU, Japan, Korea
   current_2026_08  22 August 2026, latest date in the CEPII file
-Elasticities: ProTEE sector medians (central), uniform 4 and 8 (sensitivity).
+Elasticities: ProTEE sector medians capped at 15 (central); uncapped ProTEE, uniform 4 and 8 (sensitivity).
 
 Writes <output>/scenarios/us_tariffs_results.csv (country results),
 us_tariffs_germany_sectors.csv (German output and exports to the US by sector).
@@ -32,6 +32,7 @@ BASE_DATE = "20250101"
 SCENARIOS = {"peak_2025_04": "20250410", "deal_2025_09": "20250905", "current_2026_08": "20260822"}
 GOODS = ("A", "B", "C")          # tariffs apply only to goods sectors
 DEFAULT_THETA = 5.0
+THETA_CAP = 15.0     # ProTEE HS6 medians above this are product-level, not sector-level elasticities
 EU = ["AUT", "BEL", "BGR", "HRV", "CYP", "CZE", "DNK", "EST", "FIN", "FRA", "DEU", "GRC", "HUN",
       "IRL", "ITA", "LVA", "LTU", "LUX", "MLT", "NLD", "POL", "PRT", "ROU", "SVK", "SVN", "ESP", "SWE"]
 
@@ -78,8 +79,9 @@ def main():
 
     t = pd.read_parquet(out / "us_tariffs_icio.parquet")
     el = pd.read_csv(out / "elasticities_icio.csv").set_index("sector")["theta"]
-    theta_central = np.array([el.get(s, DEFAULT_THETA) for s in sectors])
-    thetas = {"protee": theta_central, "uniform4": np.full(J, 4.0), "uniform8": np.full(J, 8.0)}
+    theta_raw = np.array([el.get(s, DEFAULT_THETA) for s in sectors])
+    thetas = {"protee": np.minimum(theta_raw, THETA_CAP), "protee_uncapped": theta_raw,
+              "uniform4": np.full(J, 4.0), "uniform8": np.full(J, 8.0)}
 
     tau0 = tariff_matrix(t, BASE_DATE, countries, sectors)
     base = gg.cp_baseline(X, Z, F, tau0)
@@ -87,7 +89,7 @@ def main():
     eu = [countries.index(c) for c in EU if c in countries]
 
     rows, sector_rows = [], []
-    runs = [(s, "protee") for s in SCENARIOS] + [("current_2026_08", "uniform4"), ("current_2026_08", "uniform8")]
+    runs = [(s, "protee") for s in SCENARIOS] + [(s, v) for s in SCENARIOS for v in ("protee_uncapped", "uniform4", "uniform8")]
     for scen, th in runs:
         tau1 = tariff_matrix(t, SCENARIOS[scen], countries, sectors)
         r = gg.cp_solve(base, tau1, thetas[th])

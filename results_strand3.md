@@ -6,21 +6,26 @@ CEPII (Guimbard 2026) aggregated to ICIO sectors with 2024 US import weights;
 tariff revenue rebated, deficits fixed, no retaliation, tariffs of other
 countries zero in the baseline. Scripts 33 and 34. Runtime about 25 seconds.
 
-## Main results (central case: ProTEE sector elasticities)
+## Main results (central case: ProTEE sector elasticities, capped at 15)
 
 | Scenario (US tariffs at) | Germany real income | Germany exports to US | EU27 real income | US real income |
 |---|---|---|---|---|
-| 10 Apr 2025 (peak) | -0.09 % | -14.7 % | -0.05 % | -0.58 % |
-| 5 Sep 2025 (EU deal) | -0.07 % | -9.0 % | -0.03 % | -0.42 % |
-| 22 Aug 2026 (current) | -0.07 % | -9.2 % | -0.06 % | -0.16 % |
+| 10 Apr 2025 (peak) | -0.10 % | -12.8 % | -0.05 % | -0.53 % |
+| 5 Sep 2025 (EU deal) | -0.08 % | -6.8 % | -0.04 % | -0.35 % |
+| 22 Aug 2026 (current) | -0.07 % | -7.4 % | -0.06 % | -0.12 % |
 
 German sectors hit hardest at the current level: motor vehicles, machinery,
-electrical equipment and electronics, each about -17 to -22 % in US sales and
--1.5 to -2.6 % in output.
+electrical equipment and electronics, each about -15 to -22 % in US sales and
+-1.6 to -2.8 % in output.
+
+Elasticity cap: ProTEE HS6 medians are product-level elasticities; sector values
+above 15 (refined petroleum 66, electricity 45, metal ores 37, coal 35, other
+transport 23, pharmaceuticals 21 and others) are capped at 15 (decision of
+2026-11-06). Uncapped ProTEE, uniform 4 and uniform 8 are reported as sensitivity.
 
 ## Check 1: rise of EU exports to the US in the September 2025 scenario
 
-EU exports to the US rise by 2.9 % (USD 718 to 739 bn) although German exports
+EU exports to the US rise by 1.4 % in the central case (2.9 % uncapped, USD 718 to 739 bn) although German exports
 fall by 9 %. Decomposition by sector:
 - falls where EU goods face tariffs: motor vehicles (-24 bn), chemicals (-22 bn),
   food (-12 bn), machinery (-9 bn);

@@ -25,8 +25,9 @@ transport 23, pharmaceuticals 21 and others) are capped at 15 (decision of
 
 ## Check 1: rise of EU exports to the US in the September 2025 scenario
 
-EU exports to the US rise by 1.4 % in the central case (2.9 % uncapped, USD 718 to 739 bn) although German exports
-fall by 9 %. Decomposition by sector:
+EU exports to the US rise by 1.4 % in the central case (2.9 % with uncapped
+elasticities, USD 718 to 739 bn) although German exports fall by 6.8 % (9.0 %
+uncapped). Decomposition by sector (uncapped run, where the effect is largest):
 - falls where EU goods face tariffs: motor vehicles (-24 bn), chemicals (-22 bn),
   food (-12 bn), machinery (-9 bn);
 - rises where EU goods are nearly tariff-free while competitors (China at 44 %,

@@ -12,10 +12,19 @@ licences: data_inventory_gravity.md and literature_gravity_scenarios.md.
   ProTEE 0.1        CEPII trade elasticities by HS6 (Fontagne, Guimbard, Orefice 2022)
   CERDI seadistance Sea distances between countries, V1.1 (Zenodo)
 
+  searoute data     maritime network and port list from the searoute-py package
+                    (Apache 2.0), only the two GeoJSON files are extracted
+  WITS concordances HS 2022 -> HS 2007 -> ISIC Rev. 3 (folder conc)
+  BACI HS22         import weights for the US tariffs (about 0.3 GB)
+Not downloadable by script: OECD ICIO 2025 (www.oecd.org blocks automated
+requests); put 2016-2022_SML.zip into the folder icio by hand.
+
 Usage: python 30_scenario_download.py
 """
 import shutil
+import tarfile
 import urllib.request
+import zipfile
 
 from config import load_config
 
@@ -26,7 +35,11 @@ FILES = {
     "ProTEE_0_1.csv": "https://www.cepii.fr/DATA_DOWNLOAD/ProTEE/ProTEE_0_1.csv",
     "CERDI-seadistance_V1.1.dta":
         "https://zenodo.org/api/records/240493/files/CERDI-seadistance_V1.1.dta/content",
+    "BACI_HS22_V202601.zip": "https://www.cepii.fr/DATA_DOWNLOAD/baci/data/BACI_HS22_V202601.zip",
+    "conc/Concordance_H6_to_H3.zip": "https://wits.worldbank.org/data/public/concordance/Concordance_H6_to_H3.zip",
+    "conc/Concordance_H3_to_I3.zip": "https://wits.worldbank.org/data/public/concordance/Concordance_H3_to_I3.zip",
 }
+SEAROUTE = "https://files.pythonhosted.org/packages/source/s/searoute/searoute-1.6.0.tar.gz"
 
 
 def fetch(url, target):
@@ -43,12 +56,31 @@ def main():
     folder.mkdir(parents=True, exist_ok=True)
     for name, url in FILES.items():
         target = folder / name
+        target.parent.mkdir(parents=True, exist_ok=True)
         if target.exists():
             print(f"exists   {name}")
             continue
         print(f"download {name} ...", flush=True)
         fetch(url, target)
         print(f"         {target.stat().st_size / 1e6:.0f} MB")
+        if name.startswith("conc/"):
+            with zipfile.ZipFile(target) as z:
+                for m in z.namelist():
+                    if m.upper().endswith(".CSV"):
+                        z.extract(m, target.parent)
+    sea = folder / "searoute"
+    if not (sea / "marnet_searoute.geojson").exists():
+        sea.mkdir(exist_ok=True)
+        tgz = sea / "searoute.tar.gz"
+        fetch(SEAROUTE, tgz)
+        with tarfile.open(tgz) as tf:              # data files only, no code
+            for m in tf.getmembers():
+                base = m.name.rsplit("/", 1)[-1]
+                if base in ("marnet_searoute.geojson", "ports.geojson") and m.isfile():
+                    with tf.extractfile(m) as src, (sea / base).open("wb") as dst:
+                        shutil.copyfileobj(src, dst)
+        tgz.unlink()
+        print("searoute network and ports extracted")
 
 
 if __name__ == "__main__":

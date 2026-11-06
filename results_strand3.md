@@ -103,3 +103,39 @@ Real income changes. Smaller, more open members gain or lose most (Ireland,
 Poland, Netherlands); third countries barely move (US within 0.01 %).
 Limits: services effect from the literature, not estimated here; the trend
 scenario extrapolates a linear path.
+
+
+# Transport cost shocks (2026-11-06)
+
+Script 38 with sea_routes.py. Shortest sea routes between the main ports of the
+80 ICIO economies in the marnet network (searoute data, Arctic passages closed),
+with and without the Red Sea (Suez and Bab el-Mandeb) or the Panama Canal.
+Europe-Asia routes get 12 days longer on average when the Red Sea is closed
+(Germany 10 to 14 days, Mediterranean ports up to 25 days); Hamburg-Ningbo
+grows from 19,868 to 25,584 km (+29 %).
+
+Calibration. Goods trade on longer routes falls with an elasticity of 0.5 with
+respect to sea distance (Feyrer 2021, JDE, closure of the Suez Canal 1967-75:
+about half the cross-sectional estimate; the 0.5 figure is from the working
+paper summary, search snippet only), upper variant 1.0. In general equilibrium
+the model gives 0.43. A first version with time costs of 0.6 to 2.1 % per day
+(Hummels and Schaur 2013) implied 2.5, five times Feyrer, and was dropped: it
+treats all goods as seaborne and as time-sensitive as parts.
+Red Sea 2024: half of the full shock; Suez transits fell from about 26,000 ships
+(2023) to about 13,200 (2024), -49 % (AP data as reported by PortNews), Suez oil
+flows -51 % (S&P Global). IMF PortWatch could not be queried (API quota).
+
+| Real income, central (range) | Red Sea as 2024 | Red Sea closed | Panama closed |
+|---|---|---|---|
+| DEU | -0.050 % (-0.097 to -0.044) | -0.097 % (-0.182 to -0.086) | +0.003 % (+0.002 to +0.005) |
+| EU27 | -0.055 % (-0.104 to -0.048) | -0.104 % (-0.192 to -0.091) | +0.002 % (+0.002 to +0.004) |
+| CHN | -0.023 % (-0.047 to -0.022) | -0.045 % (-0.091 to -0.043) | -0.018 % (-0.036 to -0.017) |
+| IND | -0.081 % (-0.164 to -0.076) | -0.152 % (-0.307 to -0.143) | +0.004 % (+0.003 to +0.007) |
+| EGY | -0.112 % (-0.215 to -0.107) | -0.203 % (-0.390 to -0.194) | +0.000 % (-0.001 to +0.000) |
+| USA | -0.009 % (-0.017 to -0.007) | -0.017 % (-0.031 to -0.014) | -0.034 % (-0.064 to -0.030) |
+| JPN | -0.007 % (-0.017 to -0.006) | -0.014 % (-0.033 to -0.013) | -0.047 % (-0.092 to -0.044) |
+
+Germany: exports on the longer routes fall by about 4 % (2024 case), most in
+electronics, chemicals, electrical equipment and machinery (about -6 to -7 %).
+Mediterranean and Gulf economies lose most. Not modelled: Suez Canal fees for
+Egypt, freight rate spikes and capacity shortages, air freight substitution.

@@ -1,7 +1,6 @@
 """Export strand 3 scenario results as one JSON file for the public site.
 
-Reads <output>/scenarios/us_tariffs_results.csv, us_tariffs_germany_sectors.csv,
-eu_results.csv, eu_germany_sectors.csv (scripts 34 and 36) and writes
+Reads the results of scripts 34 (US tariffs), 36 (EU) and 38 (transport) and writes
 scenarios.json into the site data folder (default <output>/site_data).
 Central case: ProTEE elasticities capped at 15; the range spans all elasticity
 variants (capped and uncapped ProTEE, uniform 4 and 8).
@@ -56,6 +55,15 @@ SCENARIOS = [
     {"id": "services_deeper", "group": "eu", "title": "Dienstleistungsbinnenmarkt so tief wie bei Waren",
      "shock": "Der Binnenmarkteffekt im Dienstleistungshandel steigt auf das Niveau des Warenhandels in einer vergleichbaren Stichprobe (Koeffizient +0,14 nach Mayer, Vicard und Zignago 2019).",
      "partner": "EU"},
+    {"id": "red_sea_2024", "group": "transport", "title": "Rotes Meer: Umleitung wie 2024",
+     "shock": "Rund die Hälfte der Schiffe meidet Suezkanal und Bab el-Mandeb und fährt um das Kap der Guten Hoffnung, wie 2024 nach den Angriffen im Roten Meer (Suez-Durchfahrten 2024 rund -49 % gegenüber 2023). Seewege zwischen Europa und Asien werden dadurch im Mittel um 12 Tage länger (Deutschland 10 bis 14 Tage, Mittelmeerhäfen bis 25 Tage).",
+     "partner": "Routen"},
+    {"id": "red_sea_closed", "group": "transport", "title": "Rotes Meer vollständig gesperrt",
+     "shock": "Suezkanal und Bab el-Mandeb sind für alle Schiffe gesperrt. Alle Seewege, die bisher durch das Rote Meer führen, gehen um Afrika herum; Hamburg-Ningbo wird zum Beispiel rund 29 % länger.",
+     "partner": "Routen"},
+    {"id": "panama_closed", "group": "transport", "title": "Panamakanal gesperrt",
+     "shock": "Der Panamakanal ist gesperrt, etwa durch anhaltende Dürre. Seewege zwischen der Ostküste Amerikas und Ostasien sowie zwischen Europa und der Westküste Südamerikas werden länger.",
+     "partner": "Routen"},
 ]
 
 CHECKS = [
@@ -71,6 +79,8 @@ CHECKS = [
      "text": "Ignatenko, Lashkaripour, Macedoni und Simonovska (2025, JIE) finden ohne Vergeltung einen kleinen Gewinn der USA. Hier entsteht ein Gewinn nur bei niedrigen Elastizitäten; im zentralen Fall verlieren die USA 0,1 bis 0,5 %."},
     {"name": "EU-Handelskosten seit 2000", "result": "bestanden",
      "text": "Eigene Schätzung: Die Handelskosten im EU-Binnenhandel mit Industriewaren sinken 2000 bis 2019 um 11,6 Punkte, die von Drittstaaten in die EU ebenfalls. Head und Mayer (2021, Abbildung 1) zeigen für 2000 bis 2018 einen ähnlichen Rückgang und ebenfalls keine Abschottung nach außen."},
+    {"name": "Transportkosten: Reaktion auf längere Seewege", "result": "bestanden",
+     "text": "Im Modell sinkt der Warenhandel auf umgeleiteten Routen mit einer Elastizität von 0,43 bezogen auf die Seeentfernung. Feyrer (2021, Journal of Development Economics) findet bei der Schließung des Suezkanals 1967 bis 1975 etwa 0,5. Zeitkosten nach Hummels und Schaur (2013) hätten 2,5 ergeben und wurden deshalb nicht verwendet."},
     {"name": "Anstieg der EU-Exporte in die USA im September-Szenario", "result": "erklärt",
      "text": "Die EU-Exporte in die USA steigen um 1,4 %, obwohl die deutschen fallen. Ursache ist Handelsumlenkung: Fast zollfreie EU-Waren (Pharma, Mineralöl, Flugzeuge) und Dienstleistungen ersetzen hoch verzollte Importe aus China und Indien."},
 ]
@@ -97,12 +107,16 @@ def main(target=None):
     out.mkdir(parents=True, exist_ok=True)
     us = pd.read_csv(src / "us_tariffs_results.csv")
     eu = pd.read_csv(src / "eu_results.csv")
+    tr = pd.read_csv(src / "transport_results.csv")
     res = pd.concat([us.rename(columns={"exports_to_us_pct": "partner_pct"}),
-                     eu.rename(columns={"exports_to_eu_pct": "partner_pct"})], ignore_index=True)
+                     eu.rename(columns={"exports_to_eu_pct": "partner_pct"}),
+                     tr.rename(columns={"exports_rerouted_pct": "partner_pct"})], ignore_index=True)
     sec = pd.concat([pd.read_csv(src / "us_tariffs_germany_sectors.csv").rename(
                          columns={"exports_to_us_pct": "partner_pct", "exports_to_us_2022_bn": "partner_2022_bn"}),
                      pd.read_csv(src / "eu_germany_sectors.csv").rename(
-                         columns={"exports_to_eu_pct": "partner_pct", "exports_to_eu_2022_bn": "partner_2022_bn"})],
+                         columns={"exports_to_eu_pct": "partner_pct", "exports_to_eu_2022_bn": "partner_2022_bn"}),
+                     pd.read_csv(src / "transport_germany_sectors.csv").rename(
+                         columns={"exports_rerouted_pct": "partner_pct", "exports_rerouted_2022_bn": "partner_2022_bn"})],
                     ignore_index=True)
     iso2 = iso2_map(cfg)
 

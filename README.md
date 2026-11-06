@@ -92,6 +92,8 @@ Flat structure, at most one folder level. Scripts are numbered in run order.
 | `results_strand3.md` | results report, strand 3 (US tariffs, EU integration, plausibility checks) |
 | `35_eu_border_effects.py` | strand 3: time-varying EU border effects with flows to self (Head and Mayer 2021) |
 | `36_scenario_eu.py` | strand 3: EU single market scenarios in the Caliendo-Parro model |
+| `38_scenario_transport.py` | strand 3: Red Sea and Panama closure scenarios (sea routes, Feyrer calibration) |
+| `sea_routes.py` | sea routing between main ports on the marnet network, passages can be closed |
 | `37_export_scenarios.py` | strand 3: exports scenario results as scenarios.json for the site |
 | `product_examples_de.csv` | one or two everyday product examples per HS4 heading (German) |
 | `results_strand1.md` | results report, strand 1 |

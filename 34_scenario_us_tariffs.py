@@ -112,7 +112,8 @@ def main():
                                     "output_pct": (r["Y_hat"][deu, j] - 1) * 100,
                                     "exports_to_us_pct": (r["X_new"][us, deu, j] / max(r["X_old"][us, deu, j], 1e-9) - 1) * 100,
                                     "us_tariff_pct": tau1[us, deu, j] * 100,
-                                    "exports_to_us_2022_bn": r["X_old"][us, deu, j] / 1e3})
+                                    "exports_to_us_2022_bn": r["X_old"][us, deu, j] / 1e3,
+                                    "output_2022_bn": base["Y"][deu, j] / 1e3})
         k = {c: countries.index(c) for c in ("USA", "DEU", "CHN", "CAN", "MEX")}
         print(f"{scen:16s} {th:9s} " + " ".join(f"{c} {(r['W_hat'][i] - 1) * 100:+.2f}%" for c, i in k.items())
               + f" EU27 {(eu_w - 1) * 100:+.2f}%  ({r['iterations']} it.)", flush=True)

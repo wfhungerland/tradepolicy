@@ -50,7 +50,10 @@ Commit author: Wolf-Fabian Hungerland <w.f.hungerland@gmail.com>.
 
 1. Data inventory verified on 2026-11-05: 114 of 160 facts checked on official pages, the rest
    mostly blocked by www.oecd.org (refuses automated requests). Download URLs are in the file.
-2. Possible strand 3: structural gravity scenarios (GE-PPML) for tariffs, EU integration and
+2. Strand 3 built (2026-11-06): US tariff and EU single market scenarios (scripts 30 to 37,
+   results_strand3.md), shown on the site under Szenarien. Open: retaliation, MAcMap baseline
+   tariffs for non-US countries, transport cost shocks, price convergence (Head and Mayer 2021).
+   Former note: structural gravity scenarios (GE-PPML) for tariffs, EU integration and
    transport cost shocks. Likely core data: ITPD-E (with domestic flows), tariffs (Teti GTD,
    WTO IDB), Larch RTA database, OECD ITIC, CEPII ProTEE. Not yet approved.
 3. Optional: link back from the Produktraum-Monitor to the Konjunkturmonitor. Not answered.

@@ -188,6 +188,10 @@ def main(target=None):
               "Eurostat Comext, re-use with acknowledgement",
               "IMF International Trade in Goods (IMTS)",
               "Harvard Growth Lab, Atlas of Economic Complexity, product names (translated), CC BY 4.0",
+              "OECD Inter-Country Input-Output Tables 2025 (Szenarien)",
+              "USITC ITPD-E Release 2025, public domain (Szenarien)",
+              "CEPII US import tariffs 2025-2026 (Guimbard 2026), CC BY-NC 4.0 (Szenarien)",
+              "CEPII ProTEE 0.1, trade elasticities (Szenarien)",
           ]}, out / "meta.json")
     total = sum(f.stat().st_size for f in out.rglob("*.json"))
     print(f"{len(countries_all)} countries, {len(prods)} products, {total / 1e6:.1f} MB -> {out}")

@@ -1,7 +1,8 @@
 """Scenario: EU single market, in the same multi-sector model as the US tariffs.
 
 Model: Caliendo and Parro (2015) via gravity_ge.cp_solve, OECD ICIO 2025, base
-year 2022, EU27. Elasticities: ProTEE sector medians capped at 15, services 5.
+year 2022, EU27. Elasticities: ProTEE sector medians capped at 15, services 5 (central);
+uncapped ProTEE, uniform 4 and uniform 8 as sensitivity.
 
 Shocks are set in terms of the gravity coefficient on intra-EU border flows
 (beta), so that flows between EU members change by exp(dbeta) at given
@@ -56,7 +57,9 @@ def main():
                                                    us_mod.YEAR)
     N, J = len(countries), len(sectors)
     el = pd.read_csv(out / "elasticities_icio.csv").set_index("sector")["theta"]
-    theta = np.minimum(np.array([el.get(s, us_mod.DEFAULT_THETA) for s in sectors]), us_mod.THETA_CAP)
+    theta_raw = np.array([el.get(s, us_mod.DEFAULT_THETA) for s in sectors])
+    thetas = {"protee": np.minimum(theta_raw, us_mod.THETA_CAP), "protee_uncapped": theta_raw,
+              "uniform4": np.full(J, 4.0), "uniform8": np.full(J, 8.0)}
     tau0 = np.zeros((N, N, J))
     base = gg.cp_baseline(X, Z, F, tau0)
     eu = np.array([c in EU for c in countries])
@@ -81,7 +84,8 @@ def main():
 
     deu, us = countries.index("DEU"), countries.index("USA")
     rows, sec_rows = [], []
-    for scen in ("no_single_market", "trend_2030", "services_deeper"):
+    for scen, th in [(s, v) for s in ("no_single_market", "trend_2030", "services_deeper") for v in thetas]:
+        theta = thetas[th]
         db = dbeta_vec(scen)
         kappa = np.ones((N, N, J))
         kappa[pair] = np.exp(-db / theta)[None, :]
@@ -91,17 +95,20 @@ def main():
         for k, c in enumerate(countries):
             to_eu_old = r["X_old"][eu, k].sum() - (r["X_old"][k, k].sum() if eu[k] else 0)
             to_eu_new = r["X_new"][eu, k].sum() - (r["X_new"][k, k].sum() if eu[k] else 0)
-            rows.append({"scenario": scen, "country": c, "welfare_pct": (r["W_hat"][k] - 1) * 100,
+            rows.append({"scenario": scen, "elasticity": th, "country": c, "welfare_pct": (r["W_hat"][k] - 1) * 100,
                          "exports_pct": (r["exports_hat"][k] - 1) * 100,
                          "exports_to_eu_pct": (to_eu_new / to_eu_old - 1) * 100,
                          "output_pct": (r["Y_new"][k].sum() / base["Y"][k].sum() - 1) * 100})
         w_eu = (r["W_hat"][eu] * base["I"][eu]).sum() / base["I"][eu].sum()
-        rows.append({"scenario": scen, "country": "EU27", "welfare_pct": (w_eu - 1) * 100,
+        rows.append({"scenario": scen, "elasticity": th, "country": "EU27", "welfare_pct": (w_eu - 1) * 100,
                      "exports_pct": np.nan, "exports_to_eu_pct": (intra_new / intra_old - 1) * 100, "output_pct": np.nan})
-        for j, s in enumerate(sectors):
+        for j, s in enumerate(sectors if th == "protee" else []):
             sec_rows.append({"scenario": scen, "sector": s, "output_pct": (r["Y_hat"][deu, j] - 1) * 100,
-                             "exports_to_eu_pct": (r["X_new"][eu, deu, j].sum() / max(r["X_old"][eu, deu, j].sum(), 1e-9) - 1) * 100})
-        print(f"{scen:17s} DEU {(r['W_hat'][deu] - 1) * 100:+.2f}%  EU27 {(w_eu - 1) * 100:+.2f}%  "
+                             "exports_to_eu_pct": ((r["X_new"][eu, deu, j].sum() - r["X_new"][deu, deu, j])
+                                                   / max(r["X_old"][eu, deu, j].sum() - r["X_old"][deu, deu, j], 1e-9) - 1) * 100,
+                             "exports_to_eu_2022_bn": (r["X_old"][eu, deu, j].sum() - r["X_old"][deu, deu, j]) / 1e3,
+                             "output_2022_bn": base["Y"][deu, j] / 1e3})
+        print(f"{scen:17s} {th:15s} DEU {(r['W_hat'][deu] - 1) * 100:+.2f}%  EU27 {(w_eu - 1) * 100:+.2f}%  "
               f"USA {(r['W_hat'][us] - 1) * 100:+.3f}%  intra-EU trade {(intra_new / intra_old - 1) * 100:+.1f}%", flush=True)
     pd.DataFrame(rows).round(4).to_csv(out / "eu_results.csv", index=False)
     pd.DataFrame(sec_rows).round(4).to_csv(out / "eu_germany_sectors.csv", index=False)

@@ -59,6 +59,13 @@ Commit author: Wolf-Fabian Hungerland <w.f.hungerland@gmail.com>.
    WTO IDB), Larch RTA database, OECD ITIC, CEPII ProTEE. Not yet approved.
 3. Optional: link back from the Produktraum-Monitor to the Konjunkturmonitor. Not answered.
 
+## On hold (Wiedervorlage)
+
+- Local reproduction of strand 3 on the owner's PC: `python run_strand3.py`, needs about
+  4.5 GB on C: and 30 to 60 minutes; config.yaml needs the keys `scenarios` and `yotov_guide`
+  (see config.example.yaml); success = "82 of 82 values reproduced". Postponed on 2026-11-06
+  for lack of time and disk space.
+
 ## Known pitfalls
 
 - Run tests and scripts in the `tradepolicy` conda env, not `base`.

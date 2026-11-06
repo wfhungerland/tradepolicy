@@ -43,6 +43,9 @@ FILES = {
                                     "Tariffs_2001_2019.zip?rlkey=yd3d66fegws2yv58ng0kmlryl&dl=1",
 }
 SEAROUTE = "https://files.pythonhosted.org/packages/source/s/searoute/searoute-1.6.0.tar.gz"
+# Application files of Yotov et al. (2016), as shipped with the R package tradepolicy
+# (Pacha), pinned to the commit used for 32_validate_yotov.py
+YOTOV = "https://codeload.github.com/pachadotdev/tradepolicy/zip/577bfde7bd770f61a0e686d346ec1f2ac6656247"
 
 
 def fetch(url, target):
@@ -84,6 +87,20 @@ def main():
                         shutil.copyfileobj(src, dst)
         tgz.unlink()
         print("searoute network and ports extracted")
+    guide = folder / "yotov_guide"
+    if not (guide / "Chapter2").exists():
+        guide.mkdir(exist_ok=True)
+        zf = guide / "tradepolicy.zip"
+        fetch(YOTOV, zf)
+        with zipfile.ZipFile(zf) as z:                # Stata data and results of chapter 2 only
+            for m in z.namelist():
+                if "/00-application-files/Chapter2/" in m and not m.endswith("/"):
+                    rel = m.split("/00-application-files/", 1)[1]
+                    (guide / rel).parent.mkdir(parents=True, exist_ok=True)
+                    with z.open(m) as src, (guide / rel).open("wb") as dst:
+                        shutil.copyfileobj(src, dst)
+        zf.unlink()
+        print("Yotov et al. (2016) chapter 2 files extracted")
 
 
 if __name__ == "__main__":

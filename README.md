@@ -95,6 +95,8 @@ Flat structure, at most one folder level. Scripts are numbered in run order.
 | `38_scenario_transport.py` | strand 3: Red Sea and Panama closure scenarios (sea routes, Feyrer calibration) |
 | `sea_routes.py` | sea routing between main ports on the marnet network, passages can be closed |
 | `39_macmap_baseline.py` | strand 3: baseline tariffs of all countries from MAcMap-HS6 2019 by ICIO sector |
+| `run_strand3.py` | runs strand 3 end to end in the right order |
+| `40_check_reproduction.py` | compares local results with the cloud reference (`reference_results.csv`) |
 | `37_export_scenarios.py` | strand 3: exports scenario results as scenarios.json for the site |
 | `product_examples_de.csv` | one or two everyday product examples per HS4 heading (German) |
 | `results_strand1.md` | results report, strand 1 |

@@ -266,7 +266,10 @@ vs 2.75 ESCAP, 4,126 goods; EU27 2.44 vs 3.03, ESCAP EU value = median of member
 product rankings do not (Spearman 0.00 for Germany, 0.06 for EU27; HS2 chapter medians
 0.22 and 0.34). Single-good estimates are therefore noisy; statements about groups of
 goods (shares, medians, sector values) are more reliable than the value for one good.
-The site says so in the table note.
+The site therefore flags a dependent good as hard to replace only when both estimates are
+below 2: EU27 40 of 486 dependent goods with both estimates (own estimate alone: 218),
+Germany 91 of 562 (own alone: 244). Laptops (847130) are flagged at EU level; lithium-ion
+batteries and solar modules are not (ESCAP about 4).
 
 Uses:
 - Dependent goods: 218 of 488 EU dependent goods with an estimate have sigma < 2

@@ -99,6 +99,7 @@ Flat structure, at most one folder level. Scripts are numbered in run order.
 | `40_check_reproduction.py` | compares local results with the cloud reference (`reference_results.csv`) |
 | `44_dependencies.py` | strategic dependencies of the EU and Germany at HS6 (Commission criteria) |
 | `45_scenario_china_dependencies.py` | scenario: China stops supplying dependent goods |
+| `47_indirect_dependence.py` | direct and indirect dependence of German industries on China (global Leontief inverse) |
 | `46_export_dependencies.py` | exports dependencies.json for the site |
 | `43_expost_check.py` | ex-post check: modelled vs observed US imports by partner (IMF IMTS) |
 | `41_update_assets.py` | builds the fixed inputs for the monthly tariff update (copied to tradepolicy-site/update/assets) |

@@ -40,11 +40,15 @@ def main(target=None):
                           round(r.extra_imports / 1e6, 3), round(r.hhi, 3), round(r.extra_share, 3), round(r.red_sea, 3),
                           round(r.malacca, 3)] for r in dep.itertuples()],
         }
-    g = pd.read_csv(src / "china_dependency_germany.csv")
-    g = g[g.output_2022_bn >= 5].sort_values("dependent_china_input_share_pct", ascending=False).head(12)
+    g = pd.read_csv(src / "china_dependency_germany.csv").merge(
+        pd.read_csv(src / "china_dependence_germany_total.csv")[["sector", "dependent_total_pct", "china_va_total_pct", "direct_dependent_pct"]], on="sector")
+    g = g[g.output_2022_bn >= 5].sort_values("dependent_total_pct", ascending=False).head(12)
     data = {"year": 2024, "levels": levels,
-            "germany_industries": [[r.sector, round(r.dependent_china_input_share_pct, 3), round(r.output_pct, 2),
-                                    round(r.output_2022_bn, 1)] for r in g.itertuples()]}
+            "germany_industries_columns": ["sector", "direct_dependent_pct", "output_change_pct", "output_2022_bn",
+                                           "dependent_incl_indirect_pct", "china_value_added_pct"],
+            "germany_industries": [[r.sector, round(r.direct_dependent_pct, 3), round(r.output_pct, 2),
+                                    round(r.output_2022_bn, 1), round(r.dependent_total_pct, 3), round(r.china_va_total_pct, 2)]
+                                   for r in g.itertuples()]}
     (out / "dependencies.json").write_text(json.dumps(data, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
     print(f"dependencies.json: {(out / 'dependencies.json').stat().st_size / 1e3:.0f} kB")
 

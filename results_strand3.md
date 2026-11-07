@@ -225,3 +225,20 @@ domestic and other suppliers replace China in the long run. The CES model lets b
 switch; hard short-run bottlenecks cost much more, so this is a lower bound.
 Criticality: dependent inputs from China are at most 2 % of costs in any German
 industry (electronics 2.0 %, electrical equipment 1.4 %), direct use only.
+
+
+## Indirect dependence (script 47, 2026-11-07)
+
+Global Leontief inverse of ICIO 2022 (81 x 50 country-sectors). Chinese value added in
+German output over all supply-chain stages (Johnson and Noguera 2012): 1.58 % of output
+on average; 0.78 % reaches German industries through their direct purchases from China,
+so about half arrives via third countries or other German industries. Highest:
+electronics 7.1 %, ships 5.7 %, electrical equipment 5.4 %, textiles 4.4 %; motor
+vehicles 3.3 %, of which half indirectly.
+
+Dependent goods, including indirect supply chains (direct cost share times the
+industry's ratio of total to direct-route Chinese value added): electronics 2.7 %
+(direct 2.1 %), electrical equipment 2.1 % (1.5 %), ships 1.0 %, machinery 0.8 % (0.5 %),
+motor vehicles 0.7 % (0.4 %); economy-wide 0.32 % instead of 0.17 % direct. The
+multiplier approach assumes that the indirect Chinese inputs have the same dependent
+share as the direct ones; it is an approximation.

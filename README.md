@@ -84,6 +84,7 @@ Flat structure, at most one folder level. Scripts are numbered in run order.
 | `34_scenario_us_tariffs.py` | strand 3: US tariff scenarios in a Caliendo-Parro model on ICIO 2022 |
 | `gravity_ge.py` | strand 3: structural gravity GE solver (exact hat algebra, with tariff revenue option) |
 | `test_gravity_ge.py` | checks the GE solver (market clearing, ACR welfare formula, tariff solver) |
+| `test_elasticities.py` | simulation test of the elasticity estimator |
 | `test_complexity.py` | checks against py-ecomplexity formulas and the method of reflections |
 | `complexity_methods.md` | methods review and specification, strand 2 |
 | `paper/` | methods paper (Markdown source, PDF built with pandoc and Chromium) |
@@ -101,6 +102,8 @@ Flat structure, at most one folder level. Scripts are numbered in run order.
 | `44_dependencies.py` | strategic dependencies of the EU and Germany at HS6 (Commission criteria) |
 | `45_scenario_china_dependencies.py` | scenario: China stops supplying dependent goods |
 | `47_indirect_dependence.py` | direct and indirect dependence of German industries on China (global Leontief inverse) |
+| `48_import_elasticities.py` | import demand elasticities by HS6 good for the EU and Germany (BACI HS92 2012-2024), aggregated to ICIO sectors |
+| `elasticities.py` | Feenstra (1994) / Broda-Weinstein (2006) estimator with Soderbery (2015) LIML and constrained-LIML fallback |
 | `46_export_dependencies.py` | exports dependencies.json for the site |
 | `43_expost_check.py` | ex-post check: modelled vs observed US imports by partner (IMF IMTS) |
 | `41_update_assets.py` | builds the fixed inputs for the monthly tariff update (copied to tradepolicy-site/update/assets) |
@@ -133,7 +136,7 @@ python 07_atlas_comparison.py
 
 ```bash
 python -m pytest test_forecast.py
-python -m pytest test_gravity_ge.py
+python -m pytest test_gravity_ge.py test_elasticities.py
 python 10_comext_panel.py
 python 11_imts_download.py
 python 12_forecast_germany.py

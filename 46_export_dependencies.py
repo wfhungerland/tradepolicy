@@ -19,6 +19,15 @@ def main(target=None):
     out = Path(target) if target else cfg["output"] / "site_data"
     d = pd.read_csv(src / "dependencies_hs6.csv", dtype={"hs6": str})
     de4 = {r["hs4"]: r["name_de"] for r in csv.DictReader(open(Path(__file__).parent / "product_names_de.csv", encoding="utf-8"))}
+    # import demand elasticities (48_import_elasticities.py), HS92 -> HS 2022 codes
+    conc = cfg["data"]["scenarios"] / "conc"
+    h22_92 = pd.read_csv(next(conc.glob("*H6_to_H0*.CSV")), dtype=str, encoding="latin1", usecols=[0, 2])
+    h22_92.columns = ["hs6", "hs92"]
+    ela = pd.read_csv(src / "import_elasticities_hs92.csv", dtype={"hs92": str})
+    sig = {}
+    for lv in ("EU27", "DEU"):
+        e = h22_92.merge(ela[ela.level == lv][["hs92", "sigma"]], on="hs92").groupby("hs6").sigma.median()
+        sig[lv] = e.to_dict()
     levels = {}
     for lv in ("EU27", "DEU"):
         a = d[d.level == lv]
@@ -35,10 +44,12 @@ def main(target=None):
             "malacca_share": round(float((dep.malacca * dep.extra_imports).sum() / dep.extra_imports.sum()), 3),
             "sections": [[r.section, int(r.n), int(r.n_chn), round(r.bn / 1e6, 2)] for r in sect.itertuples()],
             "columns": ["hs6", "name_de_hs4", "name_en", "top_supplier", "top_share", "china_share", "extra_imports_bn",
-                        "hhi", "extra_share", "red_sea", "malacca"],
+                        "hhi", "extra_share", "red_sea", "malacca", "sigma"],
             "products": [[r.hs6, de4.get(r.hs6[:4], ""), r.name_en, r.top_supplier, round(r.top_share, 3), round(r.china_share, 3),
                           round(r.extra_imports / 1e6, 3), round(r.hhi, 3), round(r.extra_share, 3), round(r.red_sea, 3),
-                          round(r.malacca, 3)] for r in dep.itertuples()],
+                          round(r.malacca, 3), round(sig[lv][r.hs6], 2) if r.hs6 in sig[lv] else None] for r in dep.itertuples()],
+            "n_hard_to_replace": int(sum(1 for h in dep.hs6 if sig[lv].get(h, 99) < 2)),
+            "n_with_sigma": int(sum(1 for h in dep.hs6 if h in sig[lv])),
         }
     g = pd.read_csv(src / "china_dependency_germany.csv").merge(
         pd.read_csv(src / "china_dependence_germany_total.csv")[["sector", "dependent_total_pct", "china_va_total_pct", "direct_dependent_pct"]], on="sector")

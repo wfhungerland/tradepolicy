@@ -52,6 +52,15 @@ def main():
     raw = np.array([el.get(s, m34.DEFAULT_THETA) for s in sectors])
     thetas = {"protee": np.minimum(raw, m34.THETA_CAP), "protee_uncapped": raw,
               "uniform4": np.full(J, 4.0), "uniform8": np.full(J, 8.0)}
+    # short-run variant: own Feenstra/Soderbery estimates (48_import_elasticities.py),
+    # sigma - 1 by goods sector for the EU27, floored at 0.5 (a few sectors estimate near
+    # zero); services keep 5. Reported separately, not part of the range.
+    own_path = out / "import_elasticities_icio.csv"
+    if own_path.exists():
+        own = pd.read_csv(own_path)
+        own = own[own.level == "EU27"].set_index("sector")["theta_own"]
+        thetas["own_short_run"] = np.array([max(own.get(s, m34.DEFAULT_THETA), 0.5) if s[0] in "ABC"
+                                            else m34.DEFAULT_THETA for s in sectors])
     # goods sectors only: a few HS codes map to ISIC service codes (films, art), whose
     # ICIO flows are services
     fj = np.array([min(f.get(s, 0.0), F_CAP) if s[0] in "ABC" else 0.0 for s in sectors])

@@ -213,6 +213,9 @@ def main(target=None):
                          partner_2022_bn=None)],
                     ignore_index=True)
     iso2 = iso2_map(cfg)
+    # short-run variant (own import elasticities) is reported separately, not in the range
+    short = res[res.elasticity == "own_short_run"].set_index(["scenario", "country"])["welfare_pct"]
+    res = res[res.elasticity != "own_short_run"]
 
     scen_out = []
     for s in SCENARIOS:
@@ -229,7 +232,9 @@ def main(target=None):
                     rnd(row.get("us_tariff_pct", np.nan), 2), rnd(row.partner_2022_bn, 2), rnd(row.output_2022_bn, 1)]
                    for _, row in q.iterrows()]
         en = SCEN_EN.get(s["id"], (s["title"], s["shock"]))
-        scen_out.append({**s, "title_en": en[0], "shock_en": en[1], "countries": countries, "sectors_deu": sectors})
+        sr = {c: round(float(short[(s["id"], c)]), 3) for c in ("DEU", "EU27", "CHN", "USA") if (s["id"], c) in short.index}
+        scen_out.append({**s, "title_en": en[0], "shock_en": en[1], "countries": countries, "sectors_deu": sectors,
+                         **({"short_run": sr} if sr else {})})
 
     data = {"built": date.today().isoformat(),
             "columns": ["welfare_pct", "welfare_min", "welfare_max", "exports_pct", "partner_pct", "output_pct", "us_tariff_pct"],

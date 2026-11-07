@@ -242,3 +242,31 @@ industry's ratio of total to direct-route Chinese value added): electronics 2.7 
 motor vehicles 0.7 % (0.4 %); economy-wide 0.32 % instead of 0.17 % direct. The
 multiplier approach assumes that the indirect Chinese inputs have the same dependent
 share as the direct ones; it is an approximation.
+
+## Import demand elasticities (script 48, 2026-11-07)
+
+Own estimates of the elasticity of substitution between supplier countries, HS6 good by
+good, after Feenstra (1994) and Broda and Weinstein (2006), with the LIML refinement of
+Soderbery (2015). Data: BACI HS92 V202601, 2012-2024, unit values in USD per ton. EU27:
+imports from outside the EU; Germany: imports from all suppliers.
+
+| Level | Goods estimated | Median sigma | Import-weighted median | Share sigma < 3 | LIML feasible |
+|---|---|---|---|---|---|
+| Germany | 4,472 | 2.53 | 2.22 | 56 % | 73 % |
+| EU27 | 4,521 | 2.46 | 2.44 | 57 % | 76 % |
+
+Comparison with ProTEE: rank correlation across ICIO goods sectors 0.08. The concepts
+differ: Feenstra-type estimates measure short-run substitution between varieties from
+year-to-year unit-value and share changes; ProTEE identifies the long-run trade
+elasticity from tariff variation. Low own values are in line with Broda and Weinstein
+(2006) and Soderbery (2015), who report medians of about 3 for detailed US import goods.
+Comparison with the ESCAP-World Bank estimates is pending (file host not reachable from
+the cloud session).
+
+Uses:
+- Dependent goods: 218 of 488 EU dependent goods with an estimate have sigma < 2
+  (Germany: 244 of 565), among them laptops (847130, at the grid floor 1.05), lithium-ion
+  batteries (850760, 1.44) and solar modules (854143, at the floor).
+- China supply-stop scenario, short-run variant (own sector values sigma - 1, floor 0.5,
+  services 5): real income Germany -0.93 %, EU27 -0.63 %, about ten times the long-run
+  central case (-0.09 %, EU27 -0.07 %). Reported separately, not part of the range.

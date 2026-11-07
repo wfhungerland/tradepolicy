@@ -168,3 +168,33 @@ doubles the US loss and turns its result negative under every elasticity, in lin
 with the direction found by Ignatenko et al. (2025). EU exports to the US fall
 more with retaliation (-6.0 % instead of -4.6 %) because trade balances are held
 fixed: when US exports fall, US imports must fall too.
+
+
+# Ex-post check against observed US imports (2026-11-07)
+
+Script 43. Observed US imports by partner (IMF IMTS, CIF, USD), August 2025 to July
+2026 against calendar 2024, relative to total US imports (+5.2 %); model: change in
+exports to the US in the scenarios of 5 Sep 2025 and 22 Aug 2026, also relative to
+all partners. 67 partners, weighted by 2024 imports.
+
+| Model scenario | Weighted correlation | Slope | Without CHE, IRL |
+|---|---|---|---|
+| 5 Sep 2025 | 0.43 | 0.42 | corr 0.50, slope 0.49 |
+| 22 Aug 2026 | 0.11 | 0.20 | corr 0.14, slope 0.26 |
+| mean of both | 0.33 | 0.48 | corr 0.39, slope 0.57 |
+
+Without South-East Asia (VNM, THA, MYS, KHM, IDN, PHL), Switzerland and Ireland the
+correlation is 0.73. Weighted sign agreement is only 0.42, as many partners sit near zero.
+
+What the model gets: the fall of imports from China (model -32, observed -48 log points
+relative), the rise of Taiwan (+60 vs +82, partly the AI server boom, not tariffs).
+What it misses: strong gains of Vietnam, Thailand, Malaysia and Korea (observed +10 to
++69, model -12 to -26): relocation and transshipment out of China ("China plus one"),
+which a model on the 2022 input-output structure with fixed technologies cannot
+produce; Swiss gold flows and the reversal of Irish pharmaceutical front-loading; EU
+countries slightly below the US total rather than above it.
+
+Reading: the model is a long-run benchmark for the incidence of tariffs, not a forecast
+of bilateral trade one year out. The slope of about 0.4 to 0.5 fits short-run trade
+elasticities being well below long-run ones (Boehm, Levchenko and Pandalai-Nayar 2023).
+Added to the checks on the site as "teilweise".

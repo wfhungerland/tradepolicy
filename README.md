@@ -86,6 +86,7 @@ Flat structure, at most one folder level. Scripts are numbered in run order.
 | `test_gravity_ge.py` | checks the GE solver (market clearing, ACR welfare formula, tariff solver) |
 | `test_complexity.py` | checks against py-ecomplexity formulas and the method of reflections |
 | `complexity_methods.md` | methods review and specification, strand 2 |
+| `paper/` | methods paper (Markdown source, PDF built with pandoc and Chromium) |
 | `HANDOVER.md` | project state and open items for a new session |
 | `literature_gravity_scenarios.md` | literature review for strand 3 (tariff, integration and transport scenarios) |
 | `data_inventory_gravity.md` | inventory of datasets for gravity scenario analysis (tariffs, RTAs, transport costs) |

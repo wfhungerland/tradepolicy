@@ -1,0 +1,16 @@
+@font-face { font-family: 'Source Sans 3'; font-weight: 400; src: url(../../tradepolicy-site/site/fonts/SourceSans3-400-latin.woff2) format('woff2'); }
+@font-face { font-family: 'Source Sans 3'; font-weight: 600; src: url(../../tradepolicy-site/site/fonts/SourceSans3-600-latin.woff2) format('woff2'); }
+@font-face { font-family: 'Source Sans 3'; font-weight: 700; src: url(../../tradepolicy-site/site/fonts/SourceSans3-700-latin.woff2) format('woff2'); }
+@font-face { font-family: 'Source Sans 3'; font-style: italic; src: url(../../tradepolicy-site/site/fonts/SourceSans3-400i-latin.woff2) format('woff2'); }
+@page { size: A4; margin: 22mm 20mm 20mm 20mm; }
+body { font-family: 'Source Sans 3', Arial, sans-serif; font-size: 10.5pt; line-height: 1.45; color: #000; max-width: none; }
+header h1.title { font-size: 19pt; margin: 0 0 4pt; } header p.subtitle { font-size: 12pt; margin: 0 0 8pt; }
+header p.author, header p.date { margin: 0; font-size: 10.5pt; }
+.abstract { margin: 14pt 0; font-size: 10pt; } .abstract-title { font-weight: 700; }
+h1 { font-size: 13pt; margin: 16pt 0 6pt; } h2 { font-size: 11pt; margin: 12pt 0 4pt; }
+p { margin: 0 0 6pt; text-align: justify; hyphens: auto; }
+table { border-collapse: collapse; width: 100%; font-size: 9pt; margin: 6pt 0 10pt; break-inside: avoid; }
+th { text-align: left; font-weight: 600; border-bottom: 0.8pt solid #8c8c8c; padding: 2pt 4pt; }
+td { border-bottom: 0.4pt solid #e2e5e9; padding: 2pt 4pt; vertical-align: top; }
+a { color: #000; } ul { margin: 0 0 6pt; padding-left: 14pt; }
+math { font-size: 10.5pt; }

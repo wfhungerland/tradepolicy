@@ -59,6 +59,20 @@ Commit author: Wolf-Fabian Hungerland <w.f.hungerland@gmail.com>.
    WTO IDB), Larch RTA database, OECD ITIC, CEPII ProTEE. Not yet approved.
 3. Optional: link back from the Produktraum-Monitor to the Konjunkturmonitor. Not answered.
 
+## Site status (2026-11-07)
+
+- Views: Überblick, Länder, Länderprofil (#profil/ISO), Produktraum, Branchen, Szenarien
+  (11 scenarios), Prognosetest, Methodik; German and English (site/en/), one app.js
+  (L(de, en) helper, BASE path prefix).
+- Look and feel follow the Konjunkturmonitor (ten rules): question headings with answer
+  sentences, numbered figures with italic side notes, downloads XLSX/PPTX/PNG/CSV per
+  figure (PptxGenJS, SheetJS, self-hosted in site/lib), file names "Produktraum-Monitor
+  (date, Abb. NN) short title".
+- Monthly update of the US tariff scenarios: tradepolicy-site/.github/workflows/update-tariffs.yml
+  (6th of each month), code in tradepolicy-site/update/, assets built here by 41_update_assets.py.
+  Rebuild assets after any baseline change (scripts 33, 34, 39) and copy to update/assets.
+- Policy brief (Claude Docs) mentions profiles, downloads and the monthly update.
+
 ## On hold (Wiedervorlage)
 
 - Local reproduction of strand 3 on the owner's PC: `python run_strand3.py`, needs about

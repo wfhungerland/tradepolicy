@@ -103,6 +103,7 @@ Flat structure, at most one folder level. Scripts are numbered in run order.
 | `45_scenario_china_dependencies.py` | scenario: China stops supplying dependent goods |
 | `47_indirect_dependence.py` | direct and indirect dependence of German industries on China (global Leontief inverse) |
 | `48_import_elasticities.py` | import demand elasticities by HS6 good for the EU and Germany (BACI HS92 2012-2024), aggregated to ICIO sectors |
+| `49_compare_escap.py` | compares own elasticities with the ESCAP-World Bank estimates (HS 2012) |
 | `elasticities.py` | Feenstra (1994) / Broda-Weinstein (2006) estimator with Soderbery (2015) LIML and constrained-LIML fallback |
 | `46_export_dependencies.py` | exports dependencies.json for the site |
 | `43_expost_check.py` | ex-post check: modelled vs observed US imports by partner (IMF IMTS) |

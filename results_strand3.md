@@ -260,8 +260,13 @@ differ: Feenstra-type estimates measure short-run substitution between varieties
 year-to-year unit-value and share changes; ProTEE identifies the long-run trade
 elasticity from tariff variation. Low own values are in line with Broda and Weinstein
 (2006) and Soderbery (2015), who report medians of about 3 for detailed US import goods.
-Comparison with the ESCAP-World Bank estimates is pending (file host not reachable from
-the cloud session).
+Comparison with the ESCAP-World Bank estimates (script 49; Soderbery method, HS 2012, base
+year 2012; one-to-one HS 2012 -> HS92 links only): levels agree (Germany median 2.55 own
+vs 2.75 ESCAP, 4,126 goods; EU27 2.44 vs 3.03, ESCAP EU value = median of members), but
+product rankings do not (Spearman 0.00 for Germany, 0.06 for EU27; HS2 chapter medians
+0.22 and 0.34). Single-good estimates are therefore noisy; statements about groups of
+goods (shares, medians, sector values) are more reliable than the value for one good.
+The site says so in the table note.
 
 Uses:
 - Dependent goods: 218 of 488 EU dependent goods with an estimate have sigma < 2

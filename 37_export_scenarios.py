@@ -61,6 +61,9 @@ SCENARIOS = [
     {"id": "services_deeper", "group": "eu", "title": "Dienstleistungsbinnenmarkt so tief wie bei Waren",
      "shock": "Der Binnenmarkteffekt im Dienstleistungshandel steigt auf das Niveau des Warenhandels in einer vergleichbaren Stichprobe (Koeffizient +0,14 nach Mayer, Vicard und Zignago 2019).",
      "partner": "EU"},
+    {"id": "china_dependencies", "group": "china", "title": "Lieferstopp Chinas bei abhängigen Waren",
+     "shock": "China liefert der EU keine Waren mehr, bei denen die EU nach den Kriterien der EU-Kommission abhängig ist (497 HS6-Positionen, Importwert aus China 2024 rund 157 Mrd. USD). Andere Lieferanten und die eigene Produktion springen langfristig ein; kurzfristige Engpässe ohne Ersatz kosten deutlich mehr.",
+     "partner": "CHN"},
     {"id": "red_sea_2024", "group": "transport", "title": "Rotes Meer: Umleitung wie 2024",
      "shock": "Rund die Hälfte der Schiffe meidet Suezkanal und Bab el-Mandeb und fährt um das Kap der Guten Hoffnung, wie 2024 nach den Angriffen im Roten Meer (Suez-Durchfahrten 2024 rund -49 % gegenüber 2023). Seewege zwischen Europa und Asien werden dadurch im Mittel um 12 Tage länger (Deutschland 10 bis 14 Tage, Mittelmeerhäfen bis 25 Tage).",
      "partner": "Routen"},
@@ -95,6 +98,7 @@ CHECKS = [
 
 
 SCEN_EN = {
+ "china_dependencies": ["China stops supplying dependent goods", "China no longer supplies the EU with goods on which the EU depends by the European Commission's criteria (497 HS6 lines, imports from China in 2024 about USD 157 bn). Other suppliers and EU production step in over the long run; short-run bottlenecks without substitutes cost much more."],
  "peak_2025_04": [
   "US tariffs at their peak (10 April 2025)",
   "US tariffs as on 10 April 2025: trade war with China (surcharge of 125 percentage points), a 10 % minimum tariff on all other countries during the 90-day pause, and tariffs on steel, aluminium and cars."
@@ -195,15 +199,18 @@ def main(target=None):
     us = pd.read_csv(src / "us_tariffs_results.csv")
     eu = pd.read_csv(src / "eu_results.csv")
     tr = pd.read_csv(src / "transport_results.csv")
+    ch = pd.read_csv(src / "china_dependency_results.csv").rename(columns={"imports_from_china_pct": "partner_pct"})
     res = pd.concat([us.rename(columns={"exports_to_us_pct": "partner_pct"}),
                      eu.rename(columns={"exports_to_eu_pct": "partner_pct"}),
-                     tr.rename(columns={"exports_rerouted_pct": "partner_pct"})], ignore_index=True)
+                     tr.rename(columns={"exports_rerouted_pct": "partner_pct"}), ch], ignore_index=True)
     sec = pd.concat([pd.read_csv(src / "us_tariffs_germany_sectors.csv").rename(
                          columns={"exports_to_us_pct": "partner_pct", "exports_to_us_2022_bn": "partner_2022_bn"}),
                      pd.read_csv(src / "eu_germany_sectors.csv").rename(
                          columns={"exports_to_eu_pct": "partner_pct", "exports_to_eu_2022_bn": "partner_2022_bn"}),
                      pd.read_csv(src / "transport_germany_sectors.csv").rename(
-                         columns={"exports_rerouted_pct": "partner_pct", "exports_rerouted_2022_bn": "partner_2022_bn"})],
+                         columns={"exports_rerouted_pct": "partner_pct", "exports_rerouted_2022_bn": "partner_2022_bn"}),
+                     pd.read_csv(src / "china_dependency_germany.csv").assign(scenario="china_dependencies", partner_pct=None,
+                         partner_2022_bn=None)],
                     ignore_index=True)
     iso2 = iso2_map(cfg)
 

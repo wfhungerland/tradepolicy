@@ -198,3 +198,30 @@ Reading: the model is a long-run benchmark for the incidence of tariffs, not a f
 of bilateral trade one year out. The slope of about 0.4 to 0.5 fits short-run trade
 elasticities being well below long-run ones (Boehm, Levchenko and Pandalai-Nayar 2023).
 Added to the checks on the site as "teilweise".
+
+
+# Strategic dependencies (2026-11-07)
+
+Script 44, criteria of the European Commission (2021) as summarised in CEPII Policy
+Brief 2023-41: HHI of extra-EU import sources > 0.4, extra-EU imports > 50 % of all
+imports, extra-EU imports > own exports. BACI HS22, 2024, HS6 (5,605 lines).
+
+| Level | Dependent goods | Imports from outside the EU | China main supplier | via Red Sea | via Malacca |
+|---|---|---|---|---|---|
+| EU27 | 497 | USD 230 bn (8.3 % of extra-EU imports) | 220 goods, USD 157 bn | 74 % | 70 % |
+| Germany | 593 | USD 102 bn (17.6 %) | 253 goods, USD 61 bn | 63 % | 59 % |
+
+Check: the Commission found 137 goods in its sensitive ecosystems (2018 data); CEPII
+reproduces 134 with seven sectors (2019). Our 497 cover all goods; chemicals (101),
+textiles (81), machinery and electronics (41), metals (40) lead. The largest by value
+are laptops, lithium-ion batteries and solar cells, all from China (85 to 98 %).
+
+Scenario (script 45): China stops supplying the EU with these goods, implemented per
+ICIO sector as an iceberg cost cutting China-EU flows by the dependent share f_j
+(electrical equipment 40 %, electronics 32 %, metal ores 61 %; goods sectors only).
+Real income: Germany -0.09 % (range -0.17 to -0.09), EU27 -0.07 %, China -0.04 %, US
++0.004 %. German electronics and electrical equipment expand (+2 to +5 % output) as
+domestic and other suppliers replace China in the long run. The CES model lets buyers
+switch; hard short-run bottlenecks cost much more, so this is a lower bound.
+Criticality: dependent inputs from China are at most 2 % of costs in any German
+industry (electronics 2.0 %, electrical equipment 1.4 %), direct use only.

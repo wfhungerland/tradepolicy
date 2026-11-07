@@ -58,6 +58,7 @@ def product_names(cfg):
     p = pd.read_csv(target, dtype=str)
     p = p[p.product_level == "4"]
     names = dict(zip(p.product_hs92_code, p.product_name))
+    names_en = dict(names)
     de = Path(__file__).resolve().parent / "product_names_de.csv"
     if de.exists():   # German names for the site, see product_names_de.csv
         d = pd.read_csv(de, dtype=str)
@@ -67,7 +68,7 @@ def product_names(cfg):
     if ex.exists():   # one or two everyday examples per heading, see product_examples_de.csv
         e = pd.read_csv(ex, dtype=str, keep_default_na=False)
         examples = dict(zip(e.hs4, e.examples_de))
-    return names, dict(zip(p.product_hs92_code, p.product_name_short)), examples
+    return names, dict(zip(p.product_hs92_code, p.product_name_short)), examples, names_en
 
 
 def country_codes(cfg):
@@ -97,7 +98,7 @@ def main(target=None):
         countries[f"{col}_rank"] = countries.groupby("year")[col].rank(ascending=False).astype(int)
 
     # products
-    names, short, examples = product_names(cfg)
+    names, short, examples, names_en = product_names(cfg)
     prods = sorted(products["prod"].unique())
     pidx = {p: i for i, p in enumerate(prods)}
     pooled = products.groupby("prod")["pci"].mean().reindex(prods)
@@ -122,8 +123,8 @@ def main(target=None):
         sec = sectors.sector_of(p)
         prod_rows.append([p, names.get(p, p), short.get(p, ""), sec_names.index(sec),
                           groups.index(pspace.GROUPS[sec]), rnd(xs[i], 4), rnd(ys[i], 4),
-                          rnd(pooled.iloc[i], 3), rnd(world_last.iloc[i] / 1e6, 3), examples.get(p, "")])
-    dump({"columns": ["code", "name", "short", "sector", "group", "x", "y", "pci", "world_bn_usd", "examples"],
+                          rnd(pooled.iloc[i], 3), rnd(world_last.iloc[i] / 1e6, 3), examples.get(p, ""), names_en.get(p, p)])
+    dump({"columns": ["code", "name", "short", "sector", "group", "x", "y", "pci", "world_bn_usd", "examples", "name_en"],
           "sectors": sec_names, "groups": groups, "group_colors": list(pspace.GROUP_COLORS.values()),
           "rows": prod_rows}, out / "products.json")
     tree_edges = [[pidx[u], pidx[v]] for u, v in tree.edges]

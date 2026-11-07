@@ -92,6 +92,83 @@ CHECKS = [
 ]
 
 
+SCEN_EN = {
+ "peak_2025_04": [
+  "US tariffs at their peak (10 April 2025)",
+  "US tariffs as on 10 April 2025: trade war with China (surcharge of 125 percentage points), a 10 % minimum tariff on all other countries during the 90-day pause, and tariffs on steel, aluminium and cars."
+ ],
+ "deal_2025_09": [
+  "US tariffs after the deals (5 September 2025)",
+  "US tariffs as on 5 September 2025: framework deals with the EU, Japan and Korea (for the EU at most 15 % on most goods), high surcharges on India and Brazil, China after the Geneva agreement."
+ ],
+ "current_2026_08": [
+  "US tariffs now (22 August 2026)",
+  "US tariffs as on 22 August 2026: after the Supreme Court ruling against the IEEPA tariffs (February 2026), mainly Section 232 tariffs (steel, aluminium, copper, cars, trucks, semiconductors, pharmaceuticals) and Section 301, plus surcharges on Canada."
+ ],
+ "retaliation_eu": [
+  "US tariffs now, EU retaliates",
+  "US tariffs as on 22 August 2026; the EU raises its tariffs on US goods in every sector by the same amount as the US has raised its tariffs on goods from each EU country since January 2025 (mirror retaliation). The EU countermeasure list of about EUR 93 bn (July 2025) is suspended and not coded item by item."
+ ],
+ "retaliation_all": [
+  "US tariffs now, all countries retaliate",
+  "US tariffs as on 22 August 2026; every country mirrors the increase in US tariffs on its own goods since January 2025 on its imports from the US."
+ ],
+ "no_single_market": [
+  "Without the EU single market",
+  "EU members trade with each other as with third countries: the single market effect disappears in goods (gravity coefficient 1.1, Head and Mayer 2021) and in services (0.18, Mayer, Vicard and Zignago 2019)."
+ ],
+ "trend_2030": [
+  "Single market keeps deepening to 2030",
+  "Trade costs within the EU keep falling for ten more years at the 2000 to 2019 pace, estimated with domestic sales data (ITPD-E) following Head and Mayer (2021)."
+ ],
+ "services_deeper": [
+  "Services single market as deep as for goods",
+  "The single market effect in services rises to the level of goods in a comparable sample (coefficient +0.14, Mayer, Vicard and Zignago 2019)."
+ ],
+ "red_sea_2024": [
+  "Red Sea: rerouting as in 2024",
+  "About half of all ships avoid the Suez Canal and Bab el-Mandeb and sail around the Cape of Good Hope, as in 2024 after the attacks in the Red Sea (Suez transits about -49 % on 2023). Sea routes between Europe and Asia get 12 days longer on average (Germany 10 to 14 days, Mediterranean ports up to 25 days)."
+ ],
+ "red_sea_closed": [
+  "Red Sea fully closed",
+  "The Suez Canal and Bab el-Mandeb are closed to all ships. All sea routes through the Red Sea go around Africa; Hamburg-Ningbo, for example, gets about 29 % longer."
+ ],
+ "panama_closed": [
+  "Panama Canal closed",
+  "The Panama Canal is closed, for example by a lasting drought. Sea routes between the east coast of the Americas and East Asia, and between Europe and the west coast of South America, get longer."
+ ]
+}
+
+CHECKS_EN = [
+    {"name": "Textbook example reproduced", "result": "passed", "text": "The NAFTA example of Yotov, Piermartini, Monteiro and Larch (2016) is reproduced: same RTA coefficient (0.557), export effects within 0.75 percentage points."},
+    {"name": "Model mechanics", "result": "passed", "text": "Without a shock the model returns the baseline exactly; with one sector and no inputs it equals the one-sector tariff model; the welfare formula of Arkolakis, Costinot and Rodriguez-Clare (2012) holds in the one-sector case."},
+    {"name": "US imports from China", "result": "plausible", "text": "Model: -23 % at current tariffs. Observed in 2025: about -30 % (US Census, as reported by PIIE and the press). The model describes long-run adjustment; tariffs changed during 2025."},
+    {"name": "US tariff revenue", "result": "plausible", "text": "Model: USD 192 to 256 bn a year, depending on the elasticity (including pre-2025 tariffs). Observed: USD 195 bn in fiscal year 2025 (CRFB, from the Monthly Treasury Statement), when the tariffs were only partly in force."},
+    {"name": "US welfare", "result": "deviation", "text": "Ignatenko, Lashkaripour, Macedoni and Simonovska (2025, JIE) find a small US gain without retaliation. Here a gain appears only with low elasticities; in the central case the US loses 0.1 to 0.5 %."},
+    {"name": "EU trade costs since 2000", "result": "passed", "text": "Own estimate: trade costs in intra-EU manufacturing trade fall by 11.6 points from 2000 to 2019, and those of imports from outside the EU fall too. Head and Mayer (2021, Figure 1) show a similar fall for 2000 to 2018 and likewise no closing-off."},
+    {"name": "Response to longer sea routes", "result": "passed", "text": "In the model, goods trade on rerouted routes falls with an elasticity of 0.43 with respect to sea distance. Feyrer (2021, Journal of Development Economics) finds about 0.5 for the closure of the Suez Canal in 1967 to 1975. Time costs after Hummels and Schaur (2013) would have implied 2.5 and were not used."},
+    {"name": "Rise of EU exports to the US in the September scenario", "result": "explained", "text": "EU exports to the US rise by 1.4 % although German exports fall. The cause is trade diversion: almost duty-free EU goods (pharmaceuticals, refined oil, aircraft) and services replace heavily taxed imports from China and India."},
+]
+
+
+def sector_names_en(cfg):
+    """English ICIO sector names from the ICIO ReadMe (Area_Activities sheet)."""
+    import warnings
+    path = cfg["data"]["scenarios"] / "icio" / "ReadMe_ICIO_small.xlsx"
+    if not path.exists():
+        return {}
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore")
+        d = pd.read_excel(path, "Area_Activities", header=None)
+    out = {}
+    for _, r in d.iterrows():
+        vals = [v for v in r.tolist() if isinstance(v, str)]
+        for a, b in zip(vals, vals[1:]):
+            if a in SECTOR_DE and b not in SECTOR_DE:
+                out[a] = b
+    return out
+
+
 def iso2_map(cfg):
     path = cfg["data"]["scenarios"] / "BACI_HS22_V202601.zip"
     with zipfile.ZipFile(path) as z:
@@ -140,12 +217,13 @@ def main(target=None):
         sectors = [[row.sector, rnd(row.output_pct, 2), rnd(row.partner_pct, 2),
                     rnd(row.get("us_tariff_pct", np.nan), 2), rnd(row.partner_2022_bn, 2), rnd(row.output_2022_bn, 1)]
                    for _, row in q.iterrows()]
-        scen_out.append({**s, "countries": countries, "sectors_deu": sectors})
+        en = SCEN_EN.get(s["id"], (s["title"], s["shock"]))
+        scen_out.append({**s, "title_en": en[0], "shock_en": en[1], "countries": countries, "sectors_deu": sectors})
 
     data = {"built": date.today().isoformat(),
             "columns": ["welfare_pct", "welfare_min", "welfare_max", "exports_pct", "partner_pct", "output_pct", "us_tariff_pct"],
             "sector_columns": ["sector", "output_pct", "partner_pct", "us_tariff_pct", "partner_exports_2022_bn", "output_2022_bn"],
-            "sector_names": SECTOR_DE, "iso2": {k: iso2.get(k, "") for k in res.country.unique() if k != "EU27"},
+            "sector_names": SECTOR_DE, "sector_names_en": sector_names_en(cfg), "checks_en": CHECKS_EN, "iso2": {k: iso2.get(k, "") for k in res.country.unique() if k != "EU27"},
             "scenarios": scen_out, "checks": CHECKS}
     (out / "scenarios.json").write_text(json.dumps(data, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
     print(f"{len(scen_out)} scenarios -> {out / 'scenarios.json'} ({(out / 'scenarios.json').stat().st_size / 1e3:.0f} kB)")

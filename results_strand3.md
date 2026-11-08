@@ -408,3 +408,24 @@ border trend and RTA; 174 countries, 207,823 observations.
   all others. Treat as a check, not as evidence against fragmentation.
 - Subsidies (Global Trade Alert): not done; the API key allows only 1,000 records per 24
   hours. A bulk export from the GTA data center is needed.
+
+## Varieties of capitalism: business systems and institutional distance (script 63, 2026-11-08)
+
+Witt et al. (2018, Socio-Economic Review 16(1)): nine business-system clusters of 61
+economies and the pairwise institutional distance matrix (Table 4, parsed from the open
+access PDF; all 1,830 pairs).
+
+- Germany's imports 2024 by partner type: European periphery 34 %, coordinated market
+  economies 33 %, emerging economies 13 %, liberal market economies 10 %. EU27 imports
+  from outside the EU: emerging economies 43 % (mostly China), liberal market economies
+  22 %.
+- Gravity (PPML, ITPD-E manufacturing 2017-2019, 61 economies, exporter and importer
+  effects, distance, contiguity, language, colony, RTA): institutional distance has no
+  effect beyond geography and trade agreements (+0.03 per standard deviation, s.e. 0.02);
+  same business-system type +0.05 (0.06). Distance elasticity -0.74 as usual.
+- Germany: manufacturing exports to its institutional neighbours (Belgium, Netherlands,
+  Norway) lie below the model, to China, Poland and Mexico above it; no pattern by
+  institutional distance.
+- Interpretation: Witt's distance measures differences in coordination, ownership and
+  labour institutions, not governance quality; studies that find trade effects of
+  institutional similarity mostly use governance indicators (e.g. de Groot et al. 2004).

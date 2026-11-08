@@ -93,7 +93,7 @@ def main():
     deu = countries.index("DEU")
     eu = np.array([c in us_mod.EU for c in countries])
 
-    rows, sec_rows, route_rows = [], [], []
+    rows, sec_rows, route_rows, all_rows = [], [], [], []
     share_2024 = RED_SEA_2024_SHARE
     for scen, closed in SCENARIOS.items():
         days, ratio = route_change(cfg, countries, closed)
@@ -112,6 +112,9 @@ def main():
             kappa[:, :, goods] = np.exp(lr[:, :, None] * DELTA[ave] / thetas[th][goods][None, None, :])
             r = gg.cp_solve(base, tau0, thetas[th], kappa_hat=kappa)
             variant = th if ave == "central" else f"delta_{ave}"
+            if variant == "protee":
+                all_rows += [{"scenario": scen, "country": c, "sector": s, "output_pct": (r["Y_hat"][k, j] - 1) * 100,
+                              "output_2022_bn": base["Y"][k, j] / 1e3} for k, c in enumerate(countries) for j, s in enumerate(sectors)]
             for k, c in enumerate(countries):
                 dest = affected[k]                                       # destinations on longer routes
                 old = r["X_old"][dest, k].sum()
@@ -137,6 +140,7 @@ def main():
     pd.DataFrame(rows).round(4).to_csv(out / "transport_results.csv", index=False)
     pd.DataFrame(sec_rows).round(4).to_csv(out / "transport_germany_sectors.csv", index=False)
     pd.DataFrame(route_rows).to_csv(out / "transport_routes.csv", index=False)
+    pd.DataFrame(all_rows).round(4).to_csv(out / "transport_output_all.csv", index=False)
 
 
 if __name__ == "__main__":

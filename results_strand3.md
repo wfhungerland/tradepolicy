@@ -429,3 +429,30 @@ access PDF; all 1,830 pairs).
 - Interpretation: Witt's distance measures differences in coordination, ownership and
   labour institutions, not governance quality; studies that find trade effects of
   institutional similarity mostly use governance indicators (e.g. de Groot et al. 2004).
+
+## Regions (NUTS 2 and 3; scripts 64, 65, 2026-11-09)
+
+Scenario outputs by country and sector are now saved for all countries
+(us_tariffs_output_all.csv etc.; reference check still 82 of 82).
+
+- Shift-share exposure (Eurostat sbs_r_nuts2021, business economy; Caliendo-Parro output
+  changes): US tariffs lower output most in industrial regions; in Germany Tübingen
+  (-0.56 %), Oberpfalz and Freiburg; Irish regions gain in the model. EU regional mean
+  -0.33 %. A Chinese stop of dependent goods and Red Sea rerouting raise output slightly in
+  most regions (domestic producers replace imports at higher cost; real income still
+  falls). Energy-intensive employment share highest in Severozápad (CZ, 7.3 %), in Germany
+  Rheinhessen-Pfalz (6.6 %).
+- History (ARDECO SUVGDP, nominal EUR): dispersion of log GDP per head across NUTS 3
+  regions 0.85 in 2000, 0.66 in 2010, 0.53 in 2024 (the 1990 value of 1.09 reflects
+  exchange-rate collapses in Central and Eastern Europe). East German districts (without
+  Berlin, unweighted) 34 % of the West German mean in 1991, 65 % in 2000, 75 % in 2024.
+- Cohesion payments 1989-2023 per head (latest population): in Germany highest in
+  Mecklenburg-Vorpommern (5,792 EUR), Sachsen-Anhalt and Thüringen. Regression discontinuity
+  at 75 % of EU GDP per head (PPS), periods 2007-2013 and 2014-2020 pooled, bandwidths 10 to
+  20 points: neither payments per head (+570 to +680 EUR, s.e. 640 to 920) nor growth
+  jump significantly. Becker, Egger and von Ehrlich (2010) find a clear growth effect for
+  1989-2006; here NUTS boundary changes (eligibility used older NUTS versions), transition
+  regions and the modelled regional allocation of payments blur the threshold.
+- Not done: German districts (NUTS 3) by industry; neither Eurostat nor the Federal
+  Employment Agency publish them as files (the BA offers them by Land only). Rosés-Wolf
+  historical regional GDP (1900-2022) sits behind bot protection (CEPR, HU Berlin).

@@ -67,11 +67,14 @@ def main():
     chn, deu = countries.index("CHN"), countries.index("DEU")
     eu = np.array([c in m34.EU for c in countries])
 
-    rows, sec = [], []
+    rows, sec, all_rows = [], [], []
     for v, th in thetas.items():
         kappa = np.ones((N, N, J))
         kappa[np.ix_(eu, [chn], np.arange(J))] = ((1 - fj) ** (-1 / th))[None, None, :]
         r = gg.cp_solve(base, tau0, th, kappa_hat=kappa)
+        if v == "protee":
+            all_rows += [{"scenario": "china_dependencies", "country": c, "sector": s, "output_pct": (r["Y_hat"][k, j] - 1) * 100,
+                          "output_2022_bn": base["Y"][k, j] / 1e3} for k, c in enumerate(countries) for j, s in enumerate(sectors)]
         for k, c in enumerate(countries):
             rows.append({"scenario": "china_dependencies", "elasticity": v, "country": c,
                          "welfare_pct": (r["W_hat"][k] - 1) * 100, "exports_pct": (r["exports_hat"][k] - 1) * 100,
@@ -89,6 +92,7 @@ def main():
         print(f"{v:16s} DEU {(r['W_hat'][deu] - 1) * 100:+.3f}%  EU27 {(w - 1) * 100:+.3f}%  CHN {(r['W_hat'][chn] - 1) * 100:+.3f}%  "
               f"USA {(r['W_hat'][countries.index('USA')] - 1) * 100:+.3f}%")
     pd.DataFrame(rows).round(4).to_csv(out / "china_dependency_results.csv", index=False)
+    pd.DataFrame(all_rows).round(4).to_csv(out / "china_dependency_output_all.csv", index=False)
     s = pd.DataFrame(sec).round(4)
     s.to_csv(out / "china_dependency_germany.csv", index=False)
     print(s.sort_values("dependent_china_input_share_pct", ascending=False).head(8).to_string(index=False))

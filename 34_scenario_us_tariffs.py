@@ -138,13 +138,16 @@ def main():
     us, deu = countries.index("USA"), countries.index("DEU")
     eu = [countries.index(c) for c in EU if c in countries]
 
-    rows, sector_rows = [], []
+    rows, sector_rows, all_rows = [], [], []
     runs = [(s, "protee") for s in SCENARIOS] + [(s, v) for s in SCENARIOS for v in ("protee_uncapped", "uniform4", "uniform8")]
     for scen, th in runs:
         tau1 = with_us_tariffs(tau0, t, SCENARIOS[scen], countries, sectors)
         if scen in RETALIATORS:
             tau1 = add_retaliation(tau0, tau1, countries, RETALIATORS[scen])
         r = gg.cp_solve(base, tau1, thetas[th])
+        if th == "protee":
+            all_rows += [{"scenario": scen, "country": c, "sector": s, "output_pct": (r["Y_hat"][k, j] - 1) * 100,
+                          "output_2022_bn": base["Y"][k, j] / 1e3} for k, c in enumerate(countries) for j, s in enumerate(sectors)]
         to_us_old = r["X_old"][us].sum(axis=1)      # exports of each origin to the US
         to_us_new = r["X_new"][us].sum(axis=1)
         for k, c in enumerate(countries):
@@ -172,6 +175,7 @@ def main():
 
     pd.DataFrame(rows).round(4).to_csv(out / "us_tariffs_results.csv", index=False)
     pd.DataFrame(sector_rows).round(4).to_csv(out / "us_tariffs_germany_sectors.csv", index=False)
+    pd.DataFrame(all_rows).round(4).to_csv(out / "us_tariffs_output_all.csv", index=False)
 
 
 if __name__ == "__main__":

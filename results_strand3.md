@@ -373,3 +373,38 @@ under wholesale).
 - SME shares by activity (exports outside the EU): manufacturing 9 %, wholesale 60 %,
   fabricated metal products 28 %, machinery 14 %, motor vehicles below 1 %.
 - Caveat: the German "Mittelstand" includes larger family firms and is broader than SMEs.
+
+## Migration networks and trade (script 61, 2026-11-08)
+
+UN DESA International Migrant Stock 2024 (1990-2024, five-year steps) with ITPD-E goods
+trade incl. domestic flows; PPML with exporter-year, importer-year and pair effects,
+border trend and RTA; 174 countries, 207,823 observations.
+
+- Elasticity of exports with respect to the exporter's diaspora in the importing country
+  0.044 (s.e. 0.020); with respect to immigrants from the importer in the exporting
+  country 0.040 (0.019). Without pair effects (2020 cross-section, no distance control)
+  0.08 and 0.07. The meta-analysis of Genc et al. (2012) reports about 0.1 to 0.2, mostly
+  from cross-sections; within-pair estimates are known to be smaller.
+- Germany: the rise of immigration 2015-2024 raises imports from Ukraine by about 8 %,
+  from Syria 6.5 %, Afghanistan 5.7 %, Romania 1.7 % (exports similar); for established
+  communities (Poland, Turkey) below 1 %.
+- RTA coefficient small (0.04, not significant) in this specification with five-year
+  steps; a check against Yotov et al. (2016) would expect larger values.
+
+## Defence procurement and geopolitics (script 62, 2026-11-08)
+
+- Kiel Military Procurement Tracker (3rd release, orders 2020 to January 2026), share of
+  order value by headquarters of the supplier: Germany domestic 52 %, domestic with foreign
+  partner 36 %, other European 1 %, non-European 12 %; UK 50 / 46 / 1 / 3; Poland 23 / 43 /
+  3 / 32.
+- Friend-shoring test (ITPD-E 2010-2023, PPML with pair effects): manufacturing trade
+  between countries far apart in UN votes did not fall relative to close pairs; the
+  interaction for 2022-2023 is positive (distance +0.095, s.e. 0.046; West vs. others
+  +0.20, s.e. 0.07). Defence alliances (ATOP and NATO) raise manufacturing trade by about
+  25 %. This differs from Gopinath et al. (2025), who find a relative fall of trade
+  between blocs after 2022; their blocs (US- and China-leaning by the 2022 UN votes) are
+  narrower, they use quarterly IMF data to 2023 and no domestic flows. On the UN scale
+  China sits within the Global South, so a US-China split mostly separates the West from
+  all others. Treat as a check, not as evidence against fragmentation.
+- Subsidies (Global Trade Alert): not done; the API key allows only 1,000 records per 24
+  hours. A bulk export from the GTA data center is needed.

@@ -113,6 +113,9 @@ Flat structure, at most one folder level. Scripts are numbered in run order.
 | `57_export_regime.py` | exports trade by regime for the site (regime.json) |
 | `58_mittelstand.py` | SMEs in trade (Eurostat TEC): shares by partner and activity, exposure to US tariffs, Chinese price pressure and imports from China |
 | `59_export_mittelstand.py` | exports the SME analysis for the site (mittelstand.json) |
+| `60_world_shares.py` | yearly world export shares of China and Germany by HS6 (BACI HS92) |
+| `61_migration_gravity.py` | migrant networks in structural gravity (UN DESA migrant stocks, ITPD-E, PPML with pair effects) |
+| `62_defense_alliances.py` | defence procurement by supplier origin (Kiel tracker) and friend-shoring test with UN alignment and alliances (ATOP, NATO) |
 | `54_export_zero_trade.py` | exports the matrices for the site (zerotrade_*.json) |
 | `elasticities.py` | Feenstra (1994) / Broda-Weinstein (2006) estimator with Soderbery (2015) LIML and constrained-LIML fallback |
 | `46_export_dependencies.py` | exports dependencies.json for the site |

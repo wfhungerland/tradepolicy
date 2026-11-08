@@ -307,3 +307,20 @@ German and Chinese exports to all other countries, HS6 (BACI HS92 V202601).
   world share in vehicles 4 % -> 10 %). HS92 code 870390 contains electric cars.
 - Limits: unit values per ton mix quality, model mix and weight; the ladder is a
   unit-value spread, not Khandelwal's demand-based quality estimate.
+
+## Zero-trade matrices (scripts 52 to 54, 2026-11-08)
+
+Presentation after Helpman, Melitz and Rubinstein (2008, QJE). Country level from IMF
+IMTS mirror data (171 countries present 1990-2024), HS levels from BACI HS92 (210
+countries, 1995-2024). Countries ordered by breadth of trade (partners x HS6 codes).
+
+- Country level: 66 % of ordered pairs trade in at least half the years since 1990,
+  74 % since 2020; 93 % trade in at least one year since 1990.
+- HS6: 61 % of pairs trade anything in 2024 (BACI), but the average pair trades only about
+  5 % of HS6 codes since 2020.
+- Germany 2024 (shares of partner x code cells): HS6 two-way 15 %, export only 18 %,
+  import only 2 %, none 64 %; HS2 two-way 50 %, export only 21 %. At country level
+  Germany trades with all partners except one or two in every year.
+- Notes: the IMF data include partner-reported (mirror) flows, so a zero means that
+  neither side reported trade; BACI zeros below its reporting thresholds are counted as no
+  trade. The mean view at country level is the share of years with trade.

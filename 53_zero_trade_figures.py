@@ -39,9 +39,10 @@ def load(path):
     return z["years"], list(z["countries"]), z["x"], z["two"]
 
 
-def shade(v):
-    """0 -> white (1.0), (0, 1] -> grey from light (1 - FLOOR) to black."""
-    g = np.where(v > 0, 1 - (FLOOR + (1 - FLOOR) * np.clip(v, 0, 1)), 1.0)
+def shade(v, gamma=1.0):
+    """0 -> white (1.0), (0, 1] -> grey from light (1 - FLOOR) to black; gamma < 1
+    spreads small shares (HS levels, where most pairs trade few codes)."""
+    g = np.where(v > 0, 1 - (FLOOR + (1 - FLOOR) * np.clip(v, 0, 1) ** gamma), 1.0)
     return np.dstack([g, g, g])
 
 
@@ -57,12 +58,16 @@ def summary(years, cube, start, stat, binary):
 def main():
     cfg = load_config()
     out = cfg["output"] / "zero_trade"
-    years_c, cc, xc, _ = load(out / "matrices_country.npz")
-    deg = (xc.mean(axis=0) > 0).sum(axis=0) + (xc.mean(axis=0) > 0).sum(axis=1)
-    rank_imf = {c: r for r, c in enumerate(np.array(cc)[np.argsort(-deg, kind="stable")])}
-    years_b, cb, xb, _ = load(out / "matrices_country_baci.npz")
-    deg_b = (xb.mean(axis=0) > 0).sum(axis=0) + (xb.mean(axis=0) > 0).sum(axis=1)
-    rank_baci = {c: r for r, c in enumerate(np.array(cb)[np.argsort(-deg_b, kind="stable")])}
+    # order: breadth of trade at HS6 (codes x partners, exports plus imports, mean over
+    # years); countries not in BACI follow by their number of IMF partners
+    _, cb, x6, _ = load(out / "matrices_hs6.npz")
+    m6 = x6.mean(axis=0)
+    breadth = dict(zip(cb, m6.sum(axis=0) + m6.sum(axis=1)))
+    _, cc, xc, _ = load(out / "matrices_country.npz")
+    mc = xc.mean(axis=0)
+    deg = dict(zip(cc, mc.sum(axis=0) + mc.sum(axis=1)))
+    rank_baci = {c: r for r, c in enumerate(sorted(cb, key=lambda c: -breadth[c]))}
+    rank_imf = {c: r for r, c in enumerate(sorted(cc, key=lambda c: (-breadth.get(c, -1), -deg[c])))}
     pdf = PdfPages(out / "zero_trade_matrices.pdf")
     xl = {}
     for lv, title in LEVELS:
@@ -82,7 +87,7 @@ def main():
                     a = axes[r, c]
                     v = summary(years, cube, start, stat, binary)
                     np.fill_diagonal(v, 0)
-                    a.imshow(shade(v), interpolation="nearest")
+                    a.imshow(shade(v, 1.0 if binary else 0.5), interpolation="nearest")
                     a.set_xticks([]); a.set_yticks([])
                     for k, s in enumerate(ordered):
                         if s == "DEU":
@@ -99,11 +104,17 @@ def main():
             fig.suptitle(f"Null-Handel-Matrix: {title}, {vtitle}, {years[0]}-{years[-1]}", fontsize=12, x=0.01, ha="left")
             note = ("Schwarz: Handel in mindestens der Hälfte der Jahre (Median) bzw. Anteil der Jahre mit Handel (Mittelwert); "
                     "weiß: kein Handel." if binary else
-                    "Grauwert: Anteil der Codes der Ebene, die gehandelt werden (schwarz = alle); weiß: kein Handel. ")
-            fig.text(0.01, 0.01, note + " Länder nach Zahl der Handelspartner sortiert, gleiche Reihenfolge auf beiden Achsen; "
+                    "Grauwert: Anteil der Codes der Ebene, die gehandelt werden (schwarz = alle, Wurzelskala, siehe Legende); weiß: kein Handel.")
+            fig.text(0.01, 0.01, note + " Länder nach Breite des Handels sortiert (Partner mal HS6-Codes, Exporte plus Importe), gleiche Reihenfolge auf beiden Achsen; "
                      "rote Marke: Deutschland. Jeder positive Wert mindestens hellgrau. Quelle: eigene Berechnungen auf Basis von "
                      + SOURCE.get(lv, SOURCE["default"]) + f", {len(countries)} Länder.", fontsize=7, wrap=True)
-            fig.subplots_adjust(left=0.03, right=0.99, top=0.88, bottom=0.07, wspace=0.08, hspace=0.18)
+            fig.subplots_adjust(left=0.03, right=0.95, top=0.88, bottom=0.07, wspace=0.08, hspace=0.18)
+            cax = fig.add_axes([0.962, 0.25, 0.008, 0.5])
+            vals = np.linspace(0, 1, 201)
+            cax.imshow(shade(vals[::-1, None], 1.0 if binary else 0.5), aspect="auto", extent=(0, 1, 0, 1))
+            cax.set_xticks([]); cax.yaxis.tick_right()
+            cax.set_yticks([0, 0.25, 0.5, 0.75, 1])
+            cax.set_yticklabels(["0", "25 %", "50 %", "75 %", "100 %"], fontsize=7)
             pdf.savefig(fig)
             fig.savefig(out / f"matrix_{lv}_{vw}.png", dpi=200)
             plt.close(fig)

@@ -106,6 +106,9 @@ Flat structure, at most one folder level. Scripts are numbered in run order.
 | `49_compare_escap.py` | compares own elasticities with the ESCAP-World Bank estimates (HS 2012) |
 | `50_china_competition.py` | competition of German and Chinese exports by HS6 good: export similarity, unit-value gap, quality-ladder length (BACI HS92) |
 | `51_export_china_competition.py` | exports the competition analysis as competition.json for the site |
+| `52_zero_trade.py` | zero-trade matrices (Helpman, Melitz and Rubinstein 2008): country level (IMF IMTS 1990-2024) and HS sections, HS2, HS4, HS6 (BACI HS92 1995-2024) |
+| `53_zero_trade_figures.py` | matrix pages (median, mean, five periods), Germany bars, XLSX; copies in `figures/zero_trade/` |
+| `54_export_zero_trade.py` | exports the matrices for the site (zerotrade_*.json) |
 | `elasticities.py` | Feenstra (1994) / Broda-Weinstein (2006) estimator with Soderbery (2015) LIML and constrained-LIML fallback |
 | `46_export_dependencies.py` | exports dependencies.json for the site |
 | `43_expost_check.py` | ex-post check: modelled vs observed US imports by partner (IMF IMTS) |

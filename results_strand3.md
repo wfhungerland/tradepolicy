@@ -278,3 +278,12 @@ Uses:
 - China supply-stop scenario, short-run variant (own sector values sigma - 1, floor 0.5,
   services 5): real income Germany -0.93 %, EU27 -0.63 %, about ten times the long-run
   central case (-0.09 %, EU27 -0.07 %). Reported separately, not part of the range.
+
+Quality adjustment after Feenstra and Romalis (2014, QJE) was considered and dropped
+(2026-11-08). Their estimator needs separate f.o.b. unit values (exporter reports) and
+c.i.f. unit values (importer reports) per pair, plus firm-size Pareto parameters, and is
+estimated by GMM on raw Comtrade 1984-2008 (NBER WP 18314, sections 4-5; median sigma
+6.4 across SITC 4-digit goods). BACI reconciles both reports into one value, so the
+method cannot be replicated from BACI; their published parameters were not reachable
+from the cloud session. Current practice stays: own and ESCAP estimates side by side,
+hard-to-replace flag only when both are below 2.

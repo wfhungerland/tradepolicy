@@ -109,6 +109,7 @@ Flat structure, at most one folder level. Scripts are numbered in run order.
 | `52_zero_trade.py` | zero-trade matrices (Helpman, Melitz and Rubinstein 2008): country level (IMF IMTS 1990-2024) and HS sections, HS2, HS4, HS6 (BACI HS92 1995-2024) |
 | `53_zero_trade_figures.py` | matrix pages (median, mean, five periods), Germany bars, XLSX; copies in `figures/zero_trade/` |
 | `55_zero_trade_compare.py` | trade breadth of every country plus EU27 and euro-area member means, comparison figures |
+| `56_trade_by_regime.py` | trade, trade breadth and dependencies by partner regime (V-Dem v16) and UN voting alignment (Bailey, Strezhnev and Voeten); figures in `figures/regime/` |
 | `54_export_zero_trade.py` | exports the matrices for the site (zerotrade_*.json) |
 | `elasticities.py` | Feenstra (1994) / Broda-Weinstein (2006) estimator with Soderbery (2015) LIML and constrained-LIML fallback |
 | `46_export_dependencies.py` | exports dependencies.json for the site |

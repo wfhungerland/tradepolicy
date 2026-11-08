@@ -332,3 +332,26 @@ to Germany. Germany is among the broadest traders, level with the US and France;
 exports far more codes than it imports from the same partners. EU27 and euro area (21
 members as of 2026) are member means; the IMF country level lacks nine members, BACI lacks
 Luxembourg (separate only from 1999).
+
+## Trade by partner regime and UN alignment (script 56, 2026-11-08)
+
+Regimes: V-Dem Regimes of the World (v16, via the vdemdata package on GitHub; the
+v-dem.net download form asks for personal data). Alignment: UN General Assembly ideal
+points (Bailey, Strezhnev and Voeten 2017, Dataverse release July 2026), position between
+China (0) and the US (1), split at 0.5. Values: IMF IMTS.
+
+- Share of autocracies (closed and electoral) in trade, 1990 -> 2024: Germany exports
+  9 % -> 18 %, imports 11 % -> 18 % (partners include EU members, e.g. Hungary); EU27
+  extra-EU exports 22 % -> 36 %, imports 25 % -> 53 %. Holding the 2024 classification
+  fixed gives almost the same paths, so the shift comes from trade, not from reclassified
+  partners. Trade-weighted Liberal Democracy Index of EU27 import partners 0.58 -> 0.41.
+- The drop of "liberal democracy" in 2024 reflects V-Dem downgrading the UK and Korea to
+  electoral democracy (also Mexico, Indonesia, Georgia to electoral autocracy).
+- V-Dem counts India, Turkey, Mexico and Ukraine as electoral autocracies in 2024; this
+  drives much of the electoral-autocracy share.
+- Breadth (HS6, 2024): Germany trades two-way in 47 % of partner x code cells with liberal
+  democracies, 21 % with electoral democracies, 11 % with electoral and 9 % with closed
+  autocracies.
+- Dependent goods (2024, import value by regime of the main supplier): EU27 71 % closed
+  autocracies (mostly China), 12 % liberal democracies; Germany 61 % and 32 %. By UN
+  alignment: EU27 83 % closer to China, Germany 66 %.

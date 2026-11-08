@@ -2,9 +2,9 @@
 title: "Complexity, Gravity and Scenarios: An Open Monitor of Germany's Trade Position"
 subtitle: "Methods, data and validation of the Produktraum-Monitor"
 author: "Wolf-Fabian Hungerland"
-date: "Draft, 7 November 2026"
+date: "Draft, 8 November 2026"
 abstract: |
-  This paper documents an open, reproducible monitor of Germany's position in world trade. It combines four strands. First, economic complexity measures from bilateral trade data for 130 countries and 1,203 products, 1995 to 2024, show that Germany fell from second to fifth place in the Economic Complexity Index while the complexity of its export basket on a fixed yardstick stayed constant; others caught up. Second, an out-of-sample test shows that gravity models with three-way fixed effects do not beat univariate benchmarks in forecasting monthly or quarterly trade. Third, a multi-sector general equilibrium model with input-output links, solved in changes on the OECD inter-country input-output tables for 2022, quantifies scenarios: the US tariffs in force in August 2026 lower German real income by 0.07 % in the long run, the loss of the EU single market would cost 1.5 %, rerouting around Africa as in 2024 costs 0.06 %, and a Chinese supply stop for goods on which the EU depends costs at least 0.09 %. Fourth, a dependency analysis following the European Commission's criteria finds 497 dependent goods for the EU and 593 for Germany, about half supplied mainly by China. Each result is checked against published replications, observed data or the literature; an ex-post comparison with US imports in 2025 and 2026 shows that the model is a long-run benchmark, not a short-run forecast. Code, data and an interactive website are public.
+  This paper documents an open, reproducible monitor of Germany's position in world trade. It combines four strands. First, economic complexity measures from bilateral trade data for 130 countries and 1,203 products, 1995 to 2024, show that Germany fell from second to fifth place in the Economic Complexity Index while the complexity of its export basket on a fixed yardstick stayed constant; others caught up. Second, an out-of-sample test shows that gravity models with three-way fixed effects do not beat univariate benchmarks in forecasting monthly or quarterly trade. Third, a multi-sector general equilibrium model with input-output links, solved in changes on the OECD inter-country input-output tables for 2022, quantifies scenarios: the US tariffs in force in August 2026 lower German real income by 0.07 % in the long run, the loss of the EU single market would cost 1.5 %, rerouting around Africa as in 2024 costs 0.06 %, and a Chinese supply stop for goods on which the EU depends costs at least 0.09 %, or 0.93 % with short-run elasticities estimated good by good. Fourth, a dependency analysis following the European Commission's criteria finds 497 dependent goods for the EU and 593 for Germany, about half supplied mainly by China; German and Chinese exports have become more similar, and 21 % of German exports are in goods under Chinese price pressure. Each result is checked against published replications, observed data or the literature; an ex-post comparison with US imports in 2025 and 2026 shows that the model is a long-run benchmark, not a short-run forecast. Code, data and an interactive website are public.
 ---
 
 **Disclaimer.** The views expressed are the author's own and do not necessarily reflect those of any institution. All errors are the author's.
@@ -115,6 +115,14 @@ Through the global Leontief inverse, Chinese value added accounts for 1.6 % of G
 
 A scenario in which China stops supplying the EU with these goods, implemented as an iceberg cost that removes the dependent share of China-EU flows in each sector, lowers German real income by 0.09 % (range 0.09 to 0.17 %) and EU income by 0.07 %. This is a lower bound: the model lets buyers switch suppliers along CES demand curves, while short-run bottlenecks without substitutes cost much more.
 
+To gauge the short run, elasticities of substitution between supplier countries are estimated good by good (HS 1992, six digits) on BACI unit values for 2012 to 2024, for EU imports from outside the EU and for German imports. The estimator follows Feenstra (1994) and Broda and Weinstein (2006), with the limited-information maximum likelihood refinement and constrained fallback of Soderbery (2015); a simulation test recovers known elasticities. The median is 2.5 for both levels, and 57 % of goods have an elasticity below 3. Aggregated to ICIO goods sectors, these short-run values are unrelated to the long-run ProTEE elasticities (rank correlation 0.08), as expected from the different identification. Used in the supply-stop scenario (sector elasticity minus one, floor 0.5), they raise the loss to 0.93 % for Germany and 0.63 % for the EU, about ten times the long-run case. Against the estimates of ESCAP and the World Bank with the same method (base year 2012), levels agree (German median 2.55 here, 2.75 there), but rankings across goods do not (rank correlation 0.00 for Germany). Single-good values are therefore noisy; the monitor flags a dependent good as hard to replace only when both sources put it below 2, which holds for 40 EU and 91 German dependent goods. Quality adjustment after Feenstra and Romalis (2014) would need separate exporter and importer unit values, which BACI reconciles into one.
+
+## 5.7 Chinese competition in third markets
+
+German and Chinese exports to all other countries are compared good by good (BACI HS 1992). The export similarity index of Finger and Kreinin (1979) rose from 0.37 in 2012 to 0.40 in 2018 and 0.45 in 2024. For the same good and destination, the Chinese unit value is at the median 61 % of the German one, weighted by German exports, in line with the low relative unit values of Chinese exports documented by Schott (2008). Quality-ladder length is proxied by the spread between the 90th and 10th percentile of log unit values across suppliers to the EU, a simplification of Khandelwal (2010). As his framework implies, the Chinese discount is larger on long ladders (rank correlation -0.49), and across goods China's share gains go with German share losses (-0.26), consistent with Chowdhry, Erhardt and Hinz (2026).
+
+Goods under price pressure are defined by German exports of at least USD 100 million, a rise in China's world market share of at least five points since 2012, a Chinese unit value at least half the German one, and a ladder shorter than the median. They comprise 256 goods and USD 302 billion, 21 % of German exports; about half are vehicles and parts, where China's export-weighted world market share rose from 4 % to 10 %. Unit values per ton mix quality, model mix and weight, so values for single goods are rough.
+
 # 6 Ex-post check
 
 Observed US imports by partner from August 2025 to July 2026 are compared with 2024 (IMF IMTS), relative to total US imports, and set against the model's predicted changes in exports to the US. Across 67 partners weighted by imports, the correlation is 0.43 for the September 2025 tariffs and 0.73 without South-East Asia, Switzerland and Ireland. The model captures the fall of imports from China (model -32, observed -48 log points relative to the average partner). It misses the strong gains of Vietnam, Thailand and Malaysia, which reflect relocation and transshipment out of China that a model on the 2022 production structure cannot produce, as well as Swiss gold flows and the reversal of Irish pharmaceutical front-loading. The slope of observed on predicted changes is 0.42, consistent with short-run trade elasticities well below long-run ones (Boehm, Levchenko and Pandalai-Nayar 2023).
@@ -128,6 +136,8 @@ Observed US imports by partner from August 2025 to July 2026 are compared with 2
 | US welfare without retaliation | Ignatenko et al. (2025) find a small gain; here only with low elasticities. Recorded as a deviation |
 | Complexity rankings | Rank correlation with the Atlas 0.95 to 0.97 |
 | Forecast evaluation | pyfixest reproduces the PPML estimates |
+| Import elasticities against ESCAP and World Bank | Medians agree (2.55 and 2.75 for Germany); rankings across goods do not (0.00) |
+| Chinese price discount and ladder length | Larger discount on long ladders (rank correlation -0.49), as in Khandelwal (2010) |
 
 # 8 The monitor
 
@@ -140,6 +150,7 @@ The results are presented on a static website in German and English, designed in
 - Services integration is taken from the literature; the estimation on ITPD-E did not converge.
 - Shipping shocks treat all goods on longer routes as seaborne and leave out canal revenues, freight rate spikes and capacity limits.
 - Dependency criteria follow the Commission but count all goods; the indirect dependence uses a multiplier approximation.
+- Good-level elasticities are noisy and not quality-adjusted; the short-run scenario uses sector medians.
 - Product names in German are own translations of the Harvard Growth Lab labels; product examples are illustrative.
 
 # References
@@ -150,7 +161,11 @@ Boehm, C.E., Levchenko, A.A. and Pandalai-Nayar, N. (2023). The Long and Short (
 
 Borchert, I., Larch, M., Shikher, S. and Yotov, Y.V. (2021). The International Trade and Production Database for Estimation (ITPD-E). *International Economics* 166, 140-166.
 
+Broda, C. and Weinstein, D.E. (2006). Globalization and the Gains from Variety. *Quarterly Journal of Economics* 121(2), 541-585.
+
 Caliendo, L. and Parro, F. (2015). Estimates of the Trade and Welfare Effects of NAFTA. *Review of Economic Studies* 82(1), 1-44.
+
+Chowdhry, S., Erhardt, K. and Hinz, J. (2026). Kiel Policy Brief, Kiel Institute for the World Economy (EconStor 341641; title to be verified).
 
 Dekle, R., Eaton, J. and Kortum, S. (2008). Global Rebalancing with Gravity: Measuring the Burden of Adjustment. *IMF Staff Papers* 55(3), 511-540.
 
@@ -158,7 +173,13 @@ Diebold, F.X. and Mariano, R.S. (1995). Comparing Predictive Accuracy. *Journal 
 
 European Commission (2021). Strategic dependencies and capacities. Commission Staff Working Document SWD(2021) 352.
 
+Feenstra, R.C. (1994). New Product Varieties and the Measurement of International Prices. *American Economic Review* 84(1), 157-177.
+
+Feenstra, R.C. and Romalis, J. (2014). International Prices and Endogenous Quality. *Quarterly Journal of Economics* 129(2), 477-527.
+
 Feyrer, J. (2021). Distance, Trade, and Income: The 1967 to 1975 Closing of the Suez Canal as a Natural Experiment. *Journal of Development Economics* 153, 102708.
+
+Finger, J.M. and Kreinin, M.E. (1979). A Measure of 'Export Similarity' and Its Possible Uses. *Economic Journal* 89(356), 905-912.
 
 Fontagné, L., Guimbard, H. and Orefice, G. (2022). Tariff-Based Product-Level Trade Elasticities. *Journal of International Economics* 137, 103593.
 
@@ -184,11 +205,17 @@ Ignatenko, A., Lashkaripour, A., Macedoni, L. and Simonovska, I. (2025). Making 
 
 Johnson, R.C. and Noguera, G. (2012). Accounting for Intermediates: Production Sharing and Trade in Value Added. *Journal of International Economics* 86(2), 224-236.
 
+Khandelwal, A. (2010). The Long and Short (of) Quality Ladders. *Review of Economic Studies* 77(4), 1450-1476.
+
 Mayer, T., Vicard, V. and Zignago, S. (2019). The Cost of Non-Europe, Revisited. *Economic Policy* 34(98), 145-199.
 
 Mealy, P., Farmer, J.D. and Teytelboym, A. (2019). Interpreting Economic Complexity. *Science Advances* 5(1), eaau1705.
 
+Schott, P.K. (2008). The Relative Sophistication of Chinese Exports. *Economic Policy* 23(53), 5-49.
+
 Sciarra, C., Chiarotti, G., Ridolfi, L. and Laio, F. (2020). Reconciling Contrasting Views on Economic Complexity. *Nature Communications* 11, 3352.
+
+Soderbery, A. (2015). Estimating Import Supply and Demand Elasticities: Analysis and Implications. *Journal of International Economics* 96(1), 1-17.
 
 Tacchella, A., Cristelli, M., Caldarelli, G., Gabrielli, A. and Pietronero, L. (2012). A New Metrics for Countries' Fitness and Products' Complexity. *Scientific Reports* 2, 723.
 

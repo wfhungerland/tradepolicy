@@ -324,3 +324,11 @@ countries, 1995-2024). Countries ordered by breadth of trade (partners x HS6 cod
 - Notes: the IMF data include partner-reported (mirror) flows, so a zero means that
   neither side reported trade; BACI zeros below its reporting thresholds are counted as no
   trade. The mean view at country level is the share of years with trade.
+
+Comparison (script 55; 2024, shares of partner x code cells at HS6): Germany two-way
+15.5 %, export only 18.3 %, no trade 64.3 %; France 15.0 / 15.8 / 66.1; USA 15.4 / 19.4 /
+62.7; China 12.2 / 36.0 / 50.9; EU27 member mean 7.5 / 7.2 / 81.8, export-weighted closer
+to Germany. Germany is among the broadest traders, level with the US and France; China
+exports far more codes than it imports from the same partners. EU27 and euro area (21
+members as of 2026) are member means; the IMF country level lacks nine members, BACI lacks
+Luxembourg (separate only from 1999).

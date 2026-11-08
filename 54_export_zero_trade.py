@@ -54,6 +54,20 @@ def main(target=None):
         ger[lv] = {"years": g.year.tolist(), **{c: g[c].round(4).tolist() for c in ("two_way", "export_only", "import_only", "none")}}
         print(f"{p.name}: {p.stat().st_size // 1024} kB, {len(countries)} countries")
     (out / "zerotrade_germany.json").write_text(json.dumps(ger, separators=(",", ":")), encoding="utf-8")
+    # all countries plus EU27 and euro-area means (55_zero_trade_compare.py), per mille
+    comp = {}
+    cats = ["two_way", "export_only", "import_only", "none"]
+    for lv in LEVELS:
+        f = pd.read_csv(src / f"compare_{lv}.csv")
+        years = sorted(f.year.unique())
+        ents = {}
+        for e, g in f.groupby("entity"):
+            g = g.set_index("year").reindex(years)
+            ents[e] = [[None if np.isnan(v) else int(round(v * 1000)) for v in g[c]] for c in cats]
+        comp[lv] = {"years": [int(y) for y in years], "entities": ents}
+    p = out / "zerotrade_compare.json"
+    p.write_text(json.dumps(comp, separators=(",", ":")), encoding="utf-8")
+    print(f"{p.name}: {p.stat().st_size // 1024} kB")
 
 
 if __name__ == "__main__":

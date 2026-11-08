@@ -423,9 +423,9 @@ access PDF; all 1,830 pairs).
   effects, distance, contiguity, language, colony, RTA): institutional distance has no
   effect beyond geography and trade agreements (+0.03 per standard deviation, s.e. 0.02);
   same business-system type +0.05 (0.06). Distance elasticity -0.74 as usual.
-- Germany: manufacturing exports to its institutional neighbours (Belgium, Netherlands,
-  Norway) lie below the model, to China, Poland and Mexico above it; no pattern by
-  institutional distance.
+- Germany: manufacturing exports lie above the model for Korea, Hungary, China, Romania
+  and Austria, below it for Belgium, the Netherlands and Norway as well as for Venezuela,
+  Nigeria and Bangladesh; no pattern by institutional distance.
 - Interpretation: Witt's distance measures differences in coordination, ownership and
   labour institutions, not governance quality; studies that find trade effects of
   institutional similarity mostly use governance indicators (e.g. de Groot et al. 2004).

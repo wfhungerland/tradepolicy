@@ -287,3 +287,23 @@ estimated by GMM on raw Comtrade 1984-2008 (NBER WP 18314, sections 4-5; median 
 method cannot be replicated from BACI; their published parameters were not reachable
 from the cloud session. Current practice stays: own and ESCAP estimates side by side,
 hard-to-replace flag only when both are below 2.
+
+## China competition for German exports (scripts 50, 51, 2026-11-08)
+
+German and Chinese exports to all other countries, HS6 (BACI HS92 V202601).
+
+- Export similarity (Finger and Kreinin 1979): 0.37 in 2012, 0.40 in 2018, 0.45 in 2024.
+- Unit values for the same good and destination: Chinese over German median 0.60
+  (weighted by German exports 0.61), in line with the low Chinese unit values found by
+  Schott (2008) for US imports.
+- Validation: the Chinese discount is larger on long quality ladders (rank correlation
+  ladder vs log price ratio -0.49), as Khandelwal (2010) implies; China's share gains go
+  with German share losses across goods (rank correlation -0.26), in line with the
+  Kiel Institute (Chowdhry, Erhardt and Hinz 2026) and the Bundesbank result cited at the
+  Banca d'Italia China-shock workshop 2026.
+- Goods under price pressure (German exports >= USD 100 m, China share +5 points since
+  2012, Chinese unit value >= half the German one, ladder below the median): 256 goods,
+  USD 302 bn or 21 % of German exports; about half vehicles and parts (China's weighted
+  world share in vehicles 4 % -> 10 %). HS92 code 870390 contains electric cars.
+- Limits: unit values per ton mix quality, model mix and weight; the ladder is a
+  unit-value spread, not Khandelwal's demand-based quality estimate.

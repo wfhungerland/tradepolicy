@@ -104,6 +104,8 @@ Flat structure, at most one folder level. Scripts are numbered in run order.
 | `47_indirect_dependence.py` | direct and indirect dependence of German industries on China (global Leontief inverse) |
 | `48_import_elasticities.py` | import demand elasticities by HS6 good for the EU and Germany (BACI HS92 2012-2024), aggregated to ICIO sectors |
 | `49_compare_escap.py` | compares own elasticities with the ESCAP-World Bank estimates (HS 2012) |
+| `50_china_competition.py` | competition of German and Chinese exports by HS6 good: export similarity, unit-value gap, quality-ladder length (BACI HS92) |
+| `51_export_china_competition.py` | exports the competition analysis as competition.json for the site |
 | `elasticities.py` | Feenstra (1994) / Broda-Weinstein (2006) estimator with Soderbery (2015) LIML and constrained-LIML fallback |
 | `46_export_dependencies.py` | exports dependencies.json for the site |
 | `43_expost_check.py` | ex-post check: modelled vs observed US imports by partner (IMF IMTS) |

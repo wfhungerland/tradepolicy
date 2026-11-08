@@ -355,3 +355,21 @@ China (0) and the US (1), split at 0.5. Values: IMF IMTS.
 - Dependent goods (2024, import value by regime of the main supplier): EU27 71 % closed
   autocracies (mostly China), 12 % liberal democracies; Germany 61 % and 32 %. By UN
   alignment: EU27 83 % closer to China, Germany 66 %.
+
+## Mittelstand: SMEs in trade (scripts 58, 59, 2026-11-08)
+
+Eurostat trade by enterprise characteristics (ext_tec10, ext_tec01), 2024. SMEs: fewer
+than 250 employees; enterprises classed by main activity (exports via wholesalers count
+under wholesale).
+
+- SME share of German exports 20 % (EU27 35 %); to the US 12 %, to China 10 %, outside the
+  EU 16 %. 97 % of 263,000 German exporting enterprises are SMEs.
+- Imports: SMEs take 35 % of imports from China against 28 % of all imports, so the
+  Mittelstand depends more on China as a supplier than as a market.
+- Exposure: of the modelled fall in manufacturing exports to the US (USD 21 bn, tariffs as
+  of August 2026) SMEs carry about 10 %; of German exports under Chinese price pressure
+  (USD 302 bn) about 7 %. Indirect exposure as suppliers to large exporters is not
+  captured.
+- SME shares by activity (exports outside the EU): manufacturing 9 %, wholesale 60 %,
+  fabricated metal products 28 %, machinery 14 %, motor vehicles below 1 %.
+- Caveat: the German "Mittelstand" includes larger family firms and is broader than SMEs.

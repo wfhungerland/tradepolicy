@@ -456,3 +456,16 @@ Scenario outputs by country and sector are now saved for all countries
 - Not done: German districts (NUTS 3) by industry; neither Eurostat nor the Federal
   Employment Agency publish them as files (the BA offers them by Land only). Rosés-Wolf
   historical regional GDP (1900-2022) sits behind bot protection (CEPR, HU Berlin).
+
+## Energy by district (script 66, 2026-11-09)
+
+Marktstammdatenregister (export of 8 November 2026), aggregated on the user's server
+(tools/server_fetch_kreise.py) to 400 districts; NUTS 2024 geometries, Destatis district
+list 31.12.2024. Capacity in operation at end-2025: solar 118 GW, onshore wind 68 GW
+(offshore has no district), gas 37 GW, hard coal 16.5 GW, lignite 15.8 GW, in line with
+Bundesnetzagentur totals. Wind per inhabitant highest in Dithmarschen (17.7 kW), Prignitz,
+Nordfriesland, Uckermark; solar in Haßberge (7.9 kW), Straubing-Bogen, Prignitz; lowest in
+the large cities (Hamburg, Berlin 0.14 kW). Lignite in Spree-Neiße (3.7 GW), Rhein-Erft,
+Görlitz, Rhein-Kreis Neuss, Leipzig, Aachen. Renewables exceed 90 % of installed capacity
+in 57 % of districts. Storage units are not yet included (file name pattern in the
+server script; to be fixed on the next run).

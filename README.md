@@ -121,6 +121,7 @@ Flat structure, at most one folder level. Scripts are numbered in run order.
 | `64_regional_exposure.py` | regional exposure (NUTS 2) to US tariffs, a Chinese supply stop and Red Sea rerouting (shift-share), energy-intensive employment |
 | `65_regional_history_cohesion.py` | regional GDP per head 1980-2024 (ARDECO, NUTS 2/3), EU cohesion payments and the 75 % threshold (RDD), seaports |
 | `tools/server_fetch_kreise.py` | runs on the user's server: Marktstammdatenregister aggregated to districts, Regionaldatenbank tables via the GENESIS web service (credentials stay on the server) |
+| `66_kreise_energy.py` | electricity capacity by German district 1990-2026 (Marktstammdatenregister via the server script), maps |
 | `54_export_zero_trade.py` | exports the matrices for the site (zerotrade_*.json) |
 | `elasticities.py` | Feenstra (1994) / Broda-Weinstein (2006) estimator with Soderbery (2015) LIML and constrained-LIML fallback |
 | `46_export_dependencies.py` | exports dependencies.json for the site |

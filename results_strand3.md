@@ -479,6 +479,12 @@ operator with own network) 85 %, 5G 75 %; motorways 4G 99.7 %, 5G 98.7 %. Weakes
 households gigabit in Brandenburg an der Havel (33 %); industrial-estate fibre in Ansbach
 (6 %) and Weimar (13 %); rail 4G in Eifelkreis Bitburg-Prüm (40 %), Lüchow-Dannenberg,
 Regen; motorway 5G in Marburg-Biedenkopf (76 %).
-Not done: rail, road and power-line lengths from OpenStreetMap (Overpass connections are
-reset from the cloud); hydrogen core network geometry (FNB Gas page moved); grid expansion
+OpenStreetMap infrastructure (`68_kreise_infra.py`, data fetched on the PC with
+`tools/pc_fetch_osm.py`, November 2026; aggregates per district only): extra-high-voltage lines
+(220/380 kV) 18,300 route km, 110 kV lines 43,600 km, 5,286 substations >= 110 kV, running
+track without sidings 57,600 km (66 % electrified), motorways 13,300 km (official about
+13,200 km). 50 districts have no extra-high-voltage line, 49 no electrified railway (e.g.
+Bayreuth, Kulmbach, Euskirchen, Vulkaneifel), 39 no motorway section. Densest motorway and
+transmission networks in Ruhr cities (Oberhausen 33 km, Gelsenkirchen 65 km per 100 km2).
+Not done: hydrogen core network geometry (FNB Gas page moved); grid expansion
 projects (netzausbau.de not tried).

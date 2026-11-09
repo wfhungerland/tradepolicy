@@ -38,25 +38,37 @@ QUERIES = {
 }
 
 
-def fetch(q):
+# rough bounding boxes (south, west, north, east) per Land: fallback for servers whose area
+# index is missing (they answer area queries with zero features). Features outside the Land
+# do no harm: the analysis de-duplicates and clips to districts.
+BBOX = {"DE-BW": (47.5, 7.5, 49.8, 10.5), "DE-BY": (47.2, 8.9, 50.6, 13.9), "DE-BE": (52.3, 13.0, 52.7, 13.8),
+        "DE-BB": (51.3, 11.2, 53.6, 14.8), "DE-HB": (53.0, 8.4, 53.6, 9.0), "DE-HH": (53.3, 9.7, 53.8, 10.4),
+        "DE-HE": (49.3, 7.7, 51.7, 10.3), "DE-MV": (53.1, 10.5, 54.7, 14.5), "DE-NI": (51.2, 6.6, 54.0, 11.6),
+        "DE-NW": (50.3, 5.8, 52.6, 9.5), "DE-RP": (48.9, 6.1, 50.95, 8.6), "DE-SL": (49.1, 6.3, 49.7, 7.5),
+        "DE-SN": (50.1, 11.8, 51.7, 15.1), "DE-ST": (50.9, 10.5, 53.1, 13.2), "DE-SH": (53.3, 8.2, 55.1, 11.4),
+        "DE-TH": (50.2, 9.8, 51.7, 12.7)}
+
+
+def fetch(q_area, q_bbox):
     """Ask the chosen server first; on errors rotate through all public servers and keep
-    trying (up to 40 attempts, waits growing to 5 minutes), because single servers are
-    often overloaded for a while."""
-    data = urllib.parse.urlencode({"data": q}).encode()
+    trying (up to 40 attempts, waits growing to 5 minutes). An answer without any feature
+    counts as an error (overloaded server or missing area index); from the second round on
+    the bounding-box query is used instead of the area query."""
     order = [URL] + [u for u in SERVERS.values() if u != URL]
     for attempt in range(40):
         url = order[attempt % len(order)]
+        q = q_area if attempt < len(order) else q_bbox
+        data = urllib.parse.urlencode({"data": q}).encode()
         req = urllib.request.Request(url, data=data, headers={"User-Agent": "tradepolicy-research/1.0 (BMWE IC1)"})
+        name = next(k for k, v in SERVERS.items() if v == url)
         try:
             with urllib.request.urlopen(req, timeout=1200) as r:
                 res = json.load(r)
-            if res.get("remark") and not res.get("elements"):
-                # server gave up (timeout, out of memory) but answered 200: do not save
-                raise RuntimeError("empty answer: " + res["remark"][:120])
+            if not res.get("elements"):
+                raise RuntimeError("answer without features " + (res.get("remark") or "")[:100])
             return res
-        except Exception as e:                       # busy server (429/502/504) or timeout
+        except Exception as e:                       # busy server (429/502/504), timeout, empty answer
             wait = min(300, 30 * (attempt // len(order) + 1))
-            name = next(k for k, v in SERVERS.items() if v == url)
             print(f"   {name}: {e}; next try in {wait} s", flush=True)
             time.sleep(wait)
     raise RuntimeError("no Overpass server answered after 40 attempts; start the script again later")
@@ -84,12 +96,11 @@ def main():
                 continue
             body, mode, keep = QUERIES[cat]
             q = f'[out:json][timeout:1100];area["ISO3166-2"="{land}"]->.a;({body});out {mode};'
+            sw, ww, nn, ee = BBOX[land]
+            qb = f'[out:json][timeout:1100][bbox:{sw},{ww},{nn},{ee}];({body.replace("(area.a)", "")});out {mode};'
             print(f"{land} {cat} ...", flush=True)
-            res = fetch(q)
+            res = fetch(q, qb)
             feats = []
-            if not res.get("elements"):
-                print("   no features returned; file not written, start the script again later")
-                continue
             for el in res.get("elements", []):
                 tags = {k: v for k, v in (el.get("tags") or {}).items() if k in keep}
                 if mode == "geom" and "geometry" in el:

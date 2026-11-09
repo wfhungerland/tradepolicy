@@ -469,3 +469,16 @@ the large cities (Hamburg, Berlin 0.14 kW). Lignite in Spree-Neiße (3.7 GW), Rh
 Görlitz, Rhein-Kreis Neuss, Leipzig, Aachen. Renewables exceed 90 % of installed capacity
 in 57 % of districts. Storage units are not yet included (file name pattern in the
 server script; to be fixed on the next run).
+
+## Networks and transport by district (script 67, 2026-11-09)
+
+Breitbandatlas / Gigabit-Grundbuch (Federal Network Agency, June 2026), 400 districts,
+district averages (unweighted): households with >= 1 Gbit/s 77.5 %, fibre to the home
+48 %; industrial estates with fibre to the building 57.6 %; 4G along railways (best
+operator with own network) 85 %, 5G 75 %; motorways 4G 99.7 %, 5G 98.7 %. Weakest:
+households gigabit in Brandenburg an der Havel (33 %); industrial-estate fibre in Ansbach
+(6 %) and Weimar (13 %); rail 4G in Eifelkreis Bitburg-Prüm (40 %), Lüchow-Dannenberg,
+Regen; motorway 5G in Marburg-Biedenkopf (76 %).
+Not done: rail, road and power-line lengths from OpenStreetMap (Overpass connections are
+reset from the cloud); hydrogen core network geometry (FNB Gas page moved); grid expansion
+projects (netzausbau.de not tried).

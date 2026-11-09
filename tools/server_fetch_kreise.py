@@ -34,7 +34,7 @@ from pathlib import Path
 
 MASTR_PAGE = "https://www.marktstammdatenregister.de/MaStR/Datendownload"
 RDB = "https://www.regionalstatistik.de/genesisws/rest/2020/"
-UNIT_FILES = re.compile(r"^Einheiten(Solar|Wind|Biomasse|Wasser|Verbrennung|Kernkraft|GeoSolarthermieGrubenKlaerschlammDruckentspannung|Stromspeicher)(_\d+)?\.xml$")
+UNIT_FILES = re.compile(r"^Einheiten(Solar|Wind|Biomasse|Wasser|Verbrennung|Kernkraft|GeoSolarthermieGrubenKlaerschlammDruckentspannung|Stromspeicher)(_\d+)?\.xml$", re.IGNORECASE)
 FIELDS = {"Gemeindeschluessel", "EinheitBetriebsstatus", "Inbetriebnahmedatum", "DatumEndgueltigeStilllegung",
           "Bruttoleistung", "Energietraeger"}
 
@@ -81,7 +81,7 @@ def mastr(out, work):
         names = catalog(z)
         files = sorted(n for n in z.namelist() if UNIT_FILES.match(n))
         for fn in files:
-            storage = "Stromspeicher" in fn
+            storage = "stromspeicher" in fn.lower()
             n = 0
             for _, el in ET.iterparse(z.open(fn)):
                 # unit records: <EinheitSolar>, <EinheitWind>, ... with child fields; skip the

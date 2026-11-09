@@ -486,5 +486,13 @@ track without sidings 57,600 km (66 % electrified), motorways 13,300 km (officia
 13,200 km). 50 districts have no extra-high-voltage line, 49 no electrified railway (e.g.
 Bayreuth, Kulmbach, Euskirchen, Vulkaneifel), 39 no motorway section. Densest motorway and
 transmission networks in Ruhr cities (Oberhausen 33 km, Gelsenkirchen 65 km per 100 km2).
-Not done: hydrogen core network geometry (FNB Gas page moved); grid expansion
-projects (netzausbau.de not tried).
+Hydrogen core network (`69_h2_kernnetz.py`, BNetzA approval of 22.10.2024, annexes 3 and 4):
+246 segments, 8,866 km (3,937 km new build, 4,929 km converted gas pipelines), investment
+19.0 bn EUR; most in Lower Saxony (2,048 km) and North Rhine-Westphalia (1,738 km). Planned
+in operation: 670 km by 2026, 6,060 km by 2030, all by 2032. The annexes have no geometry,
+so no district maps.
+Transmission grid expansion (`70_netzausbau.py`, BNetzA monitoring Q2/2026): 128 projects,
+16,879 km; 2,983 km in operation, 1,865 km finished but not yet in operation, 4,404 km
+approved or under construction, 6,437 km before or in planning approval, 1,190 km earlier.
+Planned commissioning by project: 8,400 km by 2030, 13,900 km by 2035; 11 projects
+(2,806 km) without date.

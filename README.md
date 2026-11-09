@@ -124,6 +124,8 @@ Flat structure, at most one folder level. Scripts are numbered in run order.
 | `66_kreise_energy.py` | electricity capacity by German district 1990-2026 (Marktstammdatenregister via the server script), maps |
 | `67_kreise_netze.py` | gigabit broadband (households, industrial estates) and mobile coverage along railways and motorways by district (Breitbandatlas) |
 | `68_kreise_infra.py` | extra-high-voltage and 110 kV lines, substations, electrified rail share and motorway density by district (OpenStreetMap, fetched with `tools/pc_fetch_osm.py`; aggregates only) |
+| `69_h2_kernnetz.py` | hydrogen core network (BNetzA approval 2024): new-build and conversion km by Land and planned commissioning year |
+| `70_netzausbau.py` | transmission grid expansion (EnLAG, BBPlG): km by status and planned commissioning, BNetzA monitoring Q2/2026 |
 | `tools/pc_fetch_osm.py` | runs on the user's PC: power lines, substations, rail lines and motorways from OpenStreetMap (Overpass) per Land |
 | `54_export_zero_trade.py` | exports the matrices for the site (zerotrade_*.json) |
 | `elasticities.py` | Feenstra (1994) / Broda-Weinstein (2006) estimator with Soderbery (2015) LIML and constrained-LIML fallback |

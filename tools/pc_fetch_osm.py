@@ -39,17 +39,23 @@ QUERIES = {
 
 
 def fetch(q):
+    """Ask the chosen server first; on errors rotate through all public servers and keep
+    trying (up to 40 attempts, waits growing to 5 minutes), because single servers are
+    often overloaded for a while."""
     data = urllib.parse.urlencode({"data": q}).encode()
-    req = urllib.request.Request(URL, data=data, headers={"User-Agent": "tradepolicy-research/1.0 (BMWE IC1)"})
-    for attempt in range(5):
+    order = [URL] + [u for u in SERVERS.values() if u != URL]
+    for attempt in range(40):
+        url = order[attempt % len(order)]
+        req = urllib.request.Request(url, data=data, headers={"User-Agent": "tradepolicy-research/1.0 (BMWE IC1)"})
         try:
             with urllib.request.urlopen(req, timeout=1200) as r:
                 return json.load(r)
-        except Exception as e:                       # busy server (429/504) or timeout: wait and retry
-            wait = 60 * (attempt + 1)
-            print(f"   retry in {wait} s ({e})")
+        except Exception as e:                       # busy server (429/502/504) or timeout
+            wait = min(300, 30 * (attempt // len(order) + 1))
+            name = next(k for k, v in SERVERS.items() if v == url)
+            print(f"   {name}: {e}; next try in {wait} s", flush=True)
             time.sleep(wait)
-    raise RuntimeError("Overpass did not answer after 5 attempts")
+    raise RuntimeError("no Overpass server answered after 40 attempts; start the script again later")
 
 
 def main():

@@ -147,6 +147,9 @@ def main(site=None):
     for a, (c, (bins, t, fmt)) in zip(axes, specs.items()):
         rg.choropleth(a, de, res[c].to_dict(), bins, cols, extent=rg.EXTENT_DE, lw=0.15)
         rg.legend_bins(a, bins, cols, fmt=fmt, loc="lower left")
+        if bins[1] == 0.01:                         # first class means "none"
+            a.get_legend().get_texts()[0].set_text("keine")
+            a.get_legend().get_texts()[1].set_text(f"bis {bins[2]}")
         a.set_title(t, fontsize=10, loc="left")
     fig.suptitle("Strom- und Verkehrsnetze nach Kreisen, Stand November 2026", x=0.01, ha="left", fontsize=12)
     fig.text(0.01, 0.01, "Quelle: eigene Berechnungen auf Basis von OpenStreetMap (© OpenStreetMap-Mitwirkende, ODbL 1.0). "

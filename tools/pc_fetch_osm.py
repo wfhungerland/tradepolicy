@@ -49,7 +49,11 @@ def fetch(q):
         req = urllib.request.Request(url, data=data, headers={"User-Agent": "tradepolicy-research/1.0 (BMWE IC1)"})
         try:
             with urllib.request.urlopen(req, timeout=1200) as r:
-                return json.load(r)
+                res = json.load(r)
+            if res.get("remark") and not res.get("elements"):
+                # server gave up (timeout, out of memory) but answered 200: do not save
+                raise RuntimeError("empty answer: " + res["remark"][:120])
+            return res
         except Exception as e:                       # busy server (429/502/504) or timeout
             wait = min(300, 30 * (attempt // len(order) + 1))
             name = next(k for k, v in SERVERS.items() if v == url)
@@ -72,6 +76,9 @@ def main():
     for land in LAENDER:
         for cat in cats:
             target = out / f"{cat}_{land}.json.gz"
+            if target.exists() and target.stat().st_size < 200:
+                print("re-fetch empty file", target.name)
+                target.unlink()
             if target.exists():
                 print("skip", target.name)
                 continue
@@ -80,6 +87,9 @@ def main():
             print(f"{land} {cat} ...", flush=True)
             res = fetch(q)
             feats = []
+            if not res.get("elements"):
+                print("   no features returned; file not written, start the script again later")
+                continue
             for el in res.get("elements", []):
                 tags = {k: v for k, v in (el.get("tags") or {}).items() if k in keep}
                 if mode == "geom" and "geometry" in el:

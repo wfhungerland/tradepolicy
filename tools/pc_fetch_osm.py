@@ -12,7 +12,8 @@ Data © OpenStreetMap contributors, Open Database License 1.0.
 
 Usage (Anaconda Prompt, environment tradepolicy):
   python pc_fetch_osm.py --out X:\\osm
-Takes about 20 to 60 minutes. Already downloaded files are skipped, so a broken run can
+If the main server keeps answering 502/504 (overloaded), add --server kumi or
+--server coffee to use another public Overpass instance. Takes about 20 to 60 minutes. Already downloaded files are skipped, so a broken run can
 simply be started again.
 """
 import argparse
@@ -23,7 +24,10 @@ import urllib.parse
 import urllib.request
 from pathlib import Path
 
-URL = "https://overpass-api.de/api/interpreter"
+SERVERS = {"main": "https://overpass-api.de/api/interpreter",
+           "kumi": "https://overpass.kumi.systems/api/interpreter",
+           "coffee": "https://overpass.private.coffee/api/interpreter"}
+URL = SERVERS["main"]
 LAENDER = ["DE-BW", "DE-BY", "DE-BE", "DE-BB", "DE-HB", "DE-HH", "DE-HE", "DE-MV", "DE-NI", "DE-NW", "DE-RP", "DE-SL",
            "DE-SN", "DE-ST", "DE-SH", "DE-TH"]
 QUERIES = {
@@ -52,7 +56,10 @@ def main():
     a = argparse.ArgumentParser()
     a.add_argument("--out", default=r"X:\osm")
     a.add_argument("--only", nargs="*", help="categories to fetch (default: all)")
+    a.add_argument("--server", default="main", choices=list(SERVERS), help="Overpass instance (if one is overloaded)")
     x = a.parse_args()
+    global URL
+    URL = SERVERS[x.server]
     out = Path(x.out)
     out.mkdir(parents=True, exist_ok=True)
     cats = x.only or list(QUERIES)

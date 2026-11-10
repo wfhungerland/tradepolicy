@@ -12,6 +12,9 @@ dependencies:
   - networkx
   - statsmodels
   - pyreadstat
+  - openpyxl
+  - shapely
+  - pyshp
   - jupyterlab
   - pytest
   - pip

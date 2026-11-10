@@ -503,6 +503,12 @@ approved or under construction, 6,437 km before or in planning approval, 1,190 k
 Planned commissioning by project: 8,400 km by 2030, 13,900 km by 2035; 11 projects
 (2,806 km) without date.
 
+Profile of exposed districts (`78_kreise_profile.py`, INKAR 2025): districts in the top fifth of
+US-tariff loss per inhabitant (535 EUR and more) have GDP per head of 61 thousand EUR (bottom fifth
+37), median full-time earnings 4,104 EUR (3,420), industry share 23 % (12 %); unemployment (5.5 vs
+6.0 %), mean age and the AfD vote 2025 (18.7 vs 23.2 %) differ little. Spearman with the loss:
+industry share 0.67, GDP per head 0.47, earnings 0.42, unemployment -0.10, AfD -0.01. The tariff
+shock hits prosperous industrial districts, not structurally weak ones.
 Long-run regional GDP (`77_roses_wolf.py`, Rosés-Wolf database v7, 173 regions in 16 Western
 European countries, 1900-2021, 2011 international dollars): sigma of log GDP per head 0.40 (1900),
 0.42 (1938), 0.27 (2000), 0.29 (2021); beta convergence -0.6 % per year; Spearman rank correlation

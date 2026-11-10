@@ -139,6 +139,13 @@ def main(site=None):
     (out / "inkar_analyses.json").write_text(json.dumps(res, ensure_ascii=False, indent=1, default=float), encoding="utf-8")
     m.round(4).to_csv(out / "inkar_analyses_kreise.csv")
     if site:
+        # map layers by NUTS 3 code (site tab Kreise)
+        m["nuts3"] = u.nuts3.reindex(m.index)
+        m["risk_demo"] = np.where(m.q.isna() | m.prog.isna(), np.nan, np.where((m.q == 5) & (m.prog < -5), 3, np.where(m.q == 5, 2, np.where(m.prog < -5, 1, 0))))
+        m["risk_pov"] = np.where(m.q.isna() | m.sgb2.isna(), np.nan, np.where((m.q == 5) & (m.sgb2 >= thr), 3, np.where(m.q == 5, 2, np.where(m.sgb2 >= thr, 1, 0))))
+        keep = ["alq", "fk_os", "prog", "risk_demo", "d_afd", "giga20", "d_it", "d_iq19", "t_air", "ausl", "bq_ausl", "sgb2", "kinder", "risk_pov"]
+        mp = {r.nuts3: {k: (None if pd.isna(r[k]) else round(float(r[k]), 2)) for k in keep} for _, r in m.dropna(subset=["nuts3"]).iterrows()}
+        (Path(site) / "kreise_inkar_map.json").write_text(json.dumps(mp, separators=(",", ":")), encoding="utf-8")
         p = Path(site) / "kreise_inkar.json"
         p.write_text(json.dumps(res, ensure_ascii=False, separators=(",", ":"), default=lambda x: round(float(x), 4)), encoding="utf-8")
         print(p.name, p.stat().st_size // 1024, "kB")

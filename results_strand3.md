@@ -509,6 +509,26 @@ US-tariff loss per inhabitant (535 EUR and more) have GDP per head of 61 thousan
 6.0 %), mean age and the AfD vote 2025 (18.7 vs 23.2 %) differ little. Spearman with the loss:
 industry share 0.67, GDP per head 0.47, earnings 0.42, unemployment -0.10, AfD -0.01. The tariff
 shock hits prosperous industrial districts, not structurally weak ones.
+INKAR district analyses (`79_inkar_analyses.py`; quintiles by US-tariff loss per inhabitant, OLS
+with Land effects, robust s.e., regressors standardised; associations only):
+1. Skilled labour: exposed districts have lower unemployment (5.5 vs 5.9 %) and higher employment
+   rates (66.0 vs 64.6 %); skilled shares among unemployed (about 28 %) and vacancies (57 %) similar.
+   INKAR has no vacancy totals.
+2. Demography: top fifth grows +1.3 % to 2045 (BBSR projection); 15 districts combine high loss
+   and population -5 % or more (Salzgitter, Saalekreis, Zwickau, Olpe, Holzminden, Märkischer Kreis).
+3. Votes: AfD +8.0 points 2017-2025; +0.74 points per s.d. of tariff exposure (p < 0.001, 369
+   districts, controls unemployment, income, age, density); change in industry share unrelated.
+   Exposure proxies export-dependent industrial sites (cars), not a causal tariff effect.
+4. Broadband: gigabit coverage 2020 unrelated to change in IT or creative employment 2017-2023.
+5. Industrial decline 2019-2023 (share fell in 40 % of districts) not explained by export ratio
+   change or regional energy intensity.
+6. Accessibility: one s.d. longer travel time to an airport (mean 49 min) goes with 11 % lower
+   foreign sales per inhabitant (p = 0.007); motorway and intercity station no effect.
+7. Migration: industrial districts have fewer foreigners (13.5 vs 15.8 %) but higher foreigner
+   employment rates (58.8 vs 51.4 %); foreigners' share rises with the export ratio (rho 0.46).
+8. Poverty: SGB II and child poverty similar across fifths; 15 districts combine high loss and
+   top-fifth SGB II rates (>= 10.2 %), mainly industrial cities (Ludwigshafen, Schweinfurt,
+   Leverkusen, Mannheim, Salzgitter).
 Long-run regional GDP (`77_roses_wolf.py`, Rosés-Wolf database v7, 173 regions in 16 Western
 European countries, 1900-2021, 2011 international dollars): sigma of log GDP per head 0.40 (1900),
 0.42 (1938), 0.27 (2000), 0.29 (2021); beta convergence -0.6 % per year; Spearman rank correlation

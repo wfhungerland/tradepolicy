@@ -134,6 +134,7 @@ Flat structure, at most one folder level. Scripts are numbered in run order.
 | `76_subsidies_regression.py` | PPML: targeted Chinese subsidies on goods under price pressure, with HS chapter/heading effects and size controls |
 | `77_roses_wolf.py` | regional GDP per head in Western Europe 1900-2021 (Rosés-Wolf database v7): index, sigma and beta convergence, rank persistence, maps |
 | `78_kreise_profile.py` | INKAR 2025 profile of districts by quintile of US tariff loss per inhabitant (income, unemployment, industry share, age, education, votes) |
+| `79_inkar_analyses.py` | eight INKAR district analyses (skilled labour, demography, AfD vote change, broadband, industrial decline, accessibility, migration, poverty) for the site tab Kreise |
 | `tools/pc_fetch_osm.py` | runs on the user's PC: power lines, substations, rail lines and motorways from OpenStreetMap (Overpass) per Land |
 | `54_export_zero_trade.py` | exports the matrices for the site (zerotrade_*.json) |
 | `elasticities.py` | Feenstra (1994) / Broda-Weinstein (2006) estimator with Soderbery (2015) LIML and constrained-LIML fallback |

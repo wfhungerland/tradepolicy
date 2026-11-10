@@ -4,7 +4,8 @@ Data: OpenStreetMap (© OpenStreetMap contributors, ODbL 1.0), files from tools/
 Coordinates are projected (sinusoidal, central meridian 10.5 E, as in 68_kreise_infra.py),
 simplified with a tolerance of 60 m, de-duplicated across Länder and written as integer
 coordinates in units of 100 m. District outlines (GISCO NUTS 2024, 1:1 million) as background.
-Writes <site>/netz_<layer>.json, one file per layer, loaded on demand by the site.
+Writes <site>/netz_<layer>.json, one file per layer, loaded on demand by the site, plus a
+coarse netz_<layer>_lo.json (merged, 400 m tolerance) for the overview.
 Usage: python 71_netz_lines.py site_data_folder
 """
 import gzip
@@ -14,7 +15,8 @@ from pathlib import Path
 
 import numpy as np
 from shapely.geometry import LineString, shape
-from shapely.ops import transform
+from shapely.geometry import MultiLineString
+from shapely.ops import linemerge, transform
 
 from config import load_config
 
@@ -89,6 +91,10 @@ def main(site):
         if k == "sub":
             continue
         out[k] = [e for e in (enc(shift(l).simplify(0.06), maxy) for l in ls) if len(e) >= 4]
+        # coarse version for the overview: merge touching pieces, simplify to 400 m
+        m = linemerge(MultiLineString([shift(l) for l in ls]))
+        parts = getattr(m, "geoms", [m])
+        out[k + "_lo"] = [e for e in (enc(g.simplify(0.4), maxy) for g in parts if g.length > 0.3) if len(e) >= 4]
     out["sub"] = subs
     for k, v in out.items():
         p = site / f"netz_{k}.json"

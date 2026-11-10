@@ -496,3 +496,5 @@ Transmission grid expansion (`70_netzausbau.py`, BNetzA monitoring Q2/2026): 128
 approved or under construction, 6,437 km before or in planning approval, 1,190 km earlier.
 Planned commissioning by project: 8,400 km by 2030, 13,900 km by 2035; 11 projects
 (2,806 km) without date.
+
+Manufacturing export ratio by district (`73_kreise_export.py`): Germany 34 % (1999), 50 % (2024); 386 of 400 districts reported.

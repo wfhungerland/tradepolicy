@@ -505,8 +505,9 @@ Planned commissioning by project: 8,400 km by 2030, 13,900 km by 2035; 11 projec
 
 Profile of exposed districts (`78_kreise_profile.py`, INKAR 2025): districts in the top fifth of
 US-tariff loss per inhabitant (535 EUR and more) have GDP per head of 61 thousand EUR (bottom fifth
-37), median full-time earnings 4,104 EUR (3,420), industry share 23 % (12 %); unemployment (5.5 vs
-6.0 %), mean age and the AfD vote 2025 (18.7 vs 23.2 %) differ little. Spearman with the loss:
+37), median full-time earnings 4,104 EUR (3,420), industry employees per 100 inhabitants aged 15-64
+23 (12); unemployment (5.5 vs 6.0 %) and mean age differ little; the AfD vote 2025 is lower in the
+most exposed fifth (18.7 vs 23.2 %), with no rank correlation across districts. Spearman with the loss:
 industry employment per working-age inhabitant 0.67, GDP per head 0.47, earnings 0.42, unemployment -0.10, AfD -0.01. The tariff
 shock hits prosperous industrial districts, not structurally weak ones.
 INKAR district analyses (`79_inkar_analyses.py`; INKAR "Industriequote" = industry employees per

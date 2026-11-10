@@ -68,11 +68,12 @@ def main(site=None):
     ge.to_csv(out / "subsidies_german_exports.csv", index=False)
     print("share of German exports (value) in products with in-force harmful subsidies:\n", ge.round(3).to_string(index=False))
     ex = c.exposed.fillna(False).astype(bool)
-    cmp_ = pd.DataFrame({"gruppe": ["unter chinesischem Preisdruck", "übrige Waren"],
-                         "share_with_cn_subsidy": [float((c.China[ex] > 0).mean()), float((c.China[~ex] > 0).mean())],
-                         "share_value_with_cn_subsidy": [float(w[ex & (c.China > 0)].sum() / w[ex].sum()), float(w[~ex & (c.China > 0)].sum() / w[~ex].sum())],
-                         "mean_cn_subsidies": [float(c.China[ex].mean()), float(c.China[~ex].mean())],
-                         "n": [int(ex.sum()), int((~ex).sum())]})
+    big = c.deu_exports_bn >= 0.1                                 # size threshold of the exposure definition
+    grp = {"unter chinesischem Preisdruck": ex, "übrige Waren gleicher Größe": big & ~ex, "kleinere Waren": ~big}
+    cmp_ = pd.DataFrame({"gruppe": list(grp),
+                         "share_with_cn_subsidy": [float((c.China[g] > 0).mean()) for g in grp.values()],
+                         "mean_cn_subsidies": [float(c.China[g].mean()) for g in grp.values()],
+                         "n": [int(g.sum()) for g in grp.values()]})
     cmp_.to_csv(out / "subsidies_china_exposed.csv", index=False)
     print(cmp_.round(3).to_string(index=False))
     top = c[ex & (c.China > 0)].sort_values("deu_exports_bn", ascending=False).head(12)[["name_en", "deu_exports_bn", "China", "price_gap_log"]]
@@ -97,7 +98,7 @@ def main(site=None):
     fig.savefig(out / "subsidies.png", dpi=150); plt.close(fig)
     if site:
         j = {"years": yr.index.astype(int).tolist(), "by_year": {g: yr[g].astype(int).tolist() for g in yr.columns},
-             "de_exports": ge.to_dict("records"), "china_exposed": cmp_.to_dict("records"),
+             "de_exports": ge.to_dict("records"), "china_exposed": cmp_.to_dict("records"), "regression": pd.read_csv(out / "regression.csv").round(4).to_dict("records") if (out / "regression.csv").exists() else [],
              "top": [{"hs": h, "name": r.name_en, "deu_bn": round(r.deu_exports_bn, 2), "n_cn": int(r.China)} for h, r in top.iterrows()],
              "n_total": int(s["Intervention ID"].nunique()), "n_force": int(s[s["Is In Force"] == 1]["Intervention ID"].nunique())}
         f = Path(site) / "subsidies.json"

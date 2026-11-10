@@ -503,6 +503,11 @@ approved or under construction, 6,437 km before or in planning approval, 1,190 k
 Planned commissioning by project: 8,400 km by 2030, 13,900 km by 2035; 11 projects
 (2,806 km) without date.
 
+Long-run regional GDP (`77_roses_wolf.py`, Rosés-Wolf database v7, 173 regions in 16 Western
+European countries, 1900-2021, 2011 international dollars): sigma of log GDP per head 0.40 (1900),
+0.42 (1938), 0.27 (2000), 0.29 (2021); beta convergence -0.6 % per year; Spearman rank correlation
+1900 vs 2021 only 0.30. German regions on average 97 (1900), 120 (1938), 104 (1990), 110 (2021)
+relative to the regional mean (= 100). Poorest 2021: Calabria (51), Sicily, Campania.
 Manufacturing export ratio by district (`73_kreise_export.py`, Regionaldatenbank 42111-04-02-4,
 establishments with 20+ employees): Germany 34 % (1999), 42 % (2009), 50 % (2024); 386 of 400
 districts reported for 2024, median 42 %. Highest Oder-Spree (87 %), Rostock, Stuttgart, Munich;

@@ -132,6 +132,7 @@ Flat structure, at most one folder level. Scripts are numbered in run order.
 | `74_kreise_us_tariffs.py` | US tariff exposure of manufacturing by district: NUTS 2 industry mix scaled by the district export ratio |
 | `75_subsidies.py` | harmful subsidies (Global Trade Alert, MAST L and P) by implementer and year; targeted Chinese subsidies on goods under Chinese price pressure |
 | `76_subsidies_regression.py` | PPML: targeted Chinese subsidies on goods under price pressure, with HS chapter/heading effects and size controls |
+| `77_roses_wolf.py` | regional GDP per head in Western Europe 1900-2021 (Rosés-Wolf database v7): index, sigma and beta convergence, rank persistence, maps |
 | `tools/pc_fetch_osm.py` | runs on the user's PC: power lines, substations, rail lines and motorways from OpenStreetMap (Overpass) per Land |
 | `54_export_zero_trade.py` | exports the matrices for the site (zerotrade_*.json) |
 | `elasticities.py` | Feenstra (1994) / Broda-Weinstein (2006) estimator with Soderbery (2015) LIML and constrained-LIML fallback |

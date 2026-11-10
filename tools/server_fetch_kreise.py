@@ -18,7 +18,7 @@ Runs on the Hetzner server (Python 3.10+, pandas). Two parts:
 Usage on the server:
   python3 server_fetch_kreise.py --out /srv/daten/claude-daten/kreise --mastr
   RDB_USER=... RDB_PASSWORD=... python3 server_fetch_kreise.py --search Auslandsumsatz
-  RDB_USER=... RDB_PASSWORD=... python3 server_fetch_kreise.py --out /srv/daten/claude-daten/kreise --tables 42111-... 13111-...
+  RDB_USER=... RDB_PASSWORD=... python3 server_fetch_kreise.py --out /srv/daten/claude-daten/kreise --tables 42111-04-02-4 --start 1995
 """
 import argparse
 import io
@@ -136,10 +136,13 @@ def rdb_search(term):
         print(t.get("Code"), "|", t.get("Content"))
 
 
-def rdb_tables(out, codes):
+def rdb_tables(out, codes, start=None):
     out.mkdir(parents=True, exist_ok=True)
     for c in codes:
-        r = rdb_post("data/tablefile", {"name": c, "area": "all", "format": "ffcsv", "compress": "false", "language": "de"})
+        q = {"name": c, "area": "all", "format": "ffcsv", "compress": "false", "language": "de"}
+        if start:
+            q["startyear"] = str(start)             # otherwise the service returns only recent years
+        r = rdb_post("data/tablefile", q)
         if r[:2] == b"PK":
             with zipfile.ZipFile(io.BytesIO(r)) as z:
                 r = z.read(z.namelist()[0])
@@ -154,6 +157,7 @@ def main():
     a.add_argument("--mastr", action="store_true")
     a.add_argument("--search")
     a.add_argument("--tables", nargs="*")
+    a.add_argument("--start", type=int, help="first year for --tables (default: service default, often only recent years)")
     x = a.parse_args()
     out, work = Path(x.out), Path(x.work)
     work.mkdir(parents=True, exist_ok=True)
@@ -162,7 +166,7 @@ def main():
     if x.search:
         rdb_search(x.search)
     if x.tables:
-        rdb_tables(out, x.tables)
+        rdb_tables(out, x.tables, x.start)
 
 
 if __name__ == "__main__":

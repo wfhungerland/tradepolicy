@@ -406,8 +406,14 @@ border trend and RTA; 174 countries, 207,823 observations.
   narrower, they use quarterly IMF data to 2023 and no domestic flows. On the UN scale
   China sits within the Global South, so a US-China split mostly separates the West from
   all others. Treat as a check, not as evidence against fragmentation.
-- Subsidies (Global Trade Alert): not done; the API key allows only 1,000 records per 24
-  hours. A bulk export from the GTA data center is needed.
+- Subsidies (`75_subsidies.py`, `76_subsidies_regression.py`, Global Trade Alert full export,
+  November 2026): 51,202 harmful subsidy interventions (MAST L and P, red/amber) since 2009,
+  41,747 in force; most by China (9,001) and the US (8,850). Targeted Chinese subsidies in
+  force (not horizontal, at most 50 HS6 codes) per good: 25.3 for the 256 goods under Chinese
+  price pressure, 20.0 for other goods of similar size (German exports >= 100 million USD),
+  5.3 for smaller goods. The raw gap is a size effect: PPML within HS chapters among goods of
+  similar size +9 % (p = 0.37); with size controls no difference. China subsidises large
+  product markets, not specifically the goods where Germany is under pressure.
 
 ## Varieties of capitalism: business systems and institutional distance (script 63, 2026-11-08)
 
@@ -497,4 +503,11 @@ approved or under construction, 6,437 km before or in planning approval, 1,190 k
 Planned commissioning by project: 8,400 km by 2030, 13,900 km by 2035; 11 projects
 (2,806 km) without date.
 
-Manufacturing export ratio by district (`73_kreise_export.py`): Germany 34 % (1999), 50 % (2024); 386 of 400 districts reported.
+Manufacturing export ratio by district (`73_kreise_export.py`, Regionaldatenbank 42111-04-02-4,
+establishments with 20+ employees): Germany 34 % (1999), 42 % (2009), 50 % (2024); 386 of 400
+districts reported for 2024, median 42 %. Highest Oder-Spree (87 %), Rostock, Stuttgart, Munich;
+lowest Oberspreewald-Lausitz (8 %). Since 2012 the ratio rose in 275 of 364 districts.
+US tariffs by district (`74_kreise_us_tariffs.py`): NUTS 2 manufacturing-mix shock (-0.8 to
+-2.0 %) scaled by the district export ratio relative to its region. Manufacturing output change
+-0.3 to -3.5 % (median -1.5 %), about 34 bn EUR a year (establishments with 20+ employees). Most
+hit in % Jena, Landshut, Oder-Spree; per inhabitant Regensburg (3,440 EUR), Ludwigshafen, Rastatt.

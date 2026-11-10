@@ -1,4 +1,4 @@
-"""Eight district analyses with INKAR 2025 (BBSR), for the site tab "Kreise".
+"""Ten district analyses with INKAR 2025 (BBSR), for the site tab "Kreise".
 
 Inputs: inkar_2025_kreise.parquet (district rows of INKAR 2025, Gebietsstand 2023),
 <output>/kreise/us_tariffs_kreise.csv (74), export_kreise.csv (73), regional exposure NUTS 2 (64).
@@ -8,11 +8,14 @@ errors; regressors standardised (effect of one standard deviation). All results 
 across districts, not causal effects.
   1 skilled labour       labour-market indicators by tariff quintile
   2 demography           projected population 2022-2045 by quintile; districts with both risks
+  3 municipal finances   local business tax, tax capacity and debt by tariff quintile
   4 votes                change of AfD vote 2017-2025 on tariff exposure and de-industrialisation
   5 broadband            change of IT and creative employment 2017-2023 on gigabit coverage 2020
   6 industrial decline   change of industry share 2019-2023 on export ratio change and energy intensity
   7 accessibility        export ratio and foreign sales per head on travel times
   8 migration            foreigners' share and employment rate by industry-share quintile
+  9 land use             new settlement area, building land prices and settlement share versus
+                         industrial growth 2013-2023
   10 poverty             SGB II rate and child poverty by tariff quintile; districts with both risks
 Writes <output>/kreise/inkar_analyses.json and site data kreise_inkar.json.
 Usage: python 79_inkar_analyses.py [site_data_folder]
@@ -83,6 +86,14 @@ def main(site=None):
     items.append({"id": "demografie", "table": t.round(1).to_dict("records"), "cols": ["prog"],
                   "both": [[r["name"], round(r.loss), round(r.prog, 1)] for _, r in both.iterrows()]})
 
+    # 3 municipal finances (EUR per inhabitant, 2023)
+    m["gwst"], m["stk"], m["schulden"] = v("Gewerbesteuer"), v("Steuerkraft"), v("Kommunale Schulden")
+    m["gwst_share"] = 100 * m.gwst / m.stk
+    t = wq(m.dropna(subset=["q"]), ["gwst", "stk", "gwst_share", "schulden"])
+    m["inc"] = np.log(v("Medianeinkommen"))
+    c3, n3, _ = reg(m, "gwst_share", ["loss"], ["ln_dens", "inc"])
+    items.append({"id": "finanzen", "table": t.round(1).to_dict("records"), "cols": ["gwst", "stk", "gwst_share", "schulden"], "coef": c3, "n": n3})
+
     # 4 votes
     m["afd17"], m["afd25"] = v("Stimmenanteile AfD", 2017), v("Stimmenanteile AfD", 2025)
     m["d_afd"] = m.afd25 - m.afd17
@@ -125,6 +136,16 @@ def main(site=None):
     items.append({"id": "migration", "table": t.round(1).to_dict("records"), "cols": ["iq23", "ausl", "bq_ausl"],
                   "rho_exq": float(m[["ausl", "exq"]].corr(method="spearman").iloc[0, 1])})
 
+    # 9 land use and industrial growth
+    fl = d[(d.I == "Flächenneuinanspruchnahme") & d.Zeitbezug.between(2018, 2023)].groupby(["ags", "Zeitbezug"]).Wert.first().groupby("ags").mean()
+    m["flaeche"] = fl.reindex(m.index).values
+    m["bauland"] = v("Baulandpreise"); m["svf"] = v("Siedlungs- und Verkehrsfläche")
+    m["ln_bauland"] = np.log(m.bauland)
+    m["gq"] = pd.qcut(m.d_iq, 5, labels=[1, 2, 3, 4, 5]).astype(float)
+    t = wq(m.dropna(subset=["gq"]), ["d_iq", "flaeche", "bauland", "svf"], by="gq")
+    c9, n9, _ = reg(m, "d_iq", ["flaeche", "ln_bauland", "svf"], ["iq13", "ln_dens"])
+    items.append({"id": "flaeche", "table": t.round(2).to_dict("records"), "cols": ["d_iq", "flaeche", "bauland", "svf"], "coef": c9, "n": n9})
+
     # 10 poverty
     m["sgb2"], m["kinder"] = v("SGB II - Quote"), v("(SDG 1) Armut - Kinderarmut")
     t = wq(m.dropna(subset=["q"]), ["sgb2", "kinder"])
@@ -143,7 +164,8 @@ def main(site=None):
         m["nuts3"] = u.nuts3.reindex(m.index)
         m["risk_demo"] = np.where(m.q.isna() | m.prog.isna(), np.nan, np.where((m.q == 5) & (m.prog < -5), 3, np.where(m.q == 5, 2, np.where(m.prog < -5, 1, 0))))
         m["risk_pov"] = np.where(m.q.isna() | m.sgb2.isna(), np.nan, np.where((m.q == 5) & (m.sgb2 >= thr), 3, np.where(m.q == 5, 2, np.where(m.sgb2 >= thr, 1, 0))))
-        keep = ["alq", "fk_os", "prog", "risk_demo", "d_afd", "giga20", "d_it", "d_iq19", "t_air", "ausl", "bq_ausl", "sgb2", "kinder", "risk_pov"]
+        keep = ["alq", "fk_os", "prog", "risk_demo", "d_afd", "giga20", "d_it", "d_iq19", "t_air", "ausl", "bq_ausl", "sgb2", "kinder", "risk_pov",
+                "gwst", "gwst_share", "schulden", "flaeche", "bauland", "d_iq"]
         mp = {r.nuts3: {k: (None if pd.isna(r[k]) else round(float(r[k]), 2)) for k in keep} for _, r in m.dropna(subset=["nuts3"]).iterrows()}
         (Path(site) / "kreise_inkar_map.json").write_text(json.dumps(mp, separators=(",", ":")), encoding="utf-8")
         p = Path(site) / "kreise_inkar.json"

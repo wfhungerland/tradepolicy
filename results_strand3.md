@@ -507,15 +507,19 @@ Profile of exposed districts (`78_kreise_profile.py`, INKAR 2025): districts in 
 US-tariff loss per inhabitant (535 EUR and more) have GDP per head of 61 thousand EUR (bottom fifth
 37), median full-time earnings 4,104 EUR (3,420), industry share 23 % (12 %); unemployment (5.5 vs
 6.0 %), mean age and the AfD vote 2025 (18.7 vs 23.2 %) differ little. Spearman with the loss:
-industry share 0.67, GDP per head 0.47, earnings 0.42, unemployment -0.10, AfD -0.01. The tariff
+industry employment per working-age inhabitant 0.67, GDP per head 0.47, earnings 0.42, unemployment -0.10, AfD -0.01. The tariff
 shock hits prosperous industrial districts, not structurally weak ones.
-INKAR district analyses (`79_inkar_analyses.py`; quintiles by US-tariff loss per inhabitant, OLS
+INKAR district analyses (`79_inkar_analyses.py`; INKAR "Industriequote" = industry employees per
+100 inhabitants aged 15-64, not a share of employment; quintiles by US-tariff loss per inhabitant, OLS
 with Land effects, robust s.e., regressors standardised; associations only):
 1. Skilled labour: exposed districts have lower unemployment (5.5 vs 5.9 %) and higher employment
    rates (66.0 vs 64.6 %); skilled shares among unemployed (about 28 %) and vacancies (57 %) similar.
    INKAR has no vacancy totals.
 2. Demography: top fifth grows +1.3 % to 2045 (BBSR projection); 15 districts combine high loss
    and population -5 % or more (Salzgitter, Saalekreis, Zwickau, Olpe, Holzminden, Märkischer Kreis).
+3a. Municipal finances: local business tax 1,269 EUR per inhabitant in the most exposed fifth vs
+   599 in the least; relative to tax capacity 79.9 vs 60.0 %; +2.7 points per s.d. of exposure
+   (p = 0.007, controls income, density); municipal debt lower (1,333 vs 1,673 EUR).
 3. Votes: AfD +8.0 points 2017-2025; +0.74 points per s.d. of tariff exposure (p < 0.001, 369
    districts, controls unemployment, income, age, density); change in industry share unrelated.
    Exposure proxies export-dependent industrial sites (cars), not a causal tariff effect.
@@ -526,6 +530,9 @@ with Land effects, robust s.e., regressors standardised; associations only):
    foreign sales per inhabitant (p = 0.007); motorway and intercity station no effect.
 7. Migration: industrial districts have fewer foreigners (13.5 vs 15.8 %) but higher foreigner
    employment rates (58.8 vs 51.4 %); foreigners' share rises with the export ratio (rho 0.46).
+7a. Land use: fastest industrial growth 2013-2023 (+4.5 per 100 working-age inhabitants) in
+   districts with less built-up land (16.5 vs 37.6 %); within Länder unrelated to new settlement
+   area or built-up share; building land prices weakly positive (p = 0.08).
 8. Poverty: SGB II and child poverty similar across fifths; 15 districts combine high loss and
    top-fifth SGB II rates (>= 10.2 %), mainly industrial cities (Ludwigshafen, Schweinfurt,
    Leverkusen, Mannheim, Salzgitter).

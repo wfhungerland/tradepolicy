@@ -20,7 +20,7 @@ from config import load_config
 
 IND = {"Arbeitslosenquote": ("Arbeitslosenquote, %", "Unemployment rate, %"),
        "Medianeinkommen": ("Medianeinkommen Vollzeit, EUR je Monat", "Median full-time earnings, EUR per month"),
-       "Industriequote": ("Industriequote (Beschäftigte), %", "Industry share of employment, %"),
+       "Industriequote": ("Industriebeschäftigte je 100 Einwohner von 15 bis 64", "Industry employees per 100 inhabitants aged 15-64"),
        "Bruttoinlandsprodukt je Einwohner": ("BIP je Einwohner, Tsd. EUR", "GDP per head, EUR thousand"),
        "Durchschnittsalter der Bevölkerung": ("Durchschnittsalter, Jahre", "Mean age, years"),
        "Beschäftigte am AO mit akademischem Berufsabschluss": ("Beschäftigte mit Hochschulabschluss, %", "Employees with university degree, %"),

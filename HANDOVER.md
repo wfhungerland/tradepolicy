@@ -55,7 +55,8 @@ a failed run with "No artifacts named github-pages" is a GitHub glitch, re-run w
    Germany faces Chinese price pressure) is a size effect and disappears within HS chapters.
 5. Site views: Überblick, Länder, Länderprofil, Produktraum, Branchen, Abhängigkeiten,
    China-Wettbewerb (with subsidies), Null-Handel, Regierungsform, Mittelstand, Regionen
-   (EU and district maps, network map, hydrogen and grid charts, INKAR table), Szenarien,
+   (EU and district maps, network map, hydrogen and grid charts), Kreise (14 INKAR district maps,
+   profile of tariff-exposed districts, eight INKAR analyses from 79_inkar_analyses.py), Szenarien,
    Prognosetest, Methodik; DE and EN. Monthly US tariff update via tradepolicy-site/.github/workflows/update-tariffs.yml.
 6. KM handover prompt (HANDOVER_KM_extensions.md), data requests (DATA_REQUESTS.md).
 
@@ -66,7 +67,8 @@ a failed run with "No artifacts named github-pages" is a GitHub glitch, re-run w
   C:\Daten\scenarios\icio, config.yaml keys `scenarios` and `yotov_guide`; success = "82 of 82
   values reproduced" (still 82 of 82 in the cloud on 2026-11-10).
 - Publication permission for the methods paper: decision of the ministry, not ours.
-- Ideas for INKAR (10 proposals in chat of 2026-11-10), none started.
+- INKAR ideas not chosen (2026-11-10): municipal finances (Gewerbesteuer, Steuerkraft, debt) of
+  exposed districts; land use and building land prices versus industrial growth.
 
 ## Not pursued or blocked
 
@@ -77,6 +79,8 @@ a failed run with "No artifacts named github-pages" is a GitHub glitch, re-run w
 - District industry mix within manufacturing is confidential; districts take their NUTS 2 mix.
 
 ## Known pitfalls
+
+- Site: app.js is loaded as app.js?v=YYYYMMDDx; raise the version after changes, or browsers keep the old file.
 
 - Run scripts in the `tradepolicy` conda env, not `base`.
 - Adding a `.fig` card to the site renumbers all later figures (links #abb-N shift).

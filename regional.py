@@ -101,3 +101,11 @@ def svg_paths(shapes, extent=EXTENT_EU, width=600, tol=2500):
         if parts:
             out[nid] = "".join(parts)
     return out, round((y1 - y0) * k)
+
+
+def kreis_names(names, types):
+    """District names made unique: Bavarian and other cities share their name with the
+    surrounding Landkreis (Regensburg, Schweinfurt, ...); add 'Stadt' or 'Landkreis'."""
+    names, types = list(names), list(types)
+    dup = {n for n in names if names.count(n) > 1}
+    return [f"{n}, {'Stadt' if str(t).startswith('Kreisfreie') else 'Landkreis'}" if n in dup else n for n, t in zip(names, types)]

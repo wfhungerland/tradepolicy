@@ -39,8 +39,10 @@ def main(site=None):
     out = cfg["output"] / "kreise"
     out.mkdir(parents=True, exist_ok=True)
     new, old = read(raw / "rdb_42111-04-02-4.csv"), read(raw / "rdb_42111-04-01-4.csv")
-    k = pd.read_excel(raw / "kreise.xlsx", sheet_name=1, header=None, skiprows=3).iloc[:, [0, 2, 3, 5]]
-    k.columns = ["ags", "name", "nuts3", "pop"]
+    k = pd.read_excel(raw / "kreise.xlsx", sheet_name=1, header=None, skiprows=3).iloc[:, [0, 1, 2, 3, 5]]
+    k.columns = ["ags", "typ", "name", "nuts3", "pop"]
+    k = k[k.ags.astype(str).str.len() == 5]
+    k["name"] = rg.kreis_names(k.name, k.typ)
     k = k[k.ags.astype(str).str.len() == 5].dropna(subset=["nuts3"]).assign(ags=lambda x: x.ags.astype(str)).set_index("ags")
     # Germany series (both classifications, break 2008/2009)
     de = pd.concat([x[x["1_variable_code"] == "DINSG"].pivot_table(index="time", columns="value_variable_label", values="v").assign(wz=w)

@@ -549,4 +549,4 @@ lowest Oberspreewald-Lausitz (8 %). Since 2012 the ratio rose in 275 of 364 dist
 US tariffs by district (`74_kreise_us_tariffs.py`): NUTS 2 manufacturing-mix shock (-0.8 to
 -2.0 %) scaled by the district export ratio relative to its region. Manufacturing output change
 -0.3 to -3.5 % (median -1.5 %), about 34 bn EUR a year (establishments with 20+ employees). Most
-hit in % Jena, Landshut, Oder-Spree; per inhabitant Regensburg (3,440 EUR), Ludwigshafen, Rastatt.
+hit in % Jena, Landshut city, Oder-Spree; per inhabitant Regensburg city (3,440 EUR), Ludwigshafen, Rastatt.

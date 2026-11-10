@@ -43,8 +43,10 @@ def main(site=None):
     m = pd.read_csv(raw / "mastr_kreis_jahr.csv", dtype={"kreis": str})
     m["g"] = m.energietraeger.map(GROUPS).fillna("other")
     k = pd.read_excel(raw / "kreise.xlsx", sheet_name=1, header=None, skiprows=3)
-    k = k.iloc[:, [0, 2, 3, 4, 5]]
-    k.columns = ["ags", "name", "nuts3", "area", "pop"]
+    k = k.iloc[:, [0, 1, 2, 3, 4, 5]]
+    k.columns = ["ags", "typ", "name", "nuts3", "area", "pop"]
+    k = k[k.ags.astype(str).str.len() == 5]
+    k["name"] = rg.kreis_names(k.name, k.typ)
     k = k[k.ags.astype(str).str.len() == 5].dropna(subset=["nuts3"])
     k["ags"] = k.ags.astype(str)
     matched = m[m.jahr == 2025].kreis.isin(k.ags)

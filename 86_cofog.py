@@ -4,7 +4,8 @@
 Source: Eurostat gov_10a_exp (total expenditure TE, million EUR), sectors S13 (general
 government, consolidated), S1311 (federal), S1312 (Länder), S1313 (municipalities), S1314
 (social security); divisions GF01-GF10 for all sectors 1995 onward, groups (second level)
-for S13 from 2000. Population: demo_gind (AVG); prices: GDP deflator nama_10_gdp PD15_EUR.
+for S13 from 2000. Population: demo_gind (AVG); prices: deflator of government final consumption
+(nama_10_gdp P3_S13, PD15_EUR).
 
 Subsector figures include transfers between levels; their sum exceeds the consolidated
 general government total by 14-24 %. They are therefore shown side by side, never stacked.
@@ -61,7 +62,7 @@ def main(site=None):
     lab_en = d["dimension"]["cofog99"]["category"]["label"]
     years = sorted({int(r["time"]) for r in rows})
     pop = series("demo_gind", "geo=DE&indic_de=AVG")
-    defl = series("nama_10_gdp", "geo=DE&unit=PD15_EUR&na_item=B1GQ")
+    defl = series("nama_10_gdp", "geo=DE&unit=PD15_EUR&na_item=P3_S13")  # government final consumption deflator
     gdp = series("nama_10_gdp", "geo=DE&unit=CP_MEUR&na_item=B1GQ")
     y1 = years[-1]
     val = {}
@@ -78,6 +79,7 @@ def main(site=None):
         "price_index": [round(defl[y] / defl[y1], 5) if y in defl else None for y in years],
         "gdp": [gdp.get(y) for y in years],
         "price_base": y1,
+        "deflator": "P3_S13",
     }
     # second level for general government (treemap), from 2000
     groups = {}

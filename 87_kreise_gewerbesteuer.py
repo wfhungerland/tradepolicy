@@ -7,6 +7,8 @@ manufacturing sales per inhabitant (Regionaldatenbank 42111-04-02-4, establishme
   lags     d ln G_kt = sum_j b_j d ln U_k,t-j (j = 0, 1, 2) + year FE (prepayments adjust with a lag)
   longdiff change 2010-12 -> 2021-23 with Land FE
   terciles levels model by tercile of the industry employment rate 2013 (INKAR Industriequote)
+  placebo  levels model with next year's sales added (lead); a large lead coefficient would point to
+           reverse timing or common trends rather than a response of the tax to sales
 Year effects absorb the national cycle, so b measures the response to a district-specific sales
 shock, the kind of shock that the regional allocation of the tariff loss creates. Apportionment
 (Zerlegung) of the tax base by payroll to municipalities with plants is part of the reduced form.
@@ -78,11 +80,16 @@ def main(site=None):
     z = lev[lev.year.between(2021, 2023)].groupby("ags")[["lg", "lu"]].mean()
     ld = (z - a).dropna().reset_index().assign(land=lambda x: x.ags.str[:2])
     b, se, n = fit("lg ~ lu | land", ld, "hetero"); est.append({"model": "longdiff", "b": b.lu, "se": se.lu, "n": n})
-    bt = {}
+    p["lu_lead"] = p.groupby("ags").lu.shift(-1)
+    pl = p.dropna(subset=["lg", "lu", "lu_lead"])
+    r = pf.feols("lg ~ lu + lu_lead | ags + year", data=pl, vcov={"CRV1": "ags"})
+    est.append({"model": "placebo_lead", "b": float(r.coef().lu), "se": float(r.se().lu), "n": int(r._N),
+                "b_lead": float(r.coef().lu_lead), "se_lead": float(r.se().lu_lead)})
+    bt, st = {}, {}
     for t in (1, 2, 3):
         x = lev[lev.t == t]
         b, se, n = fit("lg ~ lu | ags + year", x)
-        bt[t] = float(b.lu)
+        bt[t], st[t] = float(b.lu), float(se.lu)
         est.append({"model": f"tercile_{t}", "b": b.lu, "se": se.lu, "n": n, "iq_mean": float(iq[iq.index.isin(x.ags)].mean())})
     e = pd.DataFrame(est)
     print(e.round(3).to_string(index=False))
@@ -109,6 +116,10 @@ def main(site=None):
     v["q"] = pd.qcut(v.loss_pc, 5, labels=[1, 2, 3, 4, 5]).astype(int)
     w = lambda x, c: float(np.average(x[c], weights=x["pop"]))
     tot = {c: float(v[f"dg_mio_{c}"].sum()) for c in ("central", "uniform", "upper")}
+    # 95 % band of the central total from the tercile standard errors (tercile regressions on disjoint samples)
+    part = v.groupby("t").apply(lambda x: (x.dm / 100 * x.gwst_pc * x["pop"] / 1e6).sum())
+    se_tot = float(np.sqrt(sum((part[t] * st[t]) ** 2 for t in part.index)))
+    tot["central_lo"], tot["central_hi"] = tot["central"] - 1.96 * se_tot, tot["central"] + 1.96 * se_tot
     quint = [{"q": q, "n": len(x), "dg_pc": w(x, "dg_pc_central"), "dg_pct": w(x, "dg_pct"), "dg_stk_pct": w(x, "dg_stk_pct"),
               "gwst_pc": w(x, "gwst_pc")} for q, x in v.groupby("q")]
     summ = {"elasticity": e.round(4).to_dict("records"), "total_mio": tot, "gwst_total_mio": float((v.gwst_pc * v["pop"]).sum() / 1e6),
@@ -118,7 +129,7 @@ def main(site=None):
             "top_pc": [[r["name"], round(r.dg_pc_central), round(r.dg_pct, 1), round(r.dg_stk_pct, 1)] for _, r in v.sort_values("dg_pc_central").head(15).iterrows()],
             "top_stk": [[r["name"], round(r.dg_pc_central), round(r.dg_pct, 1), round(r.dg_stk_pct, 1)] for _, r in v.sort_values("dg_stk_pct").head(15).iterrows()],
             "double": [[r["name"], round(r.dg_pc_central), round(r.dg_stk_pct, 1)] for _, r in v[v.double == True].sort_values("dg_pc_central").iterrows()]}
-    print(f"Gewerbesteuer loss, EUR million a year: central {tot['central']:,.0f}, uniform {tot['uniform']:,.0f}, upper {tot['upper']:,.0f}"
+    print(f"Gewerbesteuer loss, EUR million a year: central {tot['central']:,.0f} (95 % band {tot['central_hi']:,.0f} to {tot['central_lo']:,.0f}), uniform {tot['uniform']:,.0f}, upper {tot['upper']:,.0f}"
           f" (of {summ['gwst_total_mio']:,.0f}); in C areas {summ['loss_share_c']:.0%}, C or D {summ['loss_share_cd']:.0%}")
     print(pd.DataFrame(quint).round(2).to_string(index=False))
     print("largest per inhabitant:", summ["top_pc"][:10])

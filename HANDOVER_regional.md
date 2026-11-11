@@ -56,6 +56,8 @@ decline or high SGB II rates.
 | 81_kreis_steckbrief.py | district profile, 31 indicators with median and rank |
 | 86_kreise_robustness.py | seven downscaling and scenario variants versus the baseline (kreise_robust.json) |
 | 87_kreise_gewerbesteuer.py | Gewerbesteuer elasticity (district panel) and tax loss by district (kreise_gewst.json) |
+| 88_regional_paper_figures.py | four figures of the working paper (paper/figures_regional) |
+| tools/build_regional_paper.py | fills paper/regional_paper_template.md with result tables, builds md, HTML and PDF |
 | tools/scenario_from_site.py | rebuilds German scenario outputs from site/data/scenarios.json when the model cannot run |
 | regional.py | shared helpers, kreis_names() disambiguates duplicate names, rdb_kreise() reads 42111 panels |
 | tools/server_fetch_kreise.py | Regionaldatenbank/Destatis downloads (run on the PC, --start, --destatis) |
@@ -91,6 +93,9 @@ regional aid (table 4), limits, policy conclusions, references, English abstract
   top fifth under all seven variants; GRW, profile and Gewerbesteuer gaps barely move.
 - Gewerbesteuer (87): elasticity to district manufacturing sales about 0.2 (0.43 in the most industrial
   third); tax loss 0.3 bn EUR a year (1.2 bn with elasticity 1), concentrated in rich places.
+- Working paper (English): paper/regional_paper.md/.html/.pdf, 14 pages, built from the template;
+  adds a 95 % band for the tax loss (0.19 to 0.42 bn EUR) and a placebo with next year's sales (0.08, n.s.).
+  Note: the 14 suppressed districts include Wolfsburg, Ingolstadt, Dingolfing-Landau, Böblingen.
 - Site JSON files kreise_robust.json and kreise_gewst.json are written but not yet shown on the site.
 - Cloud rebuild without the model: WITS concordances answer 403 to cloud sessions, so
   tools/scenario_from_site.py rebuilds the German sector outputs; 74 then reproduces 34.0 bn EUR.

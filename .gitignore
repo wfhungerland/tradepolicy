@@ -21,3 +21,7 @@ __pycache__/
 Thumbs.db
 desktop.ini
 .pytest_cache/
+
+# Raw TED downloads
+data/ted_legacy/
+data/ted_eforms/

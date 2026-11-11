@@ -592,6 +592,11 @@ Revision after panel review (2026-11-11): NUTS 2 clustered s.e. for all elastici
 larger s.e. Imputation test (89, published districts masked): large plant location median error 5 % in sales and
 8 % in loss per inhabitant (rank corr. 0.97); small districts 34 %; only foreign sales missing below 4 %. Paper:
 AfD association removed, tax loss presented as gross range 0.3-1.2 bn with fiscal equalisation discussed.
+Labour market regions (`90_amr.py`, BBSR Arbeitsmarktregionen, 223, with imputed districts): median loss EUR 320 per
+inhabitant; most exposed fifth carries 47 % of the loss (districts 55 %), coefficient of variation 1.1 (districts 1.9).
+Top: Dingolfing-Landau (5,700), Wolfsburg (2,000), Baden-Baden, Ingolstadt, Frankfurt (Oder), Tuttlingen. Spearman with
+industry employment 0.58, GDP per head 0.54, earnings 0.50, unemployment -0.28; C areas: 6 % of the population in the
+top fifth, 44 % in the bottom fifth; 11 % of the loss in C areas.
 
 ## Services, critical raw materials, FDI (scripts 82-84, 2026-11-12)
 

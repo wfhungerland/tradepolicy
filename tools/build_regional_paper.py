@@ -88,6 +88,14 @@ def tables(out, site):
                                      "Population 2022-2045, %": [fmt(x, 1, True) for x in d.prog], "SGB II rate, %": [fmt(x, 1) for x in d.sgb2],
                                      "Second risk": [risk(x) for x in d.itertuples()], "GRW status": d.status.map({"C": "C", "D": "D", "teilweise": "partly", "keine": "none"}),
                                      "Tax loss, EUR per inhabitant": [fmt(x, 1) for x in d.dg_pc_central]}))
+    a = json.load(open(out / "amr_summary.json", encoding="utf-8"))["by_quintile"]
+    t["T_AMR"] = md(pd.DataFrame({"Quintile": [x["q"] for x in a], "Regions": [x["n"] for x in a],
+                                  "Loss, EUR per inhabitant": [fmt(x["loss_pc"], 0) for x in a],
+                                  "GDP per head, EUR thousand": [fmt(x["gdp_pc"], 1) for x in a],
+                                  "Industry employees per 100 aged 15-64": [fmt(x["iq"], 1) for x in a],
+                                  "Unemployment rate, %": [fmt(x["alq"], 1) for x in a],
+                                  "Population in C areas, %": [fmt(x["share_c"], 0) for x in a],
+                                  "Population in C or D areas, %": [fmt(x["share_cd"], 0) for x in a]}))
     core = json.load(open(Path(site) / "kreise_robust.json", encoding="utf-8"))["core"]
     t["T_CORE"] = ", ".join(short(n) for n in core) + "."
     return t

@@ -136,6 +136,7 @@ Flat structure, at most one folder level. Scripts are numbered in run order.
 | `78_kreise_profile.py` | INKAR 2025 profile of districts by quintile of US tariff loss per inhabitant (income, unemployment, industry share, age, education, votes) |
 | `79_inkar_analyses.py` | ten INKAR district analyses (skilled labour, demography, municipal finances, AfD vote change, broadband, industrial decline, accessibility, migration, land use, poverty) for the site tab Kreise |
 | `80_grw.py` | GRW regional aid areas 2022-2027 (BBSR municipal reference 2023) for the tariff-exposed and double-risk districts |
+| `81_kreis_steckbrief.py` | district profile for the site tab Kreis-Steckbrief: 31 indicators with German median and rank |
 | `tools/pc_fetch_osm.py` | runs on the user's PC: power lines, substations, rail lines and motorways from OpenStreetMap (Overpass) per Land |
 | `54_export_zero_trade.py` | exports the matrices for the site (zerotrade_*.json) |
 | `elasticities.py` | Feenstra (1994) / Broda-Weinstein (2006) estimator with Soderbery (2015) LIML and constrained-LIML fallback |

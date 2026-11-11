@@ -139,6 +139,7 @@ Flat structure, at most one folder level. Scripts are numbered in run order.
 | `81_kreis_steckbrief.py` | district profile for the site tab Kreis-Steckbrief: 31 indicators with German median and rank |
 | `82_services.py` | German trade in services (OECD TiS): types, partners, goods and services balance with the US, digital imports from the US and Ireland |
 | `83_critical_materials.py` | raw materials under Chinese export controls (2023-2025): German imports, China share, suppliers (BACI HS22) |
+| `84_fdi.py` | German FDI with the US and China (OECD FDI statistics): outward stocks and flows, inward by ultimate investor |
 | `tools/pc_fetch_osm.py` | runs on the user's PC: power lines, substations, rail lines and motorways from OpenStreetMap (Overpass) per Land |
 | `54_export_zero_trade.py` | exports the matrices for the site (zerotrade_*.json) |
 | `elasticities.py` | Feenstra (1994) / Broda-Weinstein (2006) estimator with Soderbery (2015) LIML and constrained-LIML fallback |

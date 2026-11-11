@@ -557,3 +557,19 @@ US tariffs by district (`74_kreise_us_tariffs.py`): NUTS 2 manufacturing-mix sho
 -2.0 %) scaled by the district export ratio relative to its region. Manufacturing output change
 -0.3 to -3.5 % (median -1.5 %), about 34 bn EUR a year (establishments with 20+ employees). Most
 hit in % Jena, Landshut city, Oder-Spree; per inhabitant Regensburg city (3,440 EUR), Ludwigshafen, Rastatt.
+
+## Services, critical raw materials, FDI (scripts 82-84, 2026-11-12)
+
+- Services (OECD TiS, reporter Germany, 2024): exports 435 bn EUR, imports 506 bn EUR; the
+  deficit is almost entirely travel (-71 bn). Largest buyer the US (68 bn EUR). Balance with the
+  US: services +2 bn USD, goods +99 bn USD (IMF IMTS). ICT services and licence fees imported
+  (85 bn EUR) come 22 % directly from the US, 29 % with Ireland (2010: 30 and 39 %). Bilateral
+  asymmetries with US statistics are large (booking via Ireland, Netherlands, Luxembourg).
+- Critical raw materials under Chinese export controls (BACI HS22, 2024, direct shares of
+  German imports): permanent magnets 82 %, bismuth 74 %, rare earths 33 %, tellurium 32 %,
+  graphite 31 %, gallium/germanium/indium group 25 %, antimony 15 %, tungsten 13 %, molybdenum
+  7 %. Much arrives via EU processors (France, Belgium, Austria); direct shares likely understate
+  dependence.
+- FDI (OECD, BMD4): German outward stock 2024 2,126 bn EUR; US 396 bn (19 %), China 97 bn (5 %);
+  since 2013 +144 % and +105 %. Net flows 2013-2024: US 134 bn, China 62 bn. Inward 2023 by
+  ultimate investor: US 246 bn, China 14 bn EUR (immediate: 126 and 7 bn).

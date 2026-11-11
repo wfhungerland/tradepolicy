@@ -537,6 +537,13 @@ with Land effects, robust s.e., regressors standardised; associations only):
 8. Poverty: SGB II and child poverty similar across fifths; 15 districts combine high loss and
    top-fifth SGB II rates (>= 10.2 %), mainly industrial cities (Ludwigshafen, Schweinfurt,
    Leverkusen, Mannheim, Salzgitter).
+GRW aid areas (`80_grw.py`, BBSR Raumgliederungen Referenz 2023, GRW status of each municipality,
+split municipalities counted in equal parts): 17 % of the population lives in C areas, 42 % in C or
+D areas. Most exposed fifth of districts: 8 % in C areas (least exposed fifth: 27 %), 23 % in C or D
+(67 %). Only 13 % of the modelled output loss falls in C areas, 32 % in C or D areas. Of the twelve
+districts with the highest loss per inhabitant only Oder-Spree is a C area. Of the 26 double-risk
+districts 8 are fully or partly C areas, 7 D areas, 11 none (Ludwigshafen, Leverkusen, Mannheim,
+Salzgitter, Krefeld, Schweinfurt city, Olpe, Pforzheim, Siegen-Wittgenstein, Hamburg, Cologne).
 Long-run regional GDP (`77_roses_wolf.py`, Rosés-Wolf database v7, 173 regions in 16 Western
 European countries, 1900-2021, 2011 international dollars): sigma of log GDP per head 0.40 (1900),
 0.42 (1938), 0.27 (2000), 0.29 (2021); beta convergence -0.6 % per year; Spearman rank correlation

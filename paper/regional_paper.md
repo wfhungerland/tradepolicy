@@ -4,7 +4,7 @@ subtitle: "District exposure, local business tax and regional aid"
 author: "Wolf-Fabian Hungerland"
 date: "Draft, 11 November 2026"
 abstract: |
-  This paper allocates the output losses of German manufacturing from the US tariffs in force in August 2026 to Germany's 400 districts (Kreise). A multi-sector trade model with input-output links gives the long-run output change of each manufacturing industry; the industry mix of the 38 NUTS 2 regions turns it into a regional shock, and the export ratio of each district's manufacturing allocates the shock within regions. Manufacturing output falls by about EUR 34 billion a year, 1.6 % of the sales of establishments with 20 and more employees, or EUR 38 billion when the 14 districts with suppressed data, among them Wolfsburg and Ingolstadt, are imputed from regional totals. Half of the loss falls on one fifth of districts. These are prosperous, export-oriented industrial locations: GDP per head in the most exposed fifth is more than 60 % above that of the least exposed fifth, and unemployment is lower. Only 13 % of the loss falls in areas eligible for regional aid under the joint federal-state programme GRW. Local business tax (Gewerbesteuer) is the direct fiscal channel. A district panel for 2009 to 2023 gives an elasticity of Gewerbesteuer to district-specific manufacturing sales of about 0.2, rising to 0.4 in the most industrial third of districts; the resulting tax loss is EUR 0.3 billion a year (95 % band 0.2 to 0.4). Because the tariff shock is national, the elasticity of about one observed in the 2009 recession is at least as relevant; it gives EUR 1.2 billion. Fiscal equalisation and the shared tax-base levy reduce the net loss of municipalities below these gross figures. Summed over 223 labour market regions, which capture commuting, the concentration falls (the most exposed fifth carries 47 % of the loss) but the profile is unchanged. Twenty-six districts combine a high loss with a shrinking population or a high welfare rate, eleven of them outside any aid area. The ranking of districts is robust to eight alternative allocation rules, data choices and tariff scenarios.
+  This paper allocates the output losses of German manufacturing from the US tariffs in force in August 2026 to Germany's 400 districts (Kreise). A multi-sector trade model with input-output links gives the long-run output change of each manufacturing industry; the industry mix of the 38 NUTS 2 regions turns it into a regional shock, and the export ratio of each district's manufacturing allocates the shock within regions. Manufacturing output falls by about EUR 34 billion a year, 1.6 % of the sales of establishments with 20 and more employees, or EUR 38 billion when the 14 districts with suppressed data, among them Wolfsburg and Ingolstadt, are imputed from regional totals. Half of the loss falls on one fifth of districts. These are prosperous, export-oriented industrial locations: GDP per head in the most exposed fifth is more than 60 % above that of the least exposed fifth, and unemployment is lower. About two thirds of the variation in losses per inhabitant reflect how much manufacturing a district has; a uniform shock of the same size would rank districts almost identically (rank correlation 0.90). The tariff structure adds concentration and tilts the loss toward high-earning, export-intensive cities, but it does not shift it toward weak regions. Only 13 % of the loss falls in areas eligible for regional aid under the joint federal-state programme GRW. Local business tax (Gewerbesteuer) is the direct fiscal channel. A district panel for 2009 to 2023 gives an elasticity of Gewerbesteuer to district-specific manufacturing sales of about 0.2, rising to 0.4 in the most industrial third of districts; the resulting tax loss is EUR 0.3 billion a year (95 % band 0.2 to 0.4). Because the tariff shock is national, the elasticity of about one observed in the 2009 recession is at least as relevant; it gives EUR 1.2 billion. Fiscal equalisation and the shared tax-base levy reduce the net loss of municipalities below these gross figures. Summed over 223 labour market regions, which capture commuting, the concentration falls (the most exposed fifth carries 47 % of the loss) but the profile is unchanged. Twenty-six districts combine a high loss with a shrinking population or a high welfare rate, eleven of them outside any aid area. The ranking of districts is robust to eight alternative allocation rules, data choices and tariff scenarios.
 ---
 
 **Disclaimer.** The views expressed are the author's own and do not necessarily reflect those of any institution. All errors are the author's.
@@ -19,7 +19,7 @@ Since 2025 the United States has levied much higher tariffs on imports from the 
 
 This paper allocates the manufacturing output loss to Germany's 400 districts and links it to district data on prosperity, labour markets, municipal finances, demography and regional aid. It makes three contributions. First, it combines a structural trade model with official district statistics in a transparent downscaling, and tests the downscaling against eight alternatives. Second, it estimates how strongly local business tax responds to district-specific changes in manufacturing sales, and uses the estimate to quantify the fiscal channel. Third, it compares the exposure with the map of regional aid areas.
 
-The main result is that the tariff shock is a shock to strong regions. The most exposed fifth of districts is richer, more industrial and younger than the rest, with lower unemployment. The loss correlates with industry employment per working-age inhabitant (Spearman rank correlation 0.67), with GDP per head (0.47) and earnings (0.42), not with unemployment (−0.10). Regional aid in Germany targets other places. The fiscal hit through local business tax is limited, EUR 0.3 to 1.2 billion a year gross, and concentrated in fiscally strong municipalities that receive little from fiscal equalisation. A minority of 26 districts combines high exposure with a second risk, shrinking population or high welfare dependency; they are the natural focus for policy.
+The main result is that the tariff shock is a shock to strong regions. The most exposed fifth of districts is richer, more industrial and younger than the rest, with lower unemployment. The loss correlates with industry employment per working-age inhabitant (Spearman rank correlation 0.67), with GDP per head (0.47) and earnings (0.42), not with unemployment (−0.10). This profile comes mostly from where German manufacturing is located: a decomposition shows that manufacturing sales per inhabitant account for about two thirds of the variation in the loss, the tariff-specific percentage shock for one third. The tariff structure concentrates the loss further on export-intensive cities with high earnings; controlling for density and Land it is unrelated to unemployment. Regional aid in Germany targets other places. The fiscal hit through local business tax is limited, EUR 0.3 to 1.2 billion a year gross, and concentrated in fiscally strong municipalities that receive little from fiscal equalisation. A minority of 26 districts combines high exposure with a second risk, shrinking population or high welfare dependency; they are the natural focus for policy.
 
 # 2 Related literature
 
@@ -99,6 +99,36 @@ Source: BBSR (2025), INKAR; own calculations. Indicators 2023 unless stated.
 ![Figure 3: Output loss per inhabitant and industry employment rate by district.](figures_regional/fig3_industry.png){width=70%}
 
 Regressions with Land fixed effects, robust standard errors and standardised regressors (script 79) confirm the pattern. The share of Gewerbesteuer in municipal tax capacity rises by 2.7 percentage points per standard deviation of exposure (p = 0.007), controlling for earnings and density.
+
+## 6.1 What the tariff structure adds
+
+The loss per inhabitant is the product of two factors: manufacturing sales per inhabitant and the percentage output loss, which carries the tariff structure through the regional industry mix and the district export ratio:
+
+```{=html}
+<p class="formula">V<sub>k</sub> / P<sub>k</sub> = (U<sub>k</sub> / P<sub>k</sub>) &middot; s<sub>k</sub>, &nbsp;&nbsp; s<sub>k</sub> = &minus;&Delta;Y<sub>k</sub>.</p>
+```
+
+Any shock proportional to manufacturing output would rank districts by the first factor alone. A benchmark makes this explicit (script 91): a uniform shock that lowers manufacturing output everywhere by the national average of 1.65 % has the same total loss as the tariffs. Its ranking of districts by loss per inhabitant is almost identical to the tariff ranking (rank correlation 0.90). In logarithms, manufacturing intensity accounts for 69 % of the variance of the loss per inhabitant and the tariff-specific percentage shock for 31 %.
+
+The profile of Table 1 therefore mostly describes where German manufacturing is. Figure 6 separates the two factors. Manufacturing intensity carries the strong link with industry employment (rank correlation 0.78) and the negative link with unemployment (−0.20). The tariff-specific shock s~k~ correlates only weakly with industry employment (0.17), more with earnings (0.38) and GDP per head (0.24), and slightly positively with unemployment (0.18) and the SGB II rate (0.23). The last two links reflect cities: the shock is larger in independent cities with high export ratios (median 1.69 % against 1.46 % in rural districts, rank correlation with density 0.36). With Land fixed effects and density as control, s~k~ is unrelated to unemployment and the SGB II rate (p = 0.50 and 0.97), while one percentage point more output loss goes with 4 % higher earnings (p < 0.001). Table 7 shows the raw profile by quintile of s~k~.
+
+**Table 7: Districts by tariff intensity (quintiles of the percentage output loss)**
+
+| Quintile | Districts | Output loss, % | Manufacturing sales per inhabitant, EUR thousand | GDP per head, EUR thousand | Median earnings, EUR | Unemployment rate, % | SGB II rate, % | Population in C areas, % |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| 1 | 78 | 0.85 | 24.9 | 43.4 | 3,516 | 6.0 | 8.2 | 28 |
+| 2 | 77 | 1.24 | 18.7 | 38.5 | 3,546 | 4.5 | 6.1 | 15 |
+| 3 | 77 | 1.52 | 27.3 | 43.5 | 3,712 | 4.9 | 6.9 | 9 |
+| 4 | 77 | 1.76 | 20.2 | 47.9 | 3,834 | 6.4 | 9.8 | 22 |
+| 5 | 77 | 2.21 | 34.1 | 53.7 | 4,016 | 6.2 | 9.3 | 13 |
+
+Source: own calculations; BBSR (2025), INKAR. Manufacturing sales of establishments with 20 and more employees, 2024. Means weighted by population.
+
+![Figure 6: Rank correlations of the two factors of the loss per inhabitant with district characteristics. Blue: manufacturing sales per inhabitant, which alone ranks districts under a uniform shock; orange: the tariff-specific percentage output loss.](figures_regional/fig6_decomposition.png){width=80%}
+
+What the tariff structure adds is concentration, not a different set of regions. Under the benchmark the most exposed fifth of districts carries 45 % of the loss, under the tariffs 50 %. The share of the loss in GRW C areas hardly changes (13.1 % under the benchmark, 12.5 % under the tariffs). For policy this matters: the mismatch with regional aid is a property of German industrial geography, and it would arise for almost any shock to manufacturing.
+
+## 6.2 Missing links
 
 Several expected links are absent. Neither the change in the export ratio since 2019 nor the energy intensity of the regional industry mix explains where industry employment fell between 2019 and 2023. Unemployment is slightly lower in exposed districts (5.5 % against 6.0 %), but INKAR has no vacancy totals that would show whether displaced workers would find new jobs locally.
 
@@ -235,7 +265,7 @@ The allocation inherits the regional industry mix; within-region variation comes
 
 # 12 Policy conclusions
 
-The US tariff shock mainly hits economically strong districts outside the regional aid map. Instruments of regional structural policy therefore reach only a small part of the exposure. Three conclusions follow.
+The US tariff shock mainly hits economically strong districts outside the regional aid map, largely because German manufacturing is located there. Instruments of regional structural policy therefore reach only a small part of the exposure. Three conclusions follow.
 
 First, the fiscal risk for municipalities should be monitored, but it is limited. The estimated gross loss of Gewerbesteuer is EUR 0.3 to 1.2 billion a year, between 1 % and 4 % of tax capacity in the most affected places, and fiscal equalisation reduces the net loss of weaker municipalities more than that of strong ones. An early warning through the tax estimate and the Länder fits better than new support programmes.
 
@@ -321,7 +351,7 @@ Source: own calculations. Second risk: projected population change 2022-2045 bel
 
 # Appendix B: Replication
 
-Scripts in the repository, run in this order: 64 (NUTS 2 exposure), 73 (export ratios by district), 74 (district loss), 78 and 79 (INKAR profile and analyses), 80 (GRW), 89 (imputation of suppressed districts), 90 (labour market regions), 86 (robustness), 87 (Gewerbesteuer), 88 (figures); tools/build_regional_paper.py builds this paper. Without the full model run, tools/scenario_from_site.py rebuilds the German sector output changes from the published site data; script 74 then reproduces the EUR 34.0 billion.
+Scripts in the repository, run in this order: 64 (NUTS 2 exposure), 73 (export ratios by district), 74 (district loss), 78 and 79 (INKAR profile and analyses), 80 (GRW), 89 (imputation of suppressed districts), 90 (labour market regions), 86 (robustness), 87 (Gewerbesteuer), 91 (decomposition), 88 (figures); tools/build_regional_paper.py builds this paper. Without the full model run, tools/scenario_from_site.py rebuilds the German sector output changes from the published site data; script 74 then reproduces the EUR 34.0 billion.
 
 # Appendix C: Districts in the top fifth under all variants
 

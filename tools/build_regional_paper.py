@@ -96,6 +96,18 @@ def tables(out, site):
                                   "Unemployment rate, %": [fmt(x["alq"], 1) for x in a],
                                   "Population in C areas, %": [fmt(x["share_c"], 0) for x in a],
                                   "Population in C or D areas, %": [fmt(x["share_cd"], 0) for x in a]}))
+    dc = json.load(open(out / "decomposition.json", encoding="utf-8"))
+    b = pd.DataFrame(dc["by_tariff_quintile"])
+    t["T_DECOMP"] = md(pd.DataFrame({"Quintile": b.q, "Districts": b.n, "Output loss, %": [fmt(x, 2) for x in b.s],
+                                     "Manufacturing sales per inhabitant, EUR thousand": [fmt(x, 1) for x in b.upc],
+                                     "GDP per head, EUR thousand": [fmt(x, 1) for x in b.gdp], "Median earnings, EUR": [fmt(x, 0) for x in b.inc],
+                                     "Unemployment rate, %": [fmt(x, 1) for x in b.alq], "SGB II rate, %": [fmt(x, 1) for x in b.sgb2],
+                                     "Population in C areas, %": [fmt(x, 0) for x in b.c]}))
+    t.update({"D_SBAR": fmt(dc["sbar_pct"], 2), "D_RHO": fmt(dc["rho_loss_bench"], 2), "D_VU": fmt(100 * dc["var_share_intensity"], 0),
+              "D_VS": fmt(100 * dc["var_share_tariff"], 0), "D_TOPB": fmt(100 * dc["top_fifth_share"]["benchmark"], 0),
+              "D_TOPT": fmt(100 * dc["top_fifth_share"]["tariff"], 0), "D_CB": fmt(100 * dc["loss_share_c"]["benchmark"], 1),
+              "D_CT": fmt(100 * dc["loss_share_c"]["tariff"], 1), "D_PALQ": fmt(dc["reg_s"]["alq"]["p"], 2),
+              "D_PSGB": fmt(dc["reg_s"]["sgb2"]["p"], 2), "D_INC": fmt(100 * dc["reg_s"]["ln_inc"]["b"], 0)})
     core = json.load(open(Path(site) / "kreise_robust.json", encoding="utf-8"))["core"]
     t["T_CORE"] = ", ".join(short(n) for n in core) + "."
     return t

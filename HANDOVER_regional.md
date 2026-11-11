@@ -59,6 +59,7 @@ decline or high SGB II rates.
 | 88_regional_paper_figures.py | four figures of the working paper (paper/figures_regional) |
 | 89_kreise_impute.py | imputes the 14 suppressed districts from Regierungsbezirk residuals (variant, not on the site) |
 | 90_amr.py | losses by BBSR labour market region (223), fig5, site data kreise_amr.json |
+| 91_decomposition.py | loss = manufacturing intensity x tariff intensity; uniform benchmark shock (fig6, table 7) |
 | tools/build_regional_paper.py | fills paper/regional_paper_template.md with result tables, builds md, HTML and PDF |
 | tools/scenario_from_site.py | rebuilds German scenario outputs from site/data/scenarios.json when the model cannot run |
 | regional.py | shared helpers, kreis_names() disambiguates duplicate names, rdb_kreise() reads 42111 panels |

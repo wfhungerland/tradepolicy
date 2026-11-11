@@ -597,6 +597,13 @@ inhabitant; most exposed fifth carries 47 % of the loss (districts 55 %), coeffi
 Top: Dingolfing-Landau (5,700), Wolfsburg (2,000), Baden-Baden, Ingolstadt, Frankfurt (Oder), Tuttlingen. Spearman with
 industry employment 0.58, GDP per head 0.54, earnings 0.50, unemployment -0.28; C areas: 6 % of the population in the
 top fifth, 44 % in the bottom fifth; 11 % of the loss in C areas.
+Decomposition (`91_decomposition.py`): loss per inhabitant = manufacturing sales per inhabitant x % output loss.
+ln-variance shares 69 % (intensity) and 31 % (tariff structure). Uniform benchmark shock (-1.65 % everywhere):
+rank correlation with the tariff loss 0.90; top fifth carries 45 % (tariffs 50 %); loss in C areas 13.1 % (12.5 %).
+Tariff intensity correlates with earnings 0.38, GDP per head 0.24, industry employment 0.17, unemployment +0.18,
+SGB II +0.23 (cities: median 1.69 % vs 1.46 %); with density and Land FE unrelated to unemployment (p = 0.50) and
+SGB II (p = 0.97), +4 % earnings per point (p < 0.001). The "strong regions" profile mostly reflects where German
+manufacturing is; the tariff structure adds concentration on export-intensive, high-earning cities.
 
 ## Services, critical raw materials, FDI (scripts 82-84, 2026-11-12)
 

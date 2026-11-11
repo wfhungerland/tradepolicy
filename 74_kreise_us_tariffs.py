@@ -32,10 +32,9 @@ from config import load_config
 ex = importlib.import_module("64_regional_exposure")
 
 
-def main(site=None):
-    cfg = load_config()
+def mix_shock(cfg, scenario="current_2026_08"):
+    """Manufacturing output change (%) by German NUTS 2 region, employment-weighted industry mix."""
     raw = cfg["data"]["scenarios"]
-    out = cfg["output"] / "kreise"
     s = rg.read_eurostat(raw / "regional" / "sbs_r_nuts2021.tsv.gz")
     s = s[(s.indic_sbs == "EMP_LOC_NR") & s.geo.str.match(r"^DE..$") & s.nace_r2.str.startswith("C") & s.nace_r2.isin(ex.NACE_ICIO)]
     s = s.sort_values("year").groupby(["geo", "nace_r2"]).tail(1)
@@ -46,9 +45,16 @@ def main(site=None):
         rows += [{"geo": r.geo, "sector": c, "emp": r.value / len(secs)} for c in secs]
     e = pd.DataFrame(rows)
     o = pd.read_csv(cfg["output"] / "scenarios" / "us_tariffs_output_all.csv")
-    o = o[(o.scenario == "current_2026_08") & (o.country == "DEU")][["sector", "output_pct"]]
+    o = o[(o.scenario == scenario) & (o.country == "DEU")][["sector", "output_pct"]]
     e = e.merge(o, on="sector", how="left")
-    m = (e.emp * e.output_pct).groupby(e.geo).sum() / e.groupby("geo").emp.sum()
+    return (e.emp * e.output_pct).groupby(e.geo).sum() / e.groupby("geo").emp.sum()
+
+
+def main(site=None):
+    cfg = load_config()
+    raw = cfg["data"]["scenarios"]
+    out = cfg["output"] / "kreise"
+    m = mix_shock(cfg)
     print("manufacturing mix shock by NUTS 2, %:", m.describe().round(2).loc[["min", "50%", "max"]].to_dict())
     k = pd.read_csv(out / "export_kreise.csv", dtype={"ags": str}).dropna(subset=["nuts3"])
     k["nuts2"] = k.nuts3.str[:4]

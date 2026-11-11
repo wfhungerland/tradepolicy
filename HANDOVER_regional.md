@@ -1,6 +1,6 @@
 # Handover: regional exposure work (districts, Kreise)
 
-State as of 2026-11-11, for a new chat that deepens the regional exposure analysis.
+State as of 2026-11-11 (updated after robustness and Gewerbesteuer work), for a new chat that deepens the regional exposure analysis.
 Read this file first, then the section "Regions" onward in results_strand3.md and HANDOVER.md
 (general working style, data locations, pitfalls).
 
@@ -54,7 +54,10 @@ decline or high SGB II rates.
 | 79_inkar_analyses.py | ten INKAR analyses (skilled labour, demography, municipal finances, votes, broadband, industrial decline, accessibility, migration, land use, poverty) and kreise_inkar_map.json |
 | 80_grw.py | GRW aid areas versus exposure |
 | 81_kreis_steckbrief.py | district profile, 31 indicators with median and rank |
-| regional.py | shared helpers, kreis_names() disambiguates duplicate names |
+| 86_kreise_robustness.py | seven downscaling and scenario variants versus the baseline (kreise_robust.json) |
+| 87_kreise_gewerbesteuer.py | Gewerbesteuer elasticity (district panel) and tax loss by district (kreise_gewst.json) |
+| tools/scenario_from_site.py | rebuilds German scenario outputs from site/data/scenarios.json when the model cannot run |
+| regional.py | shared helpers, kreis_names() disambiguates duplicate names, rdb_kreise() reads 42111 panels |
 | tools/server_fetch_kreise.py | Regionaldatenbank/Destatis downloads (run on the PC, --start, --destatis) |
 | tools/pc_fetch_osm.py | Overpass downloads (run on the PC) |
 
@@ -81,6 +84,25 @@ effects, method and data (formula), who loses (figure 1), rich industrial distri
 local business tax channel (table 2), double risks (table 3, 26 districts), little overlap with
 regional aid (table 4), limits, policy conclusions, references, English abstract
 (JEL F13, F14, R12, H71).
+
+## Done in the deepening chat (2026-11-11)
+
+- Robustness (86): results hold. Rank correlation with the baseline 0.87 to 1.00; 42 districts in the
+  top fifth under all seven variants; GRW, profile and Gewerbesteuer gaps barely move.
+- Gewerbesteuer (87): elasticity to district manufacturing sales about 0.2 (0.43 in the most industrial
+  third); tax loss 0.3 bn EUR a year (1.2 bn with elasticity 1), concentrated in rich places.
+- Site JSON files kreise_robust.json and kreise_gewst.json are written but not yet shown on the site.
+- Cloud rebuild without the model: WITS concordances answer 403 to cloud sessions, so
+  tools/scenario_from_site.py rebuilds the German sector outputs; 74 then reproduces 34.0 bn EUR.
+  Data for a fresh session: X:\kreise (rdb, mastr), X:\Regionen\inkar_2025.zip (district rows
+  extracted to inkar/inkar_2025_kreise.parquet, read as latin1), Eurostat sbs_r_nuts2021, GISCO NUTS 2021/2024,
+  Destatis 04-kreise.xlsx.
+
+## Waiting for the owner
+
+- PC downloads: 42111-04-02-4 again (2025 values), search "Gewerbesteuer" in the Regionaldatenbank,
+  Destatis 51000-0034 with --start 2008 (US share by Land, robustness variant and Länder section).
+- BA request (DATA_REQUESTS.md, section 1, plus short-time work by district 2025/26).
 
 ## Known limits (candidates for deepening)
 

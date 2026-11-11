@@ -109,3 +109,14 @@ def kreis_names(names, types):
     names, types = list(names), list(types)
     dup = {n for n in names if names.count(n) > 1}
     return [f"{n}, {'Stadt' if str(t).startswith('Kreisfreie') else 'Landkreis'}" if n in dup else n for n, t in zip(names, types)]
+
+
+def rdb_kreise(path):
+    """Regionaldatenbank 42111 flat CSV -> district panel (index ags, year; columns umsatz, ausl in EUR thousand)."""
+    d = pd.read_csv(path, sep=";", dtype=str, encoding="utf-8-sig")
+    d = d[d["1_variable_code"] == "KREISE"]
+    d["v"] = pd.to_numeric(d.value, errors="coerce")
+    p = d.pivot_table(index=["1_variable_attribute_code", "time"], columns="value_variable_label", values="v")
+    p = p.rename(columns={"Umsatz": "umsatz", "Auslandsumsatz": "ausl"})[["umsatz", "ausl"]]
+    p.index = p.index.set_names(["ags", "year"])
+    return p.rename(index=int, level="year")

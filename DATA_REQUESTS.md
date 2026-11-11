@@ -23,6 +23,12 @@ Energie bitte ich um folgende Tabelle:
 - Stichtage: jeweils 30. Juni, 2008 bis 2025
 - Format: CSV oder Excel, eine Zeile je Kreis, Abteilung und Stichtag
 
+Zusätzlich, für einen Abgleich mit der Entwicklung seit den US-Zöllen:
+
+- Merkmal: Kurzarbeiter (realisierte konjunkturelle Kurzarbeit) und Betriebe mit Kurzarbeit
+- Regionale Gliederung: alle Kreise und kreisfreien Städte
+- Zeitraum: monatlich, Januar 2024 bis aktueller Rand
+
 Geheimhaltete Felder bitte als gekennzeichnet ausweisen. Falls Abteilungen für einzelne
 Kreise nicht lieferbar sind, ist eine Zusammenfassung zu Abteilungsgruppen (z. B. 10-12,
 13-15, 16-18, 20-21, 22-23, 24-25, 26-27, 28, 29-30, 31-33) ebenfalls hilfreich.

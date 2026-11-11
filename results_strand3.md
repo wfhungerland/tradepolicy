@@ -557,6 +557,28 @@ US tariffs by district (`74_kreise_us_tariffs.py`): NUTS 2 manufacturing-mix sho
 -2.0 %) scaled by the district export ratio relative to its region. Manufacturing output change
 -0.3 to -3.5 % (median -1.5 %), about 34 bn EUR a year (establishments with 20+ employees). Most
 hit in % Jena, Landshut city, Oder-Spree; per inhabitant Regensburg city (3,440 EUR), Ludwigshafen, Rastatt.
+Robustness of the district allocation (`86_kreise_robustness.py`, one assumption changed at a time;
+regional totals stay fixed except under other scenarios). Rank correlation of the loss per inhabitant with
+the baseline: export ratio 2019 0.96, mean 2022-2024 0.99, no export-ratio scaling 0.92, half exports/half
+output 0.98, employment instead of sales 0.87, framework-deal scenario (Sept 2025, total 44.9 bn EUR)
+0.98, EU retaliation (28.3 bn) 1.00. Share of the baseline top fifth that stays in the top fifth: 69 % (employment)
+to 97 %. The profile holds in every variant: Spearman with industry employment 0.67 to 0.78, GDP per head
+0.46 to 0.49, unemployment -0.09 to -0.24; loss in GRW C areas 12 to 13 %, C or D 31 to 33 %; local business
+tax 1,140 to 1,270 EUR per inhabitant in the top fifth versus 600 to 690 in the bottom fifth. Double-risk
+districts: 18 to 26 per variant, 14 to 24 of them in the baseline list. 42 districts are in the top fifth in
+all seven sales-based variants (e.g. Salzgitter, Leverkusen, Ludwigshafen, Märkischer Kreis, Olpe, Gütersloh).
+Local business tax under the tariff shock (`87_kreise_gewerbesteuer.py`). Elasticity of Gewerbesteuer per
+inhabitant to the district's own manufacturing sales per inhabitant, district panel 2009-2023 with district
+and year effects: 0.24 (s.e. 0.05; population-weighted 0.18), first differences with two lags 0.17 (0.05),
+long difference 2010-12 to 2021-23 0.25 (0.07); by industry tercile 0.21, 0.17 and 0.43 (most industrial
+third). Year effects remove the national cycle; nationally Gewerbesteuer fell 21 % in 2009 with manufacturing
+sales down about 21 %, an elasticity near 1 that includes all sectors and second-round effects. Applied to
+the district output change (74): loss 0.3 bn EUR a year with the tercile elasticities (0.4 % of 73 bn EUR),
+1.2 bn EUR with elasticity 1. Most exposed fifth -6.6 EUR per inhabitant (-0.6 % of Gewerbesteuer, -0.4 % of
+tax capacity), least exposed -1.3 EUR. Largest per inhabitant Coburg city (-22 EUR), Landkreis München,
+Erlangen, Regensburg city; relative to tax capacity Erlangen, Regensburg city, Saalfeld-Rudolstadt (about
+-0.9 %). 11 % of the tax loss falls in GRW C areas, 29 % in C or D areas. The fiscal hit is small and
+concentrated in fiscally strong places.
 
 ## Services, critical raw materials, FDI (scripts 82-84, 2026-11-12)
 

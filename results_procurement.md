@@ -45,3 +45,14 @@ of origin, so granularity and supplier persistence cannot be measured with it.
 Next steps if pursued: special evaluations of the Vergabestatistik (volume and volatility
 including below-threshold contracts, by detailed buyer level); federal budget execution data for spending instead of awards; firm identifiers
 (Handelsregister) instead of name matching; sector price-change frequencies (e.g. PRISMA).
+
+## On hold (Wiedervorlage, 2026-11-11)
+
+Request to the BMWE procurement unit for special evaluations of the Vergabestatistik
+(§ 4(4) VergStatVO), parked by the owner. Draft (German, in the chat of 2026-11-11) asks for,
+quarterly from 2021, above and below thresholds: (1) number and volume by fine buyer level and
+contract type; (2) size distribution (value classes from 50k EUR; share of the largest 1 % and
+10 % of contracts); (3) distribution of bid counts by procedure, contract type and buyer level,
+volume share of single-bid awards; (4) SME awards by buyer level and value class; (5) if
+permitted, a list of above-threshold records with OJ notice number, value, buyer level and
+bid count to link with TED.

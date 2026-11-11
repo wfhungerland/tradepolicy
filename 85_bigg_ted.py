@@ -64,8 +64,13 @@ def fnum(x):
         return v if 0 < v < MAXV else None
     except Exception: return None
 
+FED = re.compile(r"\b(bundes\w*|bundeswehr|bundesrepublik|autobahn gmbh des bundes|die autobahn gmbh)\b|des bundes\b", re.I)
+
+def is_federal(name):
+    return isinstance(name, str) and bool(FED.search(name)) and not re.search(r"bundesland|land\s", name.lower()[:5])
+
 def level_legacy(t, form):
-    if "DEFENCE" in form: return "central"
+    if "DEFENCE" in form or form.startswith("F17") or form.startswith("F18"): return "central"
     if t in CENTRAL_LEGACY: return "central"
     if t in REGIONAL_LEGACY: return "regional_local"
     if t is None and "UTILITIES" in form or form.startswith("F06") or form.startswith("F21"):
@@ -147,6 +152,16 @@ def main(site=None):
     keys = set(zip(leg.pub_no, leg.pub_year))
     ef = load_eforms(keys)
     d = pd.concat([leg, ef], ignore_index=True)
+    d["ctype"] = d.ctype.fillna("").str.strip().str.lower()
+    # notice totals repeated in every award: >= 3 awards of one notice with the identical value
+    # are read as one notice total and split across the awards (e.g. BMG mask open-house 2020)
+    key = ["pub_no", "pub_year", "value"]
+    rep = d[d.value.notna()].groupby(key).value.transform("size")
+    d.loc[rep.index, "rep"] = rep
+    m = d.rep.fillna(1) >= 3
+    d.loc[m, "value"] = d.loc[m, "value"] / d.loc[m, "rep"]
+    d = d.drop(columns="rep")
+    d.loc[d.buyer.map(is_federal), "level"] = "central"  # federal agencies sometimes report another legal type
     d["date"] = pd.to_datetime(d["date"], errors="coerce")
     d["pubd"] = pd.to_datetime(d["pub"], errors="coerce")
     # award year: conclusion date if plausible, else publication date

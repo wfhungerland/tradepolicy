@@ -149,9 +149,16 @@ def run_month(ym, outdir):
             resp = urllib.request.urlopen(f"https://ted.europa.eu/packages/monthly/{ym}", timeout=600)
             n = 0
             with tarfile.open(fileobj=resp, mode="r|gz") as tf, open(path + ".tmp", "w") as f:
-                for m in tf:
-                    if not m.isfile() or not m.name.endswith(".xml"): continue
-                    raw = tf.extractfile(m).read()
+                def members(t):
+                    # some months hold daily .tar.gz packages instead of XML files
+                    for m in t:
+                        if not m.isfile(): continue
+                        if m.name.endswith(".tar.gz"):
+                            with tarfile.open(fileobj=t.extractfile(m), mode="r|gz") as inner:
+                                yield from members(inner)
+                        elif m.name.endswith(".xml"):
+                            yield t.extractfile(m).read()
+                for raw in members(tf):
                     try: recs = parse(raw)
                     except ET.ParseError: continue
                     for r in recs:

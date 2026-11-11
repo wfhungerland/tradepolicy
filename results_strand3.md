@@ -579,6 +579,14 @@ tax capacity), least exposed -1.3 EUR. Largest per inhabitant Coburg city (-22 E
 Erlangen, Regensburg city; relative to tax capacity Erlangen, Regensburg city, Saalfeld-Rudolstadt (about
 -0.9 %). 11 % of the tax loss falls in GRW C areas, 29 % in C or D areas. The fiscal hit is small and
 concentrated in fiscally strong places.
+Suppressed districts (`89_kreise_impute.py`): 14 districts lack 2024 values, 8 of them only foreign sales.
+The Regierungsbezirk (or Land) totals give their combined residual; sales of smaller districts are set to their
+secondary-sector value added (2022) times the Land median ratio of sales to that value added, the largest plant
+location takes the rest; foreign sales follow sales times the last own export ratio. Wolfsburg EUR 83 bn sales,
+Ingolstadt 49 bn, Böblingen 55 bn (published), Dingolfing-Landau 24 bn. National loss 38.1 instead of 34.0 bn EUR;
+per inhabitant Wolfsburg (13,600 EUR), Ingolstadt (6,300) and Dingolfing-Landau (5,700) lead. Rank correlation with
+the baseline 0.99; Gewerbesteuer loss 0.31 bn EUR. Working paper: paper/regional_paper.md (build with
+tools/build_regional_paper.py), placebo with next year's sales 0.08 (s.e. 0.05), 95 % band of the tax loss 0.19-0.42 bn.
 
 ## Services, critical raw materials, FDI (scripts 82-84, 2026-11-12)
 

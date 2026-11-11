@@ -109,6 +109,13 @@ def main(site=None):
     for c, el in (("central", k.el), ("uniform", b_lev), ("upper", 1.0)):
         k[f"dg_pc_{c}"] = el * k.dm / 100 * k.gwst_pc                 # EUR per inhabitant (negative = loss)
         k[f"dg_mio_{c}"] = k[f"dg_pc_{c}"] * k["pop"] / 1e6
+    imp = out / "us_tariffs_kreise_imputed.csv"
+    if imp.exists():                                   # tax loss including the 14 imputed districts (89)
+        x = pd.read_csv(imp, dtype={"ags": str}).set_index("ags").reindex(k.index)
+        k["dg_mio_imputed"] = k.el * x.dm / 100 * k.gwst_pc * k["pop"] / 1e6
+        print(f"tax loss with imputed districts: {k.dg_mio_imputed.sum():,.0f} EUR million;",
+              k.assign(n=u.name).dropna(subset=["dg_mio_imputed"])[x.imputed.reindex(k.index).fillna(False).astype(bool)]
+              .assign(pc=lambda z: z.dg_mio_imputed * 1e6 / z["pop"]).sort_values("pc")[["n", "pc"]].head(4).round(1).values.tolist())
     k["dg_pct"] = 100 * k.dg_pc_central / k.gwst_pc
     k["dg_stk_pct"] = 100 * k.dg_pc_central / k.stk_pc
     k = k.join(grw[["share_c", "share_cd", "double"]])
@@ -116,6 +123,8 @@ def main(site=None):
     v["q"] = pd.qcut(v.loss_pc, 5, labels=[1, 2, 3, 4, 5]).astype(int)
     w = lambda x, c: float(np.average(x[c], weights=x["pop"]))
     tot = {c: float(v[f"dg_mio_{c}"].sum()) for c in ("central", "uniform", "upper")}
+    if "dg_mio_imputed" in k:
+        tot["imputed"] = float(k.dg_mio_imputed.sum())
     # 95 % band of the central total from the tercile standard errors (tercile regressions on disjoint samples)
     part = v.groupby("t").apply(lambda x: (x.dm / 100 * x.gwst_pc * x["pop"] / 1e6).sum())
     se_tot = float(np.sqrt(sum((part[t] * st[t]) ** 2 for t in part.index)))

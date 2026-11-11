@@ -11,6 +11,8 @@ Variants (one assumption changed at a time):
              ratio (INKAR Industriequote 2023 x working-age population); removes productivity differences
   deal       sector shock of the September 2025 framework deals (scenario deal_2025_09)
   retal      sector shock with EU retaliation (scenario retaliation_eu)
+  imputed    baseline plus the 14 suppressed districts with sales and foreign sales imputed from the
+             residuals of the Regierungsbezirk totals (89_kreise_impute.py; used only if its output exists)
 For each variant: total loss, rank correlation with the baseline loss per inhabitant, overlap of the
 top fifth, Spearman correlations with the INKAR profile (industry employment, GDP per head, earnings,
 unemployment), share of the loss in GRW C and C/D areas, local business tax per inhabitant in the top
@@ -40,7 +42,8 @@ LABELS = {"base": ("Basis (Exportquote 2024)", "Baseline (export ratio 2024)"),
           "half_q": ("halb Export, halb Produktion", "Half exports, half output"),
           "emp": ("Beschäftigte statt Umsatz", "Employment instead of sales"),
           "deal": ("Szenario Rahmenabkommen Sept. 2025", "Scenario framework deals Sept 2025"),
-          "retal": ("Szenario mit EU-Gegenzöllen", "Scenario with EU retaliation")}
+          "retal": ("Szenario mit EU-Gegenzöllen", "Scenario with EU retaliation"),
+          "imputed": ("mit geschätzten Werten der 14 geheimen Kreise", "With imputed values for the 14 suppressed districts")}
 
 
 def downscale(k, m, q, u, mode="ratio"):
@@ -82,6 +85,10 @@ def main(site=None):
     v["emp"] = (-100 * l_e / u[2024].reindex(k.index), l_e)
     for key, sc in (("deal", "deal_2025_09"), ("retal", "retaliation_eu")):
         v[key] = downscale(k, k74.mix_shock(cfg, sc), q[2024].reindex(k.index), u[2024].reindex(k.index))
+    imp = out / "export_kreise_imputed.csv"
+    if imp.exists():
+        x = pd.read_csv(imp, dtype={"ags": str}).set_index("ags").reindex(k.index)
+        v["imputed"] = downscale(k, m0, x.q, x.U / 1000)
     lpc = pd.DataFrame({key: l * 1e6 / k["pop"] for key, (_, l) in v.items()})
     assert abs(v["base"][1].sum() - base.loss_mio.sum()) < 1, "baseline differs from 74"
 

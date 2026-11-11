@@ -3,7 +3,7 @@
 Question: can the stylised facts of Cox, Müller, Pasten, Schoenle and Weber ("Big G",
 JPE 2024) be reproduced for Germany? Data: all TED contract award notices with a buyer in
 Germany, 2016-2025 (legacy XML monthly packages via tools/ted_legacy_packages.py; eForms
-via the TED search API, tools/ted_eforms_api.py), about 750,000 awards in 490,000 notices.
+via the TED search API, tools/ted_eforms_api.py), 734,000 awards in 469,000 notices.
 Script: 85_bigg_ted.py; site tab "Beschaffung" (data/bigg_ted.json).
 
 Coverage: only contracts above EU thresholds; 35-90 bn EUR a year of award values

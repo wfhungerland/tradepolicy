@@ -34,6 +34,14 @@ Results:
 5. Composition (F5): services 38 %, works 37 %, supplies 25 % of the volume; construction
    (CPV 45) 33 %. The link to price stickiness needs external price-change frequencies.
 
-Next steps if pursued: Destatis Vergabestatistik micro data (FDZ) for below-threshold
-contracts; federal budget execution data for spending instead of awards; firm identifiers
+Vergabestatistik (VergStatVO as amended 12 May 2026): a business statistic run by Destatis on
+behalf of the BMWE, not an FDZ product. Federal authorities get statistical evaluations on request
+to the BMWE (§ 4(4)); research institutions get anonymised micro data via the BMWE (§ 5). It covers
+contracts from 50,000 EUR below the EU thresholds (Annex 8: buyer name and detailed level, CPV,
+value, procedure, date; bid counts voluntary) and above them (Annex 1: also bid counts and the
+OJ notice number, which links records to TED). Contractors appear only as SME yes/no and country
+of origin, so granularity and supplier persistence cannot be measured with it.
+
+Next steps if pursued: special evaluations of the Vergabestatistik (volume and volatility
+including below-threshold contracts, by detailed buyer level); federal budget execution data for spending instead of awards; firm identifiers
 (Handelsregister) instead of name matching; sector price-change frequencies (e.g. PRISMA).

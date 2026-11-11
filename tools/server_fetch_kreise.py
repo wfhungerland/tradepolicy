@@ -10,15 +10,15 @@ Runs on the Hetzner server (Python 3.10+, pandas). Two parts:
    Storage units (batteries) are included as energy source "Speicher".
 
 2. Regionaldatenbank Deutschland (GENESIS web service): needs a free account. Put the
-   credentials into the environment variables RDB_USER and RDB_PASSWORD (or an API token
-   into RDB_USER and leave RDB_PASSWORD empty) on the server; they never leave the server.
+   credentials into the environment variables GENESIS_USER and GENESIS_PASSWORD (or an API token
+   into GENESIS_USER and leave GENESIS_PASSWORD empty) on the server; they never leave the server.
    With --search TERM the script lists matching tables; with --tables CODE ... it downloads
    each table for all districts as flat CSV (ffcsv).
 
 Usage on the server:
   python3 server_fetch_kreise.py --out /srv/daten/claude-daten/kreise --mastr
-  RDB_USER=... RDB_PASSWORD=... python3 server_fetch_kreise.py --search Auslandsumsatz
-  RDB_USER=... RDB_PASSWORD=... python3 server_fetch_kreise.py --out /srv/daten/claude-daten/kreise --tables 42111-04-02-4 --start 1995
+  GENESIS_USER=... GENESIS_PASSWORD=... python3 server_fetch_kreise.py --search Auslandsumsatz
+  GENESIS_USER=... GENESIS_PASSWORD=... python3 server_fetch_kreise.py --out /srv/daten/claude-daten/kreise --tables 42111-04-02-4 --start 1995
   Destatis GENESIS-Online (own account): add --destatis, e.g. --destatis --tables 51000-0032 51000-0034 --start 2008
 """
 import argparse
@@ -126,9 +126,12 @@ BASE = RDB
 
 
 def rdb_post(path, data):
-    user, pw = os.environ.get("RDB_USER"), os.environ.get("RDB_PASSWORD", "")
+    # GENESIS_USER / GENESIS_PASSWORD: account of the Regionaldatenbank or, with --destatis, of
+    # Destatis GENESIS-Online (the old names RDB_USER / RDB_PASSWORD still work)
+    user = os.environ.get("GENESIS_USER") or os.environ.get("RDB_USER")
+    pw = os.environ.get("GENESIS_PASSWORD") or os.environ.get("RDB_PASSWORD", "")
     if not user:
-        sys.exit("set RDB_USER (and RDB_PASSWORD) on the server first")
+        sys.exit("set GENESIS_USER (and GENESIS_PASSWORD) first")
     req = urllib.request.Request(BASE + path, data=urllib.parse.urlencode(data).encode(), method="POST",
                                  headers={"username": user, "password": pw, "Content-Type": "application/x-www-form-urlencoded"})
     return urllib.request.urlopen(req, timeout=600).read()
@@ -173,7 +176,7 @@ def main():
     a.add_argument("--mastr", action="store_true")
     a.add_argument("--search")
     a.add_argument("--tables", nargs="*")
-    a.add_argument("--destatis", action="store_true", help="use GENESIS-Online of Destatis instead of the Regionaldatenbank (Destatis account in RDB_USER/RDB_PASSWORD)")
+    a.add_argument("--destatis", action="store_true", help="use GENESIS-Online of Destatis instead of the Regionaldatenbank (Destatis account in GENESIS_USER/GENESIS_PASSWORD)")
     a.add_argument("--start", type=int, help="first year for --tables (default: service default, often only recent years)")
     x = a.parse_args()
     out, work = Path(x.out), Path(x.work)

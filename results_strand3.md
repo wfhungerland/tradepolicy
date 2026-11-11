@@ -587,6 +587,11 @@ Ingolstadt 49 bn, Böblingen 55 bn (published), Dingolfing-Landau 24 bn. Nationa
 per inhabitant Wolfsburg (13,600 EUR), Ingolstadt (6,300) and Dingolfing-Landau (5,700) lead. Rank correlation with
 the baseline 0.99; Gewerbesteuer loss 0.31 bn EUR. Working paper: paper/regional_paper.md (build with
 tools/build_regional_paper.py), placebo with next year's sales 0.08 (s.e. 0.05), 95 % band of the tax loss 0.19-0.42 bn.
+Revision after panel review (2026-11-11): NUTS 2 clustered s.e. for all elasticities (levels 0.054 instead of
+0.047; placebo lead 0.08 becomes marginally significant, s.e. 0.037); band of the tax loss 0.18-0.43 bn with the
+larger s.e. Imputation test (89, published districts masked): large plant location median error 5 % in sales and
+8 % in loss per inhabitant (rank corr. 0.97); small districts 34 %; only foreign sales missing below 4 %. Paper:
+AfD association removed, tax loss presented as gross range 0.3-1.2 bn with fiscal equalisation discussed.
 
 ## Services, critical raw materials, FDI (scripts 82-84, 2026-11-12)
 

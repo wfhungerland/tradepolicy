@@ -15,11 +15,13 @@ Allocation within the group:
       none was ever published, the group residual ratio R_A / R_U).
 The imputed values are estimates; they are flagged and used as a robustness variant (86) and in
 the paper, not in the published site maps.
-Writes <output>/kreise/export_kreise_imputed.csv and us_tariffs_kreise_imputed.csv.
+Validation: published districts are masked and imputed with the same rule (function validate).
+Writes <output>/kreise/export_kreise_imputed.csv, us_tariffs_kreise_imputed.csv and impute_validation.csv.
 Usage: python 89_kreise_impute.py
 """
 import importlib
 
+import numpy as np
 import pandas as pd
 
 import regional as rg
@@ -29,6 +31,73 @@ i79 = importlib.import_module("79_inkar_analyses")
 k74 = importlib.import_module("74_kreise_us_tariffs")
 r86 = importlib.import_module("86_kreise_robustness")
 GROUP = {"03": 3, "05": 3, "06": 3, "08": 3, "09": 3}       # Länder with Regierungsbezirke: group = first 3 digits
+
+
+def impute(k, g, tot, gva, land_ratio, lastq):
+    """Fill sales U and foreign sales A of the districts of group g where A is missing (in place)."""
+    x = k[(k.grp == g) & k.A.isna()]
+    allx = k[k.grp == g]
+    RU = tot.loc[g, "Umsatz"] - allx.U.sum()
+    RA = tot.loc[g, "Auslandsumsatz"] - allx.A.sum()
+    mu = x.index[x.U.isna()]
+    if len(mu):
+        g_ = gva.reindex(mu)
+        big = g_.idxmax()
+        small = [a for a in mu if a != big]
+        est = g_[small] * land_ratio[g[:2]]
+        k.loc[small, "U"] = est
+        k.loc[big, "U"] = RU - est.sum()
+    ru_ratio = RA / (RU + x.U.drop(mu, errors="ignore").sum())
+    qt = lastq.reindex(x.index).fillna(ru_ratio)
+    w = k.loc[x.index, "U"] * qt
+    k.loc[x.index, "A"] = RA * w / w.sum()
+    return RU, RA
+
+
+def validate(k, tot, gva, land_ratio, m0):
+    """Mask published districts and impute them with the same rule; compare with the published values.
+    Test A (sales and foreign sales suppressed, never published): in each group without suppressed districts,
+    the district with the largest secondary value added is masked together with one other district.
+    Test B (only foreign sales suppressed): foreign sales of the district with the largest sales and of one other
+    district masked, their 2023 export ratios as last own ratios."""
+    base = k.copy()
+    dm0, l0 = r86.downscale(base, m0, base.A / base.U, base.U / 1000)
+    lpc0 = l0 * 1e6 / base["pop"]
+    rows = []
+    for g, x in base.groupby("grp"):
+        if x.A.isna().any() or len(x) < 3:
+            continue
+        big = gva.reindex(x.index).idxmax()
+        for s in x.index.drop(big):
+            t = base.copy()
+            t.loc[[big, s], ["U", "A"]] = float("nan")
+            impute(t, g, tot, gva, land_ratio, pd.Series(dtype=float))
+            _, l1 = r86.downscale(t, m0, t.A / t.U, t.U / 1000)
+            for a, role in ((big, "large"), (s, "small")):
+                rows.append({"test": "A", "role": "A " + role, "ags": a, "U": t.U[a] / base.U[a], "q": (t.A[a] / t.U[a]) / (base.A[a] / base.U[a]),
+                             "loss_pc": l1[a] * 1e6 / base["pop"][a] / lpc0[a], "lpc_true": lpc0[a], "lpc_hat": l1[a] * 1e6 / base["pop"][a]})
+        top = base.U.reindex(x.index).idxmax()
+        for s in x.index.drop(top):
+            t = base.copy()
+            t.loc[[top, s], "A"] = float("nan")
+            impute(t, g, tot, gva, land_ratio, k.q2023.reindex([top, s]))
+            _, l1 = r86.downscale(t, m0, t.A / t.U, t.U / 1000)
+            for a, role in ((top, "B large"), (s, "B small")):
+                rows.append({"test": "B", "role": role, "ags": a, "U": 1.0, "q": (t.A[a] / t.U[a]) / (base.A[a] / base.U[a]),
+                             "loss_pc": l1[a] * 1e6 / base["pop"][a] / lpc0[a], "lpc_true": lpc0[a], "lpc_hat": l1[a] * 1e6 / base["pop"][a]})
+    v = pd.DataFrame(rows)
+    summ = []
+    for (test, role), y in v.groupby(["test", "role"]):
+        r = {"test": test, "role": role, "n": len(y)}
+        for c in ("U", "q", "loss_pc"):
+            e = (y[c] - 1).abs().dropna()
+            if len(e):
+                r[f"{c}_mape"] = float(100 * e.median())
+                r[f"{c}_within25"] = float(100 * (e <= 0.25).mean())
+        if y.lpc_true.notna().any():
+            r["rho_loss_pc"] = float(y[["lpc_true", "lpc_hat"]].corr(method="spearman").iloc[0, 1])
+        summ.append(r)
+    return pd.DataFrame(summ)
 
 
 def main():
@@ -51,25 +120,15 @@ def main():
     gva = i79.get(d, "Anteil Bruttowertschöpfung Sekundärer Sektor", 2022) / 100 * i79.get(d, "Bruttoinlandsprodukt in 1000 Euro", 2022)
     ratio = (p.umsatz.xs(2022, level="year") / gva).dropna()
     land_ratio = ratio.groupby(ratio.index.str[:2]).median()
+    k["q2023"] = (p.ausl / p.umsatz).xs(2023, level="year").reindex(k.index)
+    val = validate(k.copy(), tot, gva, land_ratio, k74.mix_shock(cfg))
+    print("validation (median absolute error in %, share within 25 %):")
+    print(val.round(2).to_string(index=False))
+    val.round(4).to_csv(out / "impute_validation.csv", index=False)
     k["imputed"] = k.A.isna()
     rows = []
     for g, x in k[k.imputed].groupby("grp"):
-        allx = k[k.grp == g]
-        RU = tot.loc[g, "Umsatz"] - allx.U.sum()
-        RA = tot.loc[g, "Auslandsumsatz"] - allx.A.sum()
-        mu = x.index[x.U.isna()]
-        if len(mu):
-            g_ = gva.reindex(mu)
-            big = g_.idxmax()
-            small = [a for a in mu if a != big]
-            est = g_[small] * land_ratio[g[:2]]
-            k.loc[small, "U"] = est
-            k.loc[big, "U"] = RU - est.sum()
-            assert k.loc[big, "U"] > 0, f"negative remainder in group {g}"
-        ru_ratio = RA / (RU + x.U.drop(mu, errors="ignore").sum())
-        qt = lastq.reindex(x.index).fillna(ru_ratio)
-        w = k.loc[x.index, "U"] * qt
-        k.loc[x.index, "A"] = RA * w / w.sum()
+        RU, RA = impute(k, g, tot, gva, land_ratio, lastq)
         rows.append({"group": g, "districts": ", ".join(x.name), "residual_sales_bn": RU / 1e6, "residual_foreign_bn": RA / 1e6})
     print(pd.DataFrame(rows).round(2).to_string(index=False))
     k["q"] = k.A / k.U

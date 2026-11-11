@@ -48,7 +48,7 @@ def tables(out, site):
            ("Medianeinkommen", "Median full-time earnings, EUR per month", 0), ("Industriequote", "Industry employees per 100 aged 15-64", 1),
            ("Beschäftigte am AO mit akademischem Berufsabschluss", "Employees with university degree, %", 1),
            ("Arbeitslosenquote", "Unemployment rate, %", 1), ("Durchschnittsalter der Bevölkerung", "Mean age, years", 1),
-           ("pop_growth", "Population change 2013-2023, %", 1), ("Stimmenanteile AfD", "AfD party-list vote 2025, %", 1)]
+           ("pop_growth", "Population change 2013-2023, %", 1)]
     t["T_PROFILE"] = md(pd.DataFrame([[lab] + [fmt(v, d) for v in p[c]] for c, lab, d in ind],
                                      columns=["Indicator (population-weighted mean)"] + [f"Q{q}" for q in p.quintile]))
     e = pd.read_csv(out / "gewerbesteuer_elasticity.csv")
@@ -58,10 +58,10 @@ def tables(out, site):
            "tercile_2": "Levels, middle third", "tercile_3": "Levels, most industrial third"}
     rows = []
     for r in e.itertuples():
-        rows.append([lab[r.model], fmt(r.b, 3), fmt(r.se, 3), f"{r.n:,}"])
+        rows.append([lab[r.model], fmt(r.b, 3), fmt(r.se, 3), fmt(r.se_nuts2, 3), f"{r.n:,}"])
         if r.model == "placebo_lead":
-            rows.append(["Levels with next year's sales: next year (placebo)", fmt(r.b_lead, 3), fmt(r.se_lead, 3), f"{r.n:,}"])
-    t["T_ELAST"] = md(pd.DataFrame(rows, columns=["Model", "Elasticity", "Std. error", "Observations"]))
+            rows.append(["Levels with next year's sales: next year (placebo)", fmt(r.b_lead, 3), fmt(r.se_lead, 3), fmt(r.se_lead_nuts2, 3), f"{r.n:,}"])
+    t["T_ELAST"] = md(pd.DataFrame(rows, columns=["Model", "Elasticity", "Std. error, district clusters", "Std. error, NUTS 2 clusters", "Observations"]))
     g = json.load(open(out / "gewerbesteuer_summary.json", encoding="utf-8"))
     q = pd.DataFrame(g["by_quintile"])
     t["T_TAX"] = md(pd.DataFrame({"Quintile": q.q, "Gewerbesteuer 2023, EUR per inhabitant": [fmt(x, 0) for x in q.gwst_pc],

@@ -105,6 +105,9 @@ regional aid (table 4), limits, policy conclusions, references, English abstract
   extracted to inkar/inkar_2025_kreise.parquet, read as latin1), Eurostat sbs_r_nuts2021, GISCO NUTS 2021/2024,
   Destatis 04-kreise.xlsx.
 
+- Panel review (/review, 2026-11-11) priorities still open: validation with 2025/26 data, US share by Land,
+  net tax loss after fiscal equalisation by Land, results by labour market region, firm layer for the top ten.
+
 ## Waiting for the owner
 
 - PC downloads: 42111-04-02-4 again (2025 values), search "Gewerbesteuer" in the Regionaldatenbank,

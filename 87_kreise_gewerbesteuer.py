@@ -3,7 +3,7 @@
 Step 1, elasticity: how strongly does a district's Gewerbesteuer react to its own manufacturing
 sales? District panel 2009-2023: Gewerbesteuer per inhabitant (INKAR 2025, q_gewst_bev, EUR) and
 manufacturing sales per inhabitant (Regionaldatenbank 42111-04-02-4, establishments 20+).
-  levels   ln G_kt = b ln U_kt + district FE + year FE (s.e. clustered by district)
+  levels   ln G_kt = b ln U_kt + district FE + year FE (s.e. clustered by district; all models also by NUTS 2)
   lags     d ln G_kt = sum_j b_j d ln U_k,t-j (j = 0, 1, 2) + year FE (prepayments adjust with a lag)
   longdiff change 2010-12 -> 2021-23 with Land FE
   terciles levels model by tercile of the industry employment rate 2013 (INKAR Industriequote)
@@ -53,11 +53,6 @@ def panel(d, rdb):
     return p[(p.year >= 2009) & (p.year <= 2023)]
 
 
-def fit(f, data, vcov=None):
-    r = pf.feols(f, data=data, vcov=vcov or {"CRV1": "ags"})
-    return r.coef(), r.se(), int(r._N)
-
-
 def main(site=None):
     cfg = load_config()
     out = cfg["output"] / "kreise"
@@ -65,32 +60,39 @@ def main(site=None):
     p = panel(d, rg.rdb_kreise(cfg["data"]["scenarios"] / "kreise" / "rdb_42111-04-02-4.csv"))
     iq = i79.get(d, "Industriequote", 2013)
     p["t"] = p.ags.map(pd.qcut(iq, 3, labels=[1, 2, 3]).astype(float))
-    lev = p.dropna(subset=["lg", "lu"])
-    est = []
-    b, se, n = fit("lg ~ lu | ags + year", lev); est.append({"model": "levels", "b": b.lu, "se": se.lu, "n": n})
-    r = pf.feols("lg ~ lu | ags + year", data=lev, weights="pop", vcov={"CRV1": "ags"})
-    est.append({"model": "levels_popweighted", "b": float(r.coef().lu), "se": float(r.se().lu), "n": int(r._N)})
-    dl = p.dropna(subset=["d_lg", "d_lu", "d_lu_1", "d_lu_2"])
+    nuts2 = pd.read_csv(out / "us_tariffs_kreise.csv", dtype={"ags": str}).set_index("ags").nuts2
+    p["nuts2"] = p.ags.map(nuts2)
+    lev = p.dropna(subset=["lg", "lu", "nuts2"])
+    dl = p.dropna(subset=["d_lg", "d_lu", "d_lu_1", "d_lu_2", "nuts2"])
     dl = dl[(dl.d_lg.abs() < 1.5) & (dl.d_lu.abs() < 1)]               # drop extreme swings (reclassification, single plants)
-    r = pf.feols("d_lg ~ d_lu + d_lu_1 + d_lu_2 | year", data=dl, vcov={"CRV1": "ags"})
-    V = r._vcov
-    est.append({"model": "lags_sum", "b": float(r.coef().sum()), "se": float(np.sqrt(V.sum())), "n": int(r._N),
-                "b0": float(r.coef().d_lu), "b1": float(r.coef().d_lu_1), "b2": float(r.coef().d_lu_2)})
     a = lev[lev.year.between(2010, 2012)].groupby("ags")[["lg", "lu"]].mean()
     z = lev[lev.year.between(2021, 2023)].groupby("ags")[["lg", "lu"]].mean()
-    ld = (z - a).dropna().reset_index().assign(land=lambda x: x.ags.str[:2])
-    b, se, n = fit("lg ~ lu | land", ld, "hetero"); est.append({"model": "longdiff", "b": b.lu, "se": se.lu, "n": n})
+    ld = (z - a).dropna().reset_index().assign(land=lambda x: x.ags.str[:2], nuts2=lambda x: x.ags.map(nuts2)).dropna(subset=["nuts2"])
     p["lu_lead"] = p.groupby("ags").lu.shift(-1)
-    pl = p.dropna(subset=["lg", "lu", "lu_lead"])
-    r = pf.feols("lg ~ lu + lu_lead | ags + year", data=pl, vcov={"CRV1": "ags"})
-    est.append({"model": "placebo_lead", "b": float(r.coef().lu), "se": float(r.se().lu), "n": int(r._N),
-                "b_lead": float(r.coef().lu_lead), "se_lead": float(r.se().lu_lead)})
-    bt, st = {}, {}
-    for t in (1, 2, 3):
-        x = lev[lev.t == t]
-        b, se, n = fit("lg ~ lu | ags + year", x)
-        bt[t], st[t] = float(b.lu), float(se.lu)
-        est.append({"model": f"tercile_{t}", "b": b.lu, "se": se.lu, "n": n, "iq_mean": float(iq[iq.index.isin(x.ags)].mean())})
+    pl = p.dropna(subset=["lg", "lu", "lu_lead", "nuts2"])
+    # (model, formula, data, weights, own-district clustering); every model is also run with clusters by NUTS 2 region
+    specs = [("levels", "lg ~ lu | ags + year", lev, None, {"CRV1": "ags"}),
+             ("levels_popweighted", "lg ~ lu | ags + year", lev, "pop", {"CRV1": "ags"}),
+             ("lags_sum", "d_lg ~ d_lu + d_lu_1 + d_lu_2 | year", dl, None, {"CRV1": "ags"}),
+             ("longdiff", "lg ~ lu | land", ld, None, "hetero"),
+             ("placebo_lead", "lg ~ lu + lu_lead | ags + year", pl, None, {"CRV1": "ags"})]
+    specs += [(f"tercile_{t}", "lg ~ lu | ags + year", lev[lev.t == t], None, {"CRV1": "ags"}) for t in (1, 2, 3)]
+    est, bt, st = [], {}, {}
+    for name, f, data, w, vc in specs:
+        r1 = pf.feols(f, data=data, weights=w, vcov=vc)
+        r2 = pf.feols(f, data=data, weights=w, vcov={"CRV1": "nuts2"})
+        if name == "lags_sum":
+            row = {"b": float(r1.coef().sum()), "se": float(np.sqrt(r1._vcov.sum())), "se_nuts2": float(np.sqrt(r2._vcov.sum())),
+                   "b0": float(r1.coef().d_lu), "b1": float(r1.coef().d_lu_1), "b2": float(r1.coef().d_lu_2)}
+        else:
+            row = {"b": float(r1.coef().lu), "se": float(r1.se().lu), "se_nuts2": float(r2.se().lu)}
+        if name == "placebo_lead":
+            row.update(b_lead=float(r1.coef().lu_lead), se_lead=float(r1.se().lu_lead), se_lead_nuts2=float(r2.se().lu_lead))
+        if name.startswith("tercile"):
+            t = int(name[-1])
+            bt[t], st[t] = row["b"], max(row["se"], row["se_nuts2"])      # band uses the larger standard error
+            row["iq_mean"] = float(iq[iq.index.isin(data.ags)].mean())
+        est.append({"model": name, **row, "n": int(r1._N)})
     e = pd.DataFrame(est)
     print(e.round(3).to_string(index=False))
     e.round(4).to_csv(out / "gewerbesteuer_elasticity.csv", index=False)
@@ -125,7 +127,8 @@ def main(site=None):
     tot = {c: float(v[f"dg_mio_{c}"].sum()) for c in ("central", "uniform", "upper")}
     if "dg_mio_imputed" in k:
         tot["imputed"] = float(k.dg_mio_imputed.sum())
-    # 95 % band of the central total from the tercile standard errors (tercile regressions on disjoint samples)
+    # 95 % band of the central total from the tercile standard errors (larger of district and NUTS 2 clustering;
+    # tercile regressions on disjoint samples)
     part = v.groupby("t").apply(lambda x: (x.dm / 100 * x.gwst_pc * x["pop"] / 1e6).sum())
     se_tot = float(np.sqrt(sum((part[t] * st[t]) ** 2 for t in part.index)))
     tot["central_lo"], tot["central_hi"] = tot["central"] - 1.96 * se_tot, tot["central"] + 1.96 * se_tot

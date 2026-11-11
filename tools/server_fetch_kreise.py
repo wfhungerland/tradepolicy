@@ -19,6 +19,7 @@ Usage on the server:
   python3 server_fetch_kreise.py --out /srv/daten/claude-daten/kreise --mastr
   RDB_USER=... RDB_PASSWORD=... python3 server_fetch_kreise.py --search Auslandsumsatz
   RDB_USER=... RDB_PASSWORD=... python3 server_fetch_kreise.py --out /srv/daten/claude-daten/kreise --tables 42111-04-02-4 --start 1995
+  Destatis GENESIS-Online (own account): add --destatis, e.g. --destatis --tables 51000-0032 51000-0034 --start 2008
 """
 import argparse
 import io
@@ -34,6 +35,7 @@ from pathlib import Path
 
 MASTR_PAGE = "https://www.marktstammdatenregister.de/MaStR/Datendownload"
 RDB = "https://www.regionalstatistik.de/genesisws/rest/2020/"
+DESTATIS = "https://genesis.destatis.de/genesisWS/rest/2020/"     # GENESIS-Online of Destatis (own account)
 UNIT_FILES = re.compile(r"^Einheiten(Solar|Wind|Biomasse|Wasser|Verbrennung|Kernkraft|GeoSolarthermieGrubenKlaerschlammDruckentspannung|Stromspeicher)(_\d+)?\.xml$", re.IGNORECASE)
 FIELDS = {"Gemeindeschluessel", "EinheitBetriebsstatus", "Inbetriebnahmedatum", "DatumEndgueltigeStilllegung",
           "Bruttoleistung", "Energietraeger"}
@@ -120,11 +122,14 @@ def mastr(out, work):
     print("written", out / "mastr_kreis_jahr.csv")
 
 
+BASE = RDB
+
+
 def rdb_post(path, data):
     user, pw = os.environ.get("RDB_USER"), os.environ.get("RDB_PASSWORD", "")
     if not user:
         sys.exit("set RDB_USER (and RDB_PASSWORD) on the server first")
-    req = urllib.request.Request(RDB + path, data=urllib.parse.urlencode(data).encode(), method="POST",
+    req = urllib.request.Request(BASE + path, data=urllib.parse.urlencode(data).encode(), method="POST",
                                  headers={"username": user, "password": pw, "Content-Type": "application/x-www-form-urlencoded"})
     return urllib.request.urlopen(req, timeout=600).read()
 
@@ -142,7 +147,18 @@ def rdb_tables(out, codes, start=None):
         q = {"name": c, "area": "all", "format": "ffcsv", "compress": "false", "language": "de"}
         if start:
             q["startyear"] = str(start)             # otherwise the service returns only recent years
+        if BASE == DESTATIS:
+            q["job"] = "true"                       # large tables are prepared as a job; fetched below
         r = rdb_post("data/tablefile", q)
+        if r[:1] == b"{" and b'"Code":99' in r:      # job started: poll the result file
+            import json, time
+            jname = json.loads(r)["Status"]["Content"].split(":")[-1].strip().split()[0]
+            for _ in range(60):
+                time.sleep(30)
+                r = rdb_post("data/resultfile", {"name": jname, "area": "all", "format": "ffcsv", "compress": "false", "language": "de"})
+                if r[:1] != b"{":
+                    break
+                print("   waiting for job", jname)
         if r[:2] == b"PK":
             with zipfile.ZipFile(io.BytesIO(r)) as z:
                 r = z.read(z.namelist()[0])
@@ -157,9 +173,13 @@ def main():
     a.add_argument("--mastr", action="store_true")
     a.add_argument("--search")
     a.add_argument("--tables", nargs="*")
+    a.add_argument("--destatis", action="store_true", help="use GENESIS-Online of Destatis instead of the Regionaldatenbank (Destatis account in RDB_USER/RDB_PASSWORD)")
     a.add_argument("--start", type=int, help="first year for --tables (default: service default, often only recent years)")
     x = a.parse_args()
     out, work = Path(x.out), Path(x.work)
+    global BASE
+    if x.destatis:
+        BASE = DESTATIS
     work.mkdir(parents=True, exist_ok=True)
     if x.mastr:
         mastr(out, work)

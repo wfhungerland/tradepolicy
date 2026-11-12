@@ -70,8 +70,11 @@ locations, pitfalls).
    says outturn and plan are only partly comparable.
 3. Federal history is short (2024-2027). Older budget years (CSV and Haushaltsrechnung) would
    allow a federal time series and a film like Abb. 30.
-4. Special funds are not in the federal treemap; option: a toggle that adds them (Soll by
-   function is in the CSV chapters whose name starts with "Anlage").
+4. Done 2026-11-12: checkbox "mit Sondervermögen" in Abb. 33 adds the special funds in FUNDS
+   (87_bundeshaushalt.py), hatched; payments into funds and between them (10 bn a year from the
+   infrastructure fund to the climate fund) are netted out. EU own resources, EU pass-through funds,
+   NATO programme, agency budgets and pension reserves stay out. HR2024.xlsx has no fund chapters,
+   so 2024 has no funds.
 5. Other cuts: by Einzelplan (ministry) or by economic type (Gruppierungsplan: personnel,
    investment, transfers); comparison plan versus outturn per function.
 6. Done 2026-11-12: RENAME in 87_bundeshaushalt.py updates outdated names (251 Bürgergeld) and

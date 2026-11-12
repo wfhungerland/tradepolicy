@@ -61,6 +61,17 @@ locations, pitfalls).
    (2025: 133.6 bn, 2026: 169.7 bn, 2027: 177.6 bn). Negative plan items (global spending cuts)
    are not drawn and named in the source line.
 
+## Konjunkturmonitor (KM)
+
+Since 2026-11-12 the KM (repo wfhungerland/konjunkturmonitor) has a section "Staatsausgaben"
+(part Struktur, after "Staat"): COFOG shares and % of GDP as small multiples (Eurostat gov_10a_exp,
+fetched by the KM itself), spending by level (gov_10a_main), and two treemaps (chart type
+`treemap` in monitor/templates/index.html, monitor/build.py, monitor/downloads.py). The treemaps read
+data/static/staat_cofog_tree.json and data/static/bund_tree.json, written by tools/export_km.py from
+the site files cofog.json and bund.json. Refresh by hand once a year (new COFOG year, new budget):
+run 86_cofog.py and 87_bundeshaushalt.py, then
+`python tools/export_km.py <tradepolicy-site>/site/data <konjunkturmonitor>/data/static`, commit in the KM.
+
 ## Known limits and open ideas
 
 1. bundeshaushalt.de blocks automated downloads (bot protection); new budget years must be

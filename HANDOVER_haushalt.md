@@ -15,6 +15,8 @@ locations, pitfalls).
   the Konjunkturmonitor; nothing playful; Tufte principles (direct labels, no legends where
   avoidable, little non-data ink, finding in the title). Colour must carry meaning and stay
   consistent across charts.
+  Source lines grey (#595959) and smaller (12 px) than text in figures; controls as one text
+  line (chosen option dark, others grey, no frames).
 
 ## Where things are
 

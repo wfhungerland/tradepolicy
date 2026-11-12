@@ -19,6 +19,26 @@ warnings.filterwarnings("ignore")
 HAUPT_SHORT = {"0": "Allgemeine Dienste", "1": "Bildung, Forschung, Kultur", "2": "Soziale Sicherung, Familie, Arbeitsmarkt",
                "3": "Gesundheit, Umwelt, Sport", "4": "Wohnen, Städtebau, Raumordnung", "5": "Ernährung, Landwirtschaft",
                "6": "Energie, Wasser, Gewerbe", "7": "Verkehr, Nachrichtenwesen", "8": "Finanzwirtschaft"}
+# Upper functions that the function plan defines as one range (11-12, 18-19): drawn as one block
+MERGE = {"12": "11", "19": "18"}
+# Outdated or very long names of the function plan, replaced for display
+RENAME = {"251": "Bürgergeld nach dem SGB II (bis 2022 Arbeitslosengeld II)",
+          "259": "Sonstige Leistungen der Grundsicherung nach dem SGB II",
+          "018": "Versorgung und Beihilfen (ohne Bundeswehr und Finanzverwaltung)",
+          "038": "Versorgung und Beihilfen, Bundeswehrverwaltung",
+          "039": "Versorgung und Beihilfen der Soldatinnen und Soldaten",
+          "068": "Versorgung und Beihilfen, Finanzverwaltung",
+          "033": "Lasten durch ausländische Streitkräfte",
+          "114": "Weiterführende allgemeinbildende Schulen",
+          "14": "Förderung von Schülern, Studierenden und Weiterbildung",
+          "16": "Forschung und Entwicklung außerhalb der Hochschulen",
+          "167": "Internationale Forschungsorganisationen",
+          "22": "Sozialversicherung einschließlich Arbeitslosenversicherung",
+          "23": "Familienhilfe, Wohlfahrtspflege",
+          "24": "Soziale Entschädigung, Folgen von Krieg und politischen Ereignissen",
+          "249": "Sonstige Folgen von Krieg und politischen Ereignissen",
+          "26": "Kinder- und Jugendhilfe (ohne Kindertagesbetreuung)",
+          "28": "Sozialhilfe, Asylbewerberleistungen, Eingliederungshilfe"}
 
 def labels(pdf):
     """Function names from the Funktionenübersicht: code, name (possibly over several lines), then amounts."""
@@ -93,7 +113,7 @@ def main(src, site=None):
         ist[y] = agg; unmatched[y] = (miss, tot); special[y] = agg_sp
     years = sorted(set(ist) | set(soll))
     out = {"_meta": {"source": "bundeshaushalt.de (Haushaltsplan, Haushaltsrechnung)", "unit": "bn EUR"},
-           "years": [], "labels": {}, "haupt_short": HAUPT_SHORT}
+           "years": [], "labels": {}, "haupt_short": HAUPT_SHORT, "merge": MERGE}
     for y in years:
         kind = "Ist" if y in ist else ("Entwurf" if y in draft else "Soll")
         vals = ist[y] if y in ist else soll[y]
@@ -107,7 +127,7 @@ def main(src, site=None):
         print(y, kind, f"core {sum(vals.values()):.1f} bn; special funds and EU own resources {sum(special.get(y, {}).values()):.1f} bn")
     codes = {c for yy in out["years"] for c in yy["values"]} | {c for yy in out["years"] for c in yy["special"]}
     need = codes | {c[:2] for c in codes} | {c[:1] for c in codes}
-    out["labels"] = {c: lab.get(c) or lab.get(c[:2]) or lab.get(c[:1]) or c for c in sorted(need)}
+    out["labels"] = {c: RENAME.get(c) or lab.get(c) or lab.get(c[:2]) or lab.get(c[:1]) or c for c in sorted(need)}
     missing = [c for c in sorted(need) if not lab.get(c)]
     print("labels missing:", missing)
     txt = json.dumps(out, ensure_ascii=False, separators=(",", ":"))

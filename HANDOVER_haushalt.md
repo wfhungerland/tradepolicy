@@ -66,14 +66,15 @@ locations, pitfalls).
 1. bundeshaushalt.de blocks automated downloads (bot protection); new budget years must be
    downloaded by the owner into X:\Haushalt. Several PDFs arrived broken (*.part, 0 bytes);
    the CSV and XLSX files were intact and are all the script needs.
-2. Ist (2024, 2025) and Soll/Entwurf (2026, 2027) are mixed in one selector; differences
-   between them are partly planning versus outturn.
+2. Done 2026-11-12: Abb. 33 selector split into "Ergebnis (Ist)" and "Plan (Soll)"; source line
+   says outturn and plan are only partly comparable.
 3. Federal history is short (2024-2027). Older budget years (CSV and Haushaltsrechnung) would
    allow a federal time series and a film like Abb. 30.
 4. Special funds are not in the federal treemap; option: a toggle that adds them (Soll by
    function is in the CSV chapters whose name starts with "Anlage").
 5. Other cuts: by Einzelplan (ministry) or by economic type (Gruppierungsplan: personnel,
    investment, transfers); comparison plan versus outturn per function.
-6. Some function names in the function plan are outdated (e.g. "Arbeitslosengeld II" for
-   Bürgergeld); functions without own name take the name of the upper function.
+6. Done 2026-11-12: RENAME in 87_bundeshaushalt.py updates outdated names (251 Bürgergeld) and
+   shortens long ones; MERGE draws the range upper functions 11-12 and 18-19 as one block (bund.json
+   key "merge", used by bundTree). Functions without own name still take the upper function's name.
 7. COFOG is updated by Eurostat once a year; the quarterly workflow refreshes it.

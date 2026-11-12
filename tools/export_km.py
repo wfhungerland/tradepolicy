@@ -17,7 +17,7 @@ DIV_HUE = {"GF10": "#002060", "GF07": "#0070C0", "GF01": "#00B0F0", "GF04": "#51
            "GF03": "#D86DCD", "GF02": "#C00000", "GF08": "#47D359", "GF05": "#2E7D32", "GF06": "#595959"}
 HF_HUE = {"0": "#00B0F0", "1": "#7030A0", "2": "#002060", "3": "#0070C0", "4": "#595959", "5": "#47D359",
           "6": "#D86DCD", "7": "#51154A", "8": "#C00000"}
-HAUPT_EN = {"0": "General services", "1": "Education, research, culture", "2": "Social security, family, labour market",
+HAUPT_EN = {"9": "Not assigned", "0": "General services", "1": "Education, research, culture", "2": "Social security, family, labour market",
             "3": "Health, environment, sport", "4": "Housing, urban development, regional planning", "5": "Food, agriculture",
             "6": "Energy, water, trade and industry", "7": "Transport, communications", "8": "Public finance"}
 
@@ -42,44 +42,37 @@ def cofog(C):
             "labels": labels, "labels_en": labels_en, "hue": DIV_HUE}
 
 
+GRP_HUE = {"4": "#00B0F0", "5": "#C00000", "6": "#002060", "7": "#51154A", "8": "#47D359", "9": "#595959"}
+EPL_HUE = {"11": "#002060", "14": "#C00000", "60": "#595959", "32": "#7F7F7F", "12": "#51154A", "30": "#7030A0",
+           "15": "#0070C0", "17": "#D86DCD", "09": "#47D359", "23": "#2E7D32", "16": "#00B0F0"}
+GRP_EN = {"4": "Personnel", "5": "Material spending, military procurement, interest", "6": "Grants and subsidies (excluding investment)",
+          "7": "Construction", "8": "Other investment and investment grants", "9": "Special financing items"}
+VIEW_EN = {"fn": "Function", "grp": "Economic type", "epl": "Ministry"}
+
+
 def bund(B):
-    merge = B.get("merge", {})
-    codes = set()
-    steps = []
-    for Y in B["years"]:
-        kind = Y["kind"]
-        st = {"key": str(Y["year"]), "group": "Ist" if kind == "Ist" else "Soll",
-              "label": f"{Y['year']}" + (" Entwurf" if kind == "Entwurf" else ""),
-              "label_en": f"{Y['year']}" + (" draft" if kind == "Entwurf" else ""),
-              "kind": kind, "values": {c: v for c, v in Y["values"].items() if v > 0},
-              "negative": round(sum(v for v in Y["values"].values() if v < 0), 2)}
-        if Y.get("funds"):
-            alt = dict(Y["values"])
-            part = {}
-            for c, v in Y.get("transfer", {}).items():
-                alt[c] = alt.get(c, 0) - v
-            for d in Y["funds"].values():
-                for c, v in d.items():
-                    alt[c] = alt.get(c, 0) + v
-                    if v > 0: part[c] = part.get(c, 0) + v
-            st["alt"] = {"values": {c: round(v, 4) for c, v in alt.items() if v > 0},
-                         "part": {c: round(v, 4) for c, v in part.items()},
-                         "funds": {B["fund_names"].get(k, k): round(sum(d.values()), 2) for k, d in Y["funds"].items() if sum(d.values()) >= 0.05},
-                         "netted": round(Y.get("transfer_total", 0) + Y.get("transfer_funds", 0), 2)}
-            codes |= set(alt)
-        codes |= set(Y["values"])
-        steps.append(st)
-    parent, labels, labels_en = {}, {}, {}
-    for c in sorted(codes):
-        up = merge.get(c[:2], c[:2])
-        parent[c], parent[up], parent[c[0]] = up, c[0], ""
-    for c in parent:
-        lab = B["haupt_short"][c] if len(c) == 1 else B["labels"].get(c, c)
-        labels[c] = lab
-        labels_en[c] = HAUPT_EN[c] if len(c) == 1 else lab
+    views = []
+    for key, VW in B["views"].items():
+        steps = []
+        for Y in B["years"]:
+            kind = Y["kind"]
+            st = {"key": str(Y["year"]), "group": "Ist" if kind == "Ist" else "Soll", "kind": kind,
+                  "label": f"{Y['year']}" + (" Entwurf" if kind == "Entwurf" else ""),
+                  "label_en": f"{Y['year']}" + (" draft" if kind == "Entwurf" else ""),
+                  "values": {c: v for c, v in Y["v"][key].items() if v > 0}}
+            if Y.get("alt"):
+                st["alt"] = {"values": {c: v for c, v in Y["alt"][key].items() if v > 0}, "part": Y["part"][key],
+                             "funds": Y["funds"], "netted": Y["netted"]}
+            steps.append(st)
+        labels = dict(VW["labels"])
+        en = dict(labels)
+        if key == "fn": en.update({c: HAUPT_EN.get(c, labels[c]) for c in labels if len(c) == 1})
+        if key == "grp": en.update({c: GRP_EN.get(c, labels[c]) for c in labels if len(c) == 1})
+        hue = HF_HUE if key == "fn" else GRP_HUE if key == "grp" else EPL_HUE
+        views.append({"key": key, "label": VW["label"], "label_en": VIEW_EN[key], "steps": steps, "parent": VW["parent"],
+                      "labels": labels, "labels_en": en, "hue": hue, "light_rest": key == "epl"})
     return {"title": "Grundriss des Bundeshaushalts", "unit": "Mrd. EUR", "unit_en": "EUR bn",
-            "scale_area": False, "slider": False, "steps": steps, "parent": parent,
-            "labels": labels, "labels_en": labels_en, "hue": HF_HUE,
+            "scale_area": False, "slider": False, "views": views,
             "alt_label": "mit Sondervermögen", "alt_label_en": "with special funds",
             "part_label": "Sondervermögen", "part_label_en": "special funds"}
 
@@ -91,7 +84,7 @@ def main(site, km):
         txt = json.dumps(out, ensure_ascii=False, separators=(",", ":"))
         assert "NaN" not in txt
         (km / name).write_text(txt, encoding="utf-8")
-        print(name, len(out["steps"]), "steps,", len(out["parent"]), "codes,", f"{len(txt) / 1000:.0f} kB")
+        print(name, f"{len(txt) / 1000:.0f} kB")
 
 
 if __name__ == "__main__":

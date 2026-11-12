@@ -86,8 +86,11 @@ run 86_cofog.py and 87_bundeshaushalt.py, then
    infrastructure fund to the climate fund) are netted out. EU own resources, EU pass-through funds,
    NATO programme, agency budgets and pension reserves stay out. HR2024.xlsx has no fund chapters,
    so 2024 has no funds.
-5. Other cuts: by Einzelplan (ministry) or by economic type (Gruppierungsplan: personnel,
-   investment, transfers); comparison plan versus outturn per function.
+5. Done 2026-11-12: switch "Gliederung" in Abb. 33 and in the KM treemap: function, economic
+   type (Gruppierungsplan, names from the Gruppierungsübersicht of the Vorspann PDF; groups without
+   a name carry the upper group's name and number) and ministry (Einzelplan and Kapitel, names from
+   the budget CSV). bund.json now has views (parent, labels) and per year v/alt/part per view.
+   Open: comparison plan versus outturn per function.
 6. Done 2026-11-12: RENAME in 87_bundeshaushalt.py updates outdated names (251 Bürgergeld) and
    shortens long ones; MERGE draws the range upper functions 11-12 and 18-19 as one block (bund.json
    key "merge", used by bundTree). Functions without own name still take the upper function's name.

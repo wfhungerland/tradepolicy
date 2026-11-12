@@ -40,19 +40,36 @@ RENAME = {"251": "Bürgergeld nach dem SGB II (bis 2022 Arbeitslosengeld II)",
           "26": "Kinder- und Jugendhilfe (ohne Kindertagesbetreuung)",
           "28": "Sozialhilfe, Asylbewerberleistungen, Eingliederungshilfe"}
 
-def labels(pdf):
-    """Function names from the Funktionenübersicht: code, name (possibly over several lines), then amounts."""
+def labels(pdf, part="fn"):
+    """Names from an overview of the budget: code, name (possibly over several lines), then amounts.
+    part "fn": Funktionenübersicht; part "grp": Gruppierungsübersicht (expenditure groups 4-9).
+    Returns names by code and merges: codes of a two-digit range such as 11-12 or 51-54 -> first code."""
     txt = subprocess.run(["pdftotext", "-layout", str(pdf), "-"], capture_output=True, text=True).stdout
-    part = txt[txt.find("Gliederung der Einnahmen und Ausgaben nach Funktionen"):]
-    part = part[:part.find("Teil III")] if "Teil III" in part else part
-    out, cur, buf = {}, None, ""
+    if part == "fn":
+        part = txt[txt.find("Gliederung der Einnahmen und Ausgaben nach Funktionen"):]
+        part = part[:part.find("Teil III")] if "Teil III" in part else part
+    else:
+        hits = [m.start() for m in re.finditer(r"Teil I:\s+Gruppierungsübersicht", txt)]
+        if len(hits) < 2: return {}, {}
+        part = txt[hits[1]:]
+        part = part[part.find("Personalausgaben") - 40:]
+        end = part.find("ökonomischen Arten)")
+        part = part[:end] if end > 0 else part
+    out, merges, cur, buf = {}, {}, None, ""
     def close(code, text):
         name = re.split(r"\.{2,}|\s{3,}[\d-]", text)[0].strip().rstrip(".").strip()
-        name = re.sub(r"(\w)- (?!und\b|oder\b|sowie\b)([a-zäöü])", r"\1\2", re.sub(r"\s+", " ", name))  # undo line-break hyphens only
-        codes = [str(c) for c in range(int(code.split("-")[0]), int(code.split("-")[1]) + 1)] if "-" in code else [code]
+        name = re.sub(r"(\w)[-\u00ad] (?!und\b|oder\b|sowie\b)([a-zäöü])", r"\1\2", re.sub(r"\s+", " ", name))  # undo line-break hyphens only
+        name = name.replace("\u00ad", "")
+        if "-" in code:
+            a, b = code.split("-")
+            codes = [str(c).zfill(len(a)) for c in range(int(a), int(b) + 1)]
+            if len(a) == 2:
+                for c in codes[1:]: merges.setdefault(c, codes[0])
+        else:
+            codes = [code]
         for c in codes: out.setdefault(c, name)
     for line in part.splitlines():
-        m = re.match(r"^\s{0,12}(\d{1,3}(?:-\d{2})?)\s+([A-ZÄÖÜa-zäöü].*)$", line)
+        m = re.match(r"^\s{0,12}(\d{1,3}(?:-\d{2,3})?)\s+([A-ZÄÖÜa-zäöü].*)$", line)
         if m:
             cur, buf = m.group(1), m.group(2)
         elif cur and re.match(r"^\s{6,}\S", line):
@@ -61,7 +78,7 @@ def labels(pdf):
             continue
         if re.search(r"\.{2,}|\s{3,}[\d-]", buf):
             close(cur, buf); cur, buf = None, ""
-    return out
+    return out, merges
 
 # Special funds (Sondervermögen) whose spending the site can add to the core budget. Other "Anlage"
 # chapters stay out: EU own resources (6090) and EU market funds (1090) pass through, the NATO
@@ -83,42 +100,65 @@ def read_soll(path):
         rows = [dict(zip(head, x[:len(head)])) for x in r]
     return [x for x in rows if x["einahmen-ausgaben"] == "A"]
 
+GRP_SHORT = {"4": "Personal", "5": "Sachausgaben, militärische Beschaffung, Zinsen", "6": "Zuweisungen und Zuschüsse (ohne Investitionen)",
+             "7": "Baumaßnahmen", "8": "Sonstige Investitionen und Investitionsförderung", "9": "Besondere Finanzierungsausgaben"}
+GRP_RENAME = {"57": "Zinsen am Kreditmarkt", "681": "Renten und sonstige Geldleistungen an Personen", "688": "Abführung der Eigenmittel an die EU",
+              "636": "Zuweisungen an die Sozialversicherung und die Bundesagentur für Arbeit", "55": "Militärische Beschaffungen, Materialerhaltung, Wehrforschung",
+              "45": "Sonstige personalbezogene Ausgaben", "51": "Sächliche Verwaltungsausgaben",
+              "56": "Zinsausgaben an öffentlichen Bereich", "58": "Tilgungsausgaben an öffentlichen Bereich",
+              "61": "Allgemeine Zuweisungen an öffentlichen Bereich"}
+VIEWS = {"fn": "Funktion", "grp": "Ausgabenart", "epl": "Ressort"}
+
+def short_epl(t):
+    """Ministry without the common prefix: "Bundesministerium für Arbeit und Soziales" -> "Arbeit und Soziales"."""
+    m = re.match(r"^Bundesministerium (?:für |der |des )?(.*)$", t)
+    if not m: return t
+    r = m.group(1).replace(" und für ", " und ")
+    return {"Innern": "Inneres"}.get(r, r[0].upper() + r[1:])
+
+def clean(t):
+    t = re.sub(r'"+', '', t or "").strip()
+    return re.sub(r"\s*\(\d{4}\)$", "", t)
+
 def main(src, site=None):
     src = Path(src)
-    lab = {}
+    lab, glab, gmerge, fmerge = {}, {}, {}, {}
     for pdf in sorted(src.glob("Gesamtplan*.pdf")) + sorted(src.glob("Vorspann*.pdf")):
         if pdf.stat().st_size > 100000:
-            for k, v in labels(pdf).items(): lab.setdefault(k, v)
-    soll, fmap, special, spkap = {}, {}, {}, set()
-    funds, transfer, trf = {}, {}, {}  # funds[y][kapitel][function]; transfer[y][function] = core-budget payments to funds
-    draft = set()
+            a, m = labels(pdf, "fn")
+            for k, v in a.items(): lab.setdefault(k, v)
+            fmerge.update(m)
+            a, m = labels(pdf, "grp")
+            for k, v in a.items(): glab.setdefault(k, v)
+            gmerge.update(m)
+    fmerge = fmerge or MERGE
+    # records per year: kapitel, titel, function, value (bn EUR), category
+    #   core, fund (special fund in FUNDS), tcore (core payment to a fund), tfund (payment between funds), other (other "Anlage")
+    rec, kinds, fmap, eplname, kapname, spkap = {}, {}, {}, {}, {}, set()
     for y in range(2024, 2031):
         p = src / f"HH_{y}_ALL.csv"
+        kinds[y] = "Soll"
         if not p.exists():
             p = src / f"HH_{y}_RegE_ALL.csv"  # government draft (Regierungsentwurf)
-            if not p.exists(): continue
-            draft.add(y)
-        rows = read_soll(p)
-        core = defaultdict(float); sv = defaultdict(float)
-        fd = defaultdict(lambda: defaultdict(float)); tr = defaultdict(float)
+            if not p.exists(): kinds.pop(y); continue
+            kinds[y] = "Entwurf"
+        rows = read_soll(p); r = []
         for x in rows:
-            v = float(x["soll"] or 0) / 1e6  # 1,000 EUR -> bn EUR
-            fmap.setdefault(y, {})[(x["kapitel"], x["titel"])] = x["funktion"]
+            k, t, fn = x["kapitel"], x["titel"], x["funktion"]
+            fmap.setdefault(y, {})[(k, t)] = fn
+            eplname[k[:2]] = x["einzelplan-text"].strip(); kapname[k] = clean(x["kapitel-text"])
             sp = x["kapitel-text"].startswith("Anlage")
-            if sp: spkap.add(x["kapitel"])
-            (sv if sp else core)[x["funktion"]] += v
-            if TRANSFER.search(x["titel-text"]):
-                if not sp: tr[x["funktion"]] += v
-                elif x["kapitel"] in FUNDS: trf[y] = trf.get(y, 0) + v
-            elif x["kapitel"] in FUNDS: fd[x["kapitel"]][x["funktion"]] += v
-        soll[y] = core; special[y] = sv; funds[y] = fd; transfer[y] = tr
-    ist, unmatched = {}, {}
+            if sp: spkap.add(k)
+            tr = bool(TRANSFER.search(x["titel-text"]))
+            cat = ("tfund" if tr else "fund") if k in FUNDS else ("other" if sp else ("tcore" if tr else "core"))
+            r.append((k, t, fn, float(x["soll"] or 0) / 1e6, cat))
+        rec[y] = r
+    unmatched = {}
     for y in (2024, 2025, 2026):
         p = src / f"HR{y}.xlsx"
         if not p.exists(): continue
         ws = openpyxl.load_workbook(p).worksheets[0]
-        agg = defaultdict(float); agg_sp = defaultdict(float); miss = 0.0; tot = 0.0
-        fd = defaultdict(lambda: defaultdict(float)); tr = defaultdict(float); trf[y] = 0.0  # outturn replaces plan
+        r, miss, tot = [], 0.0, 0.0
         for e, k, t, z, v, _ in ws.iter_rows(min_row=2, values_only=True):
             if not t or v is None or not str(t).strip(): continue
             t = int(float(t))
@@ -126,49 +166,73 @@ def main(src, site=None):
             key = (f"{int(float(e)):02d}{int(float(k)):02d}", f"{t:05d}")
             fn = fmap.get(y, {}).get(key) or next((fmap[z2][key] for z2 in sorted(fmap) if key in fmap[z2]), None)
             v = float(v) / 1e9
-            isTr = bool(TRANSFER.search(str(z or "")))
-            if key[0] in spkap and key[0] in FUNDS and isTr: trf[y] = trf.get(y, 0) + v
-            if key[0] in spkap:  # special funds, EU own resources: kept apart
-                if fn: agg_sp[fn] += v
-                if fn and key[0] in FUNDS and not isTr: fd[key[0]][fn] += v
-                continue
-            if fn and isTr: tr[fn] += v
-            tot += v
-            if fn: agg[fn] += v
-            else: miss += v
-        ist[y] = agg; unmatched[y] = (miss, tot); special[y] = agg_sp; funds[y] = fd; transfer[y] = tr
-    years = sorted(set(ist) | set(soll))
+            tr = bool(TRANSFER.search(str(z or "")))
+            kk = key[0]
+            cat = ("tfund" if tr else "fund") if kk in FUNDS else ("other" if kk in spkap else ("tcore" if tr else "core"))
+            if cat in ("core", "tcore"):
+                tot += v
+                if not fn: miss += v
+            r.append((kk, key[1], fn or "999", v, cat))
+        rec[y] = r; kinds[y] = "Ist"; unmatched[y] = (miss, tot)
+    # one aggregation per view
+    def code(view, k, t, fn):
+        return fn if view == "fn" else (t[:3] if view == "grp" else k)
     out = {"_meta": {"source": "bundeshaushalt.de (Haushaltsplan, Haushaltsrechnung)", "unit": "bn EUR"},
-           "years": [], "labels": {}, "haupt_short": HAUPT_SHORT, "merge": MERGE, "fund_names": FUNDS}
-    for y in years:
-        kind = "Ist" if y in ist else ("Entwurf" if y in draft else "Soll")
-        vals = ist[y] if y in ist else soll[y]
-        out["years"].append({"year": y, "kind": kind, "values": {k: round(v, 4) for k, v in sorted(vals.items()) if abs(v) > 1e-4},
-                             "special": {k: round(v, 4) for k, v in sorted(special.get(y, {}).items()) if abs(v) > 1e-4},
-                             "total": round(sum(vals.values()), 2), "special_total": round(sum(special.get(y, {}).values()), 2),
-                             "funds": {k: {f: round(v, 4) for f, v in sorted(d.items()) if abs(v) > 1e-4} for k, d in sorted(funds.get(y, {}).items()) if sum(d.values()) > 1e-3},
-                             "transfer": {k: round(v, 4) for k, v in sorted(transfer.get(y, {}).items()) if abs(v) > 1e-4}})
+           "fund_names": FUNDS, "views": {}, "years": []}
+    used = {v: set() for v in VIEWS}
+    for y in sorted(rec):
+        has_f = any(c == "fund" for *_, c in rec[y])
+        Y = {"year": y, "kind": kinds[y], "v": {}, "alt": {} if has_f else None, "part": {} if has_f else None}
+        for view in VIEWS:
+            core, alt, part = defaultdict(float), defaultdict(float), defaultdict(float)
+            for k, t, fn, v, c in rec[y]:
+                cd = code(view, k, t, fn)
+                if c in ("core", "tcore"): core[cd] += v
+                if c in ("core", "fund"): alt[cd] += v
+                if c == "fund": part[cd] += v
+            r4 = lambda d: {a: round(b, 4) for a, b in sorted(d.items()) if abs(b) > 1e-4}
+            Y["v"][view] = r4(core); used[view] |= set(core)
+            if has_f:
+                Y["alt"][view] = r4(alt); Y["part"][view] = r4(part); used[view] |= set(alt)
+        tot = lambda cats: round(sum(v for *_, v, c in rec[y] if c in cats), 2)
+        Y.update(total=tot(("core", "tcore")), special_total=tot(("fund", "tfund", "other")),
+                 funds_total=tot(("fund",)) if has_f else 0, netted=round(tot(("tcore",)) + tot(("tfund",)), 2) if has_f else 0,
+                 negative=round(sum(v for v in Y["v"]["fn"].values() if v < 0), 2),
+                 funds={FUNDS[k]: round(s_, 2) for k in FUNDS if (s_ := sum(v for kk, _, _, v, c in rec[y] if kk == k and c == "fund")) >= 0.05} if has_f else {})
+        out["years"].append(Y)
         if y in unmatched:
-            m, t = unmatched[y]; print(y, kind, f"total {t:.1f} bn, without function {m:.2f} bn ({100*m/t:.2f} %)")
-        else:
-            pass
-        print(y, kind, f"core {sum(vals.values()):.1f} bn; special funds and EU own resources {sum(special.get(y, {}).values()):.1f} bn")
-    codes = {c for yy in out["years"] for c in yy["values"]} | {c for yy in out["years"] for c in yy["special"]}
-    for yy in out["years"]:
-        fsum = sum(v for d in yy["funds"].values() for v in d.values()); tsum = sum(yy["transfer"].values())
-        yy["funds_total"] = round(fsum, 2); yy["transfer_total"] = round(tsum, 2); yy["transfer_funds"] = round(trf.get(yy["year"], 0), 2)
-        print(yy["year"], "special funds", {k: round(sum(d.values()), 1) for k, d in yy["funds"].items()}, "transfers to funds", round(tsum, 2))
-    need = codes | {c[:2] for c in codes} | {c[:1] for c in codes}
-    out["labels"] = {c: RENAME.get(c) or lab.get(c) or lab.get(c[:2]) or lab.get(c[:1]) or c for c in sorted(need)}
-    missing = [c for c in sorted(need) if not lab.get(c)]
-    print("labels missing:", missing)
+            m, t_ = unmatched[y]; print(y, Y["kind"], f"total {t_:.1f} bn, without function {m:.2f} bn ({100*m/t_:.2f} %)")
+        print(y, Y["kind"], f"core {Y['total']:.1f} bn; special funds {Y['funds_total']:.1f} bn; netted {Y['netted']:.1f} bn; all Anlage chapters {Y['special_total']:.1f} bn")
+    # trees: parent and labels per view
+    fnp, fnl = {}, {}
+    for c in used["fn"]:
+        up = fmerge.get(c[:2], c[:2]); fnp[c], fnp[up], fnp[c[0]] = up, c[0], ""
+    for c in fnp:
+        fnl[c] = HAUPT_SHORT.get(c) if len(c) == 1 else (RENAME.get(c) or lab.get(c) or lab.get(c[:2]) or lab.get(c[:1]) or c)
+    fnl["999"] = "ohne Zuordnung"; fnp["999"] = "99"; fnp["99"] = "9"; fnp["9"] = ""; fnl["99"] = fnl["9"] = "ohne Zuordnung"
+    gp, gl = {}, {}
+    for c in used["grp"]:
+        up = gmerge.get(c[:2], c[:2]); gp[c], gp[up], gp[c[0]] = up, c[0], ""
+    for c in gp:
+        gl[c] = GRP_SHORT.get(c) if len(c) == 1 else (GRP_RENAME.get(c) or glab.get(c) or (glab.get(gp[c]) or GRP_RENAME.get(gp[c]) or GRP_SHORT.get(c[0], c)) + f" (Gruppe {c})" * (len(c) == 3))
+    ep, el = {}, {}
+    for c in used["epl"]:
+        ep[c], ep[c[:2]] = c[:2], ""
+    for c in ep:
+        el[c] = short_epl(eplname.get(c, c)) if len(c) == 2 else (FUNDS.get(c) or kapname.get(c, c))
+    out["views"] = {"fn": {"label": VIEWS["fn"], "parent": fnp, "labels": fnl},
+                    "grp": {"label": VIEWS["grp"], "parent": gp, "labels": gl},
+                    "epl": {"label": VIEWS["epl"], "parent": ep, "labels": el}}
+    print("group names missing:", sorted(c for c in gp if len(c) > 1 and not glab.get(c) and c not in GRP_RENAME))
+    print("function names missing:", sorted(c for c in fnp if len(c) > 1 and not lab.get(c) and c not in RENAME))
     txt = json.dumps(out, ensure_ascii=False, separators=(",", ":"))
     assert "NaN" not in txt
     Path("output").mkdir(exist_ok=True); open("output/bund.json", "w").write(txt)
     if site: open(Path(site) / "bund.json", "w").write(txt)
     y0 = out["years"][-1]
-    top = sorted(y0["values"].items(), key=lambda x: -x[1])[:8]
-    print("largest functions", y0["year"], [(c, out["labels"][c][:30], round(v, 1)) for c, v in top])
+    for view in VIEWS:
+        top = sorted(y0["v"][view].items(), key=lambda x: -x[1])[:6]
+        print(view, y0["year"], [(c, out["views"][view]["labels"].get(c, c)[:28], round(v, 1)) for c, v in top])
 
 if __name__ == "__main__":
     main(sys.argv[1], sys.argv[2] if len(sys.argv) > 2 else None)

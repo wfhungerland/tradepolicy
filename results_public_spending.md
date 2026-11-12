@@ -16,3 +16,14 @@ second-level groups for general government from 2000. Real values with the defla
 - Subsector values include transfers between levels; their sum exceeds the consolidated
   total by 14-24 % (1995-2024), so levels are shown side by side, never added.
 - 1995 includes the federal takeover of the Treuhand debt (about 130 bn EUR, economic affairs).
+
+## Federal budget by function (script 87, 2026-11-12)
+
+bundeshaushalt.de downloads in X:\Haushalt (budget CSV by title with function code, 2024-2026;
+budget accounts HR2024/HR2025 by title). Core budget: outturn 2024 474.8 bn EUR, outturn 2025
+495.7 bn EUR, plan 2026 524.5 bn EUR; special funds (climate and transformation fund, Bundeswehr
+fund and others) and EU own resources kept apart (2025 outturn 133.6 bn, 2026 plan 169.7 bn).
+Outturn titles mapped to functions via the budget CSV (unmatched below 0.05 %). Function names
+from the Funktionenübersicht of the budget overview PDF. Largest functions 2026 (plan): pension
+insurance 119 bn, armed forces 75 bn, debt 30 bn, basic income support 28 bn, health insurance 18 bn.
+Site: zoomable treemap "Grundriss des Bundeshaushalts" (main, upper, function).

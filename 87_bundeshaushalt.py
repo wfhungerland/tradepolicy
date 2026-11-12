@@ -1,7 +1,7 @@
 """Federal budget by function (Funktionenplan), for the site tab "Staatsausgaben".
 
 Inputs (folder given as argument, on the server X:\\Haushalt):
-  HH_<year>_ALL.csv  budget (Soll) by title with function code, bundeshaushalt.de download,
+  HH_<year>_ALL.csv  budget (Soll; HH_<year>_RegE_ALL.csv = government draft) by title with function code, bundeshaushalt.de download,
                      amounts in 1,000 EUR; chapters "Anlage ..." are the business plans of special
                      funds and the EU own resources and are kept apart from the core budget
   HR<year>.xlsx      budget outturn (Ist) by title, Haushaltsrechnung, EUR
@@ -56,9 +56,13 @@ def main(src, site=None):
         if pdf.stat().st_size > 100000:
             for k, v in labels(pdf).items(): lab.setdefault(k, v)
     soll, fmap, special, spkap = {}, {}, {}, set()
-    for y in (2024, 2025, 2026):
+    draft = set()
+    for y in range(2024, 2031):
         p = src / f"HH_{y}_ALL.csv"
-        if not p.exists(): continue
+        if not p.exists():
+            p = src / f"HH_{y}_RegE_ALL.csv"  # government draft (Regierungsentwurf)
+            if not p.exists(): continue
+            draft.add(y)
         rows = read_soll(p)
         core = defaultdict(float); sv = defaultdict(float)
         for x in rows:
@@ -91,7 +95,7 @@ def main(src, site=None):
     out = {"_meta": {"source": "bundeshaushalt.de (Haushaltsplan, Haushaltsrechnung)", "unit": "bn EUR"},
            "years": [], "labels": {}, "haupt_short": HAUPT_SHORT}
     for y in years:
-        kind = "Ist" if y in ist else "Soll"
+        kind = "Ist" if y in ist else ("Entwurf" if y in draft else "Soll")
         vals = ist[y] if y in ist else soll[y]
         out["years"].append({"year": y, "kind": kind, "values": {k: round(v, 4) for k, v in sorted(vals.items()) if abs(v) > 1e-4},
                              "special": {k: round(v, 4) for k, v in sorted(special.get(y, {}).items()) if abs(v) > 1e-4},

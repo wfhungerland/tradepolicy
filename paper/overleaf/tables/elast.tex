@@ -1,0 +1,37 @@
+\begingroup\small
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 8\tabcolsep) * \real{0.5306}}
+  >{\raggedleft\arraybackslash}p{(\columnwidth - 8\tabcolsep) * \real{0.1224}}
+  >{\raggedleft\arraybackslash}p{(\columnwidth - 8\tabcolsep) * \real{0.1020}}
+  >{\raggedleft\arraybackslash}p{(\columnwidth - 8\tabcolsep) * \real{0.1020}}
+  >{\raggedleft\arraybackslash}p{(\columnwidth - 8\tabcolsep) * \real{0.1429}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Model
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Elasticity
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Std. error, district clusters
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Std. error, NUTS 2 clusters
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Observations
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Levels, district and year effects & 0.239 & 0.047 & 0.054 & 5,777 \\
+Levels, population-weighted & 0.180 & 0.049 & 0.055 & 5,777 \\
+First differences, sum of lags 0 to 2 & 0.172 & 0.052 & 0.058 & 4,592 \\
+Long difference 2010-12 to 2021-23, Land effects & 0.249 & 0.066 & 0.081
+& 383 \\
+Levels with next year's sales: current year & 0.191 & 0.051 & 0.059 &
+5,384 \\
+Levels with next year's sales: next year (placebo) & 0.079 & 0.045 &
+0.037 & 5,384 \\
+Levels, least industrial third & 0.205 & 0.072 & 0.072 & 1,913 \\
+Levels, middle third & 0.173 & 0.062 & 0.055 & 1,980 \\
+Levels, most industrial third & 0.426 & 0.123 & 0.151 & 1,884 \\
+\end{longtable}
+\endgroup

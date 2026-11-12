@@ -110,6 +110,9 @@ regional aid (table 4), limits, policy conclusions, references, English abstract
 - Panel review (/review, 2026-11-11) priorities still open: validation with 2025/26 data, US share by Land,
   net tax loss after fiscal equalisation by Land, firm layer for the top ten (labour market regions done: 90).
 
+- Overleaf: tools/build_regional_paper.py also writes paper/overleaf (main.tex, tables/*.tex, figures, latexmkrc for
+  XeLaTeX); compiled locally without errors (16 pages). To be pushed to a separate paper repo for Overleaf GitHub sync.
+
 ## Waiting for the owner
 
 - PC downloads: 42111-04-02-4 again (2025 values), search "Gewerbesteuer" in the Regionaldatenbank,

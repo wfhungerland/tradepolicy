@@ -51,6 +51,10 @@ Each NUTS 2 region r receives the employment-weighted mean of the industry outpu
 <p class="formula">m<sub>r</sub> = &Sigma;<sub>s</sub> (L<sub>rs</sub> / L<sub>r</sub>) &middot; &Delta;Y<sub>s</sub>,</p>
 ```
 
+```{=latex}
+\[ m_r = \sum_s \frac{L_{rs}}{L_r}\,\Delta Y_s , \]
+```
+
 where L~rs~ is employment in manufacturing division s and ΔY~s~ the model's output change in per cent. Across the 38 German regions m~r~ ranges from −0.8 % to −2.0 % (median −1.7 %). Regions with metal, car and machinery industries lose most: Arnsberg (−2.0 %), Braunschweig (−2.0 %) and the Saarland (−1.9 %); Hamburg loses least (−0.8 %).
 
 ## 4.3 Allocation to districts
@@ -59,6 +63,10 @@ Within a region the industry mix of districts is not published. Districts theref
 
 ```{=html}
 <p class="formula">&Delta;Y<sub>k</sub> = m<sub>r</sub> &middot; q<sub>k</sub> / q<sub>r</sub>, &nbsp;&nbsp; V<sub>k</sub> = &minus;&Delta;Y<sub>k</sub> &middot; U<sub>k</sub>,</p>
+```
+
+```{=latex}
+\[ \Delta Y_k = m_r \, \frac{q_k}{q_r}, \qquad V_k = -\Delta Y_k \, U_k , \]
 ```
 
 where q~k~ is foreign over total sales of district k in 2024, q~r~ the same for its region, U~k~ manufacturing sales and V~k~ the output loss in euro. The scaling assumes that, given the regional mix, the loss is proportional to sales abroad. It keeps regional totals: summed over districts, the loss equals m~r~ times regional sales. Section 10 tests the assumption.
@@ -99,17 +107,21 @@ The loss per inhabitant is the product of two factors: manufacturing sales per i
 <p class="formula">V<sub>k</sub> / P<sub>k</sub> = (U<sub>k</sub> / P<sub>k</sub>) &middot; s<sub>k</sub>, &nbsp;&nbsp; s<sub>k</sub> = &minus;&Delta;Y<sub>k</sub>.</p>
 ```
 
+```{=latex}
+\[ \frac{V_k}{P_k} = \frac{U_k}{P_k}\, s_k, \qquad s_k = -\Delta Y_k . \]
+```
+
 Any shock proportional to manufacturing output would rank districts by the first factor alone. A benchmark makes this explicit (script 91): a uniform shock that lowers manufacturing output everywhere by the national average of {{D_SBAR}} % has the same total loss as the tariffs. Its ranking of districts by loss per inhabitant is almost identical to the tariff ranking (rank correlation {{D_RHO}}). In logarithms, manufacturing intensity accounts for {{D_VU}} % of the variance of the loss per inhabitant and the tariff-specific percentage shock for {{D_VS}} %.
 
-The profile of Table 1 therefore mostly describes where German manufacturing is. Figure 6 separates the two factors. Manufacturing intensity carries the strong link with industry employment (rank correlation 0.78) and the negative link with unemployment (−0.20). The tariff-specific shock s~k~ correlates only weakly with industry employment (0.17), more with earnings (0.38) and GDP per head (0.24), and slightly positively with unemployment (0.18) and the SGB II rate (0.23). The last two links reflect cities: the shock is larger in independent cities with high export ratios (median 1.69 % against 1.46 % in rural districts, rank correlation with density 0.36). With Land fixed effects and density as control, s~k~ is unrelated to unemployment and the SGB II rate (p = {{D_PALQ}} and {{D_PSGB}}), while one percentage point more output loss goes with {{D_INC}} % higher earnings (p < 0.001). Table 7 shows the raw profile by quintile of s~k~.
+The profile of Table 1 therefore mostly describes where German manufacturing is. Figure 4 separates the two factors. Manufacturing intensity carries the strong link with industry employment (rank correlation 0.78) and the negative link with unemployment (−0.20). The tariff-specific shock s~k~ correlates only weakly with industry employment (0.17), more with earnings (0.38) and GDP per head (0.24), and slightly positively with unemployment (0.18) and the SGB II rate (0.23). The last two links reflect cities: the shock is larger in independent cities with high export ratios (median 1.69 % against 1.46 % in rural districts, rank correlation with density 0.36). With Land fixed effects and density as control, s~k~ is unrelated to unemployment and the SGB II rate (p = {{D_PALQ}} and {{D_PSGB}}), while one percentage point more output loss goes with {{D_INC}} % higher earnings (p < 0.001). Table 2 shows the raw profile by quintile of s~k~.
 
-**Table 7: Districts by tariff intensity (quintiles of the percentage output loss)**
+**Table 2: Districts by tariff intensity (quintiles of the percentage output loss)**
 
 {{T_DECOMP}}
 
 Source: own calculations; BBSR (2025), INKAR. Manufacturing sales of establishments with 20 and more employees, 2024. Means weighted by population.
 
-![Figure 6: Rank correlations of the two factors of the loss per inhabitant with district characteristics. Blue: manufacturing sales per inhabitant, which alone ranks districts under a uniform shock; orange: the tariff-specific percentage output loss.](figures_regional/fig6_decomposition.png){width=80%}
+![Figure 4: Rank correlations of the two factors of the loss per inhabitant with district characteristics. Blue: manufacturing sales per inhabitant, which alone ranks districts under a uniform shock; orange: the tariff-specific percentage output loss.](figures_regional/fig6_decomposition.png){width=80%}
 
 What the tariff structure adds is concentration, not a different set of regions. Under the benchmark the most exposed fifth of districts carries {{D_TOPB}} % of the loss, under the tariffs {{D_TOPT}} %. The share of the loss in GRW C areas hardly changes ({{D_CB}} % under the benchmark, {{D_CT}} % under the tariffs). For policy this matters: the mismatch with regional aid is a property of German industrial geography, and it would arise for almost any shock to manufacturing.
 
@@ -131,27 +143,31 @@ To translate output into tax, the paper estimates the elasticity of Gewerbesteue
 <p class="formula">ln G<sub>kt</sub> = &beta; ln U<sub>kt</sub> + &alpha;<sub>k</sub> + &delta;<sub>t</sub> + &epsilon;<sub>kt</sub>,</p>
 ```
 
+```{=latex}
+\[ \ln G_{kt} = \beta \ln U_{kt} + \alpha_k + \delta_t + \varepsilon_{kt} , \]
+```
+
 with district effects α~k~ and year effects δ~t~, standard errors clustered by district. Year effects remove the national cycle, so β measures the response to a district-specific change in sales, which is the kind of variation the regional allocation of the tariff loss creates. The apportionment of the tax base by payroll is part of this reduced form.
 
-The elasticity is about 0.2 and stable across specifications (Table 2, Figure 4): 0.24 in levels, 0.18 with population weights, 0.17 for the sum of current and two lagged changes in first differences, and 0.25 in long differences between 2010-12 and 2021-23. In the most industrial third of districts it is 0.43, twice that of the other two thirds. With standard errors clustered by NUTS 2 region, which allows for regional shocks, all estimates stay significant; the standard error of the levels estimate rises from 0.047 to 0.054. In a placebo test next year's sales add 0.08 while the current-year coefficient stays at 0.19. The lead is insignificant with district clusters (standard error 0.045) and marginally significant with regional clusters (0.037), which fits persistent sales or anticipated changes; the current-year response is more than twice as large.
+The elasticity is about 0.2 and stable across specifications (Table 3, Figure 5): 0.24 in levels, 0.18 with population weights, 0.17 for the sum of current and two lagged changes in first differences, and 0.25 in long differences between 2010-12 and 2021-23. In the most industrial third of districts it is 0.43, twice that of the other two thirds. With standard errors clustered by NUTS 2 region, which allows for regional shocks, all estimates stay significant; the standard error of the levels estimate rises from 0.047 to 0.054. In a placebo test next year's sales add 0.08 while the current-year coefficient stays at 0.19. The lead is insignificant with district clusters (standard error 0.045) and marginally significant with regional clusters (0.037), which fits persistent sales or anticipated changes; the current-year response is more than twice as large.
 
-**Table 2: Elasticity of Gewerbesteuer to manufacturing sales, district panel 2009-2023**
+**Table 3: Elasticity of Gewerbesteuer to manufacturing sales, district panel 2009-2023**
 
 {{T_ELAST}}
 
 Source: BBSR (2025), INKAR; Regionaldatenbank 42111-04-02-4; own calculations. Standard errors clustered by district (long difference: heteroskedasticity-robust) and, as a check, by NUTS 2 region. First differences exclude changes of more than 150 % in tax and 100 % in sales.
 
-![Figure 4: Elasticity of Gewerbesteuer to manufacturing sales, all specifications, 95 % intervals.](figures_regional/fig4_elasticity.png){width=80%}
+![Figure 5: Elasticity of Gewerbesteuer to manufacturing sales, all specifications, 95 % intervals.](figures_regional/fig4_elasticity.png){width=80%}
 
 The district elasticity is far below the national one. In 2009 Gewerbesteuer fell by 21 % while manufacturing sales fell by about 21 %, an elasticity near one. A national shock lowers profits in all sectors, through demand and supply chains, and through firms' headquarters; a district-specific shock moves only the local plants' share of profits. Because the tariff shock is national, the district elasticity gives a lower bound and the national one an upper bound, and the upper bound is at least as plausible as the lower.
 
 ## 7.3 Tax loss
 
-Applying the tercile elasticities to the district output changes gives a tax loss of EUR 0.30 billion a year, 0.4 % of receipts (95 % band 0.18 to 0.43 billion, from the larger of the district and regional standard errors of the tercile estimates). A uniform elasticity of 0.24 gives 0.29 billion; an elasticity of one gives 1.2 billion. The loss rises from EUR 1.3 per inhabitant in the least to EUR 6.6 in the most exposed fifth (Table 3). With these elasticities even the most affected municipalities lose less than 1 % of their tax capacity, and with an elasticity of one about four times as much: Coburg city (EUR 22 per inhabitant), the district of Munich (20), Erlangen (18) and Regensburg city (17). Places with a high output loss but low current profits, such as Ludwigshafen, lose little tax. Of the tax loss 11 % falls in GRW C areas and 29 % in C or D areas. With the imputed districts the loss is EUR 0.31 billion; Böblingen, Wolfsburg and Dingolfing-Landau then lose EUR 16 to 20 per inhabitant.
+Applying the tercile elasticities to the district output changes gives a tax loss of EUR 0.30 billion a year, 0.4 % of receipts (95 % band 0.18 to 0.43 billion, from the larger of the district and regional standard errors of the tercile estimates). A uniform elasticity of 0.24 gives 0.29 billion; an elasticity of one gives 1.2 billion. The loss rises from EUR 1.3 per inhabitant in the least to EUR 6.6 in the most exposed fifth (Table 4). With these elasticities even the most affected municipalities lose less than 1 % of their tax capacity, and with an elasticity of one about four times as much: Coburg city (EUR 22 per inhabitant), the district of Munich (20), Erlangen (18) and Regensburg city (17). Places with a high output loss but low current profits, such as Ludwigshafen, lose little tax. Of the tax loss 11 % falls in GRW C areas and 29 % in C or D areas. With the imputed districts the loss is EUR 0.31 billion; Böblingen, Wolfsburg and Dingolfing-Landau then lose EUR 16 to 20 per inhabitant.
 
 These are gross figures; three mechanisms reduce the net loss of municipalities. A share of Gewerbesteuer goes to the federal government and the Länder as a levy on the tax base (Gewerbesteuerumlage), under a tenth of receipts at the usual municipal rates (Hebesätze) above 400 %. Lower tax capacity reduces the contributions that municipalities pay to their district (Kreisumlage) and, in some Länder, to equalisation funds. Municipalities below their fiscal need receive higher general grants (Schlüsselzuweisungen) under the fiscal equalisation of their Land, which replaces a large part of a loss in tax capacity. The exposed municipalities are often fiscally strong and receive few such grants, so they bear more of their loss than weaker places. Quantifying the net effect requires the equalisation rules of each Land and is left for further work.
 
-**Table 3: Gewerbesteuer loss by exposure quintile, central elasticities**
+**Table 4: Gewerbesteuer loss by exposure quintile, central elasticities**
 
 {{T_TAX}}
 
@@ -159,9 +175,9 @@ Source: own calculations. Tax capacity (Steuerkraft) as defined by INKAR, 2023.
 
 # 8 Regional aid and double risks
 
-The GRW, the joint federal-state programme for regional economic structure, supports investment in C areas (eligible under EU state aid rules) and, with lower rates, in D areas. In C areas live 17 % of the population, in C or D areas 42 %. They account for only 13 % and 32 % of the output loss. In the most exposed fifth of districts 8 % of the population lives in C areas, in the least exposed fifth 27 % (Table 4). Of the twelve districts with the highest loss per inhabitant only Oder-Spree is a C area.
+The GRW, the joint federal-state programme for regional economic structure, supports investment in C areas (eligible under EU state aid rules) and, with lower rates, in D areas. In C areas live 17 % of the population, in C or D areas 42 %. They account for only 13 % and 32 % of the output loss. In the most exposed fifth of districts 8 % of the population lives in C areas, in the least exposed fifth 27 % (Table 5). Of the twelve districts with the highest loss per inhabitant only Oder-Spree is a C area.
 
-**Table 4: Population in GRW aid areas by exposure quintile**
+**Table 5: Population in GRW aid areas by exposure quintile**
 
 {{T_GRW}}
 
@@ -173,7 +189,7 @@ On average the shock does not hit weak districts, but some combine a high loss w
 
 Districts are where plants are, not where all their workers live. Many plants draw commuters from neighbouring districts, so a district-level loss overstates the concentration of income losses. The BBSR groups the 400 districts into 223 labour market regions by commuting flows. Summing the losses (including the imputed districts) over these regions (script 90) gives a median loss of EUR 320 per inhabitant.
 
-The concentration falls but stays high. The most exposed fifth of labour market regions carries 47 % of the loss, against 55 % for the most exposed fifth of districts with the same data; the coefficient of variation of the loss per inhabitant falls from 1.9 to 1.1. The leading regions are Dingolfing-Landau (EUR 5,700 per inhabitant), Wolfsburg (2,000, seven districts), Baden-Baden (2,000), Ingolstadt (1,900), Frankfurt (Oder) with Oder-Spree (1,400) and Tuttlingen (1,300) (Figure 5).
+The concentration falls but stays high. The most exposed fifth of labour market regions carries 47 % of the loss, against 55 % for the most exposed fifth of districts with the same data; the coefficient of variation of the loss per inhabitant falls from 1.9 to 1.1. The leading regions are Dingolfing-Landau (EUR 5,700 per inhabitant), Wolfsburg (2,000, seven districts), Baden-Baden (2,000), Ingolstadt (1,900), Frankfurt (Oder) with Oder-Spree (1,400) and Tuttlingen (1,300) (Figure 6).
 
 **Table 6: Labour market regions by exposure to US tariffs (quintiles of loss per inhabitant)**
 
@@ -183,11 +199,11 @@ Source: BBSR (2025), INKAR and Raumgliederungen Referenz 2023; own calculations 
 
 The profile is the same as for districts, and in part sharper (Table 6). GDP per head rises from EUR 40 thousand in the least to 55 thousand in the most exposed fifth, unemployment falls from 7.5 % to 4.5 %. The rank correlation of the loss with industry employment is 0.58, with GDP per head 0.54, with earnings 0.50 and with unemployment −0.28. The overlap with regional aid is even smaller: 6 % of the population in the most exposed fifth of regions lives in C areas, 44 % in the least exposed fifth, and 11 % of the loss falls in C areas.
 
-![Figure 5: Output loss per inhabitant by labour market region, including imputed districts. Each district shows the value of its labour market region.](figures_regional/fig5_amr_map.png){width=60%}
+![Figure 6: Output loss per inhabitant by labour market region, including imputed districts. Each district shows the value of its labour market region.](figures_regional/fig5_amr_map.png){width=60%}
 
 # 10 Robustness
 
-The district allocation rests on assumptions that cannot be tested directly with published data. Eight variants change one assumption at a time (script 86; Table 5):
+The district allocation rests on assumptions that cannot be tested directly with published data. Eight variants change one assumption at a time (script 86; Table 7):
 
 1. Export ratio and sales of 2019, before Covid and the tariffs.
 2. Export ratio and sales averaged over 2022 to 2024.
@@ -198,7 +214,7 @@ The district allocation rests on assumptions that cannot be tested directly with
 7. The August 2026 schedule with EU retaliation.
 8. The baseline plus the 14 suppressed districts, imputed as in Section 5.
 
-**Table 5: Robustness of the district results**
+**Table 7: Robustness of the district results**
 
 {{T_ROBUST}}
 

@@ -105,3 +105,12 @@ regional aid (table 4), limits, policy conclusions, references, English abstract
 - Municipal finance scenario: Gewerbesteuer loss per district under the tariff shock.
 - Labour market: commuting zones (BBSR Arbeitsmarktregionen) instead of districts.
 - Paper version of the memo (methods appendix, robustness tables).
+
+## Site structure changed (2026-11-13)
+
+The site now has a module register (tradepolicy-site/registry/modules.json, overview MODULES.md,
+regenerate with registry/make_overview.py) and navigation by five areas. The regional tabs were split:
+"Kreise" holds the observed district maps (stable); the new sandbox tab "Betroffenheit"
+(#betroffenheit) holds the double-risk maps, the profile of exposed districts and the eleven INKAR
+analyses (renderKreiseMap, renderKreisProfile, renderKreise); in "Regionen" the model layers of the
+map (US tariffs, China stop, Red Sea, district tariff exposure) form a separate group in the layer list.

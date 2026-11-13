@@ -28,6 +28,7 @@ import re
 import sys
 import urllib.parse
 import urllib.request
+import urllib.error
 import xml.etree.ElementTree as ET
 import zipfile
 from collections import defaultdict
@@ -134,7 +135,12 @@ def rdb_post(path, data):
         sys.exit("set GENESIS_USER (and GENESIS_PASSWORD) first")
     req = urllib.request.Request(BASE + path, data=urllib.parse.urlencode(data).encode(), method="POST",
                                  headers={"username": user, "password": pw, "Content-Type": "application/x-www-form-urlencoded"})
-    return urllib.request.urlopen(req, timeout=600).read()
+    try:
+        return urllib.request.urlopen(req, timeout=600).read()
+    except urllib.error.HTTPError as e:
+        # show what the service says (e.g. unknown table, missing rights, wrong parameter)
+        body = e.read()[:800].decode("utf-8", "replace")
+        sys.exit(f"HTTP {e.code} from {BASE + path}\nparameters: { {k: v for k, v in data.items()} }\nanswer: {body}")
 
 
 def rdb_search(term):

@@ -573,3 +573,18 @@ hit in % Jena, Landshut city, Oder-Spree; per inhabitant Regensburg city (3,440 
 - FDI (OECD, BMD4): German outward stock 2024 2,126 bn EUR; US 396 bn (19 %), China 97 bn (5 %);
   since 2013 +144 % and +105 %. Net flows 2013-2024: US 134 bn, China 62 bn. Inward 2023 by
   ultimate investor: US 246 bn, China 14 bn EUR (immediate: 126 and 7 bn).
+
+## Foreign trade of the Länder (script 88, 2026-11-13)
+
+Destatis GENESIS-Online 51000-0032 (Land x partner) and 51000-0034 (Land x GP 2019 two digits),
+2008-2025 (2025 provisional), downloaded by the owner with tools/server_fetch_kreise.py --destatis
+into X:\kreise. Exports are assigned to the Land of production; 361 of 1,572 bn EUR German exports
+(2025) are goods of foreign origin without a Land. Land GDP from Eurostat nama_10r_2gdp (latest 2024).
+- Exports to the US in % of Land GDP (2024): Bremen 13.0, Baden-Württemberg 5.3, Saarland 5.2,
+  Bayern 3.6, Hamburg 3.4, Sachsen 3.1; lowest Berlin 0.8. US share of exports 2025: Bremen 16.6 %,
+  Hessen 13.5 %, Baden-Württemberg 12.7 %.
+- Highest China share of exports: Sachsen 9.0 % (down from 2019), Hamburg 8.4 %.
+- Product mix 2025: motor vehicles 52 % of Bremen's exports, 41 % of Sachsen's; other transport
+  equipment (aircraft) 46 % of Hamburg's.
+Site tab "Bundesländer": table with sparklines, dumbbells (shares 2019 vs 2025 for US, China,
+EU) and a heat table of the product mix.

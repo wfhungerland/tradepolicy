@@ -633,3 +633,12 @@ away from NRW (-34 %) and Niedersachsen (-33 %); rank correlation with the distr
 71231-01-03-4 (local taxes by district, 2016-2024): Gewerbesteuer 2024 EUR 76.5 bn, levy (Umlage) median 8.9 % of
 receipts. Elasticity to manufacturing sales, district and year effects, 2016-2024: gross 0.21 (s.e. 0.07),
 Grundbetrag (base before multipliers) 0.22 (0.08), net of levy 0.19 (0.07), confirming the INKAR estimate of about 0.2.
+Validation by product group (`93_validation_2025.py`, Destatis 51000-0036 exports to the US by Land and GP division,
+2019-2025): manufacturing exports to the US fell 9.1 % in 2025 (model, long run: -24 %). Cars -18.4 % (model -20.6 %),
+machinery -8.6 % (-18.8 %), chemicals -16.2 % (-11.2 %), other vehicles -42.3 % (-16.2 %); pharmaceuticals +12.8 %
+(model -39 %), metals +9.6 % (-80 %), metal products -0.6 % (-68 %). Spearman across 22 divisions -0.27 (2024-25),
++0.32 (2023-25), -0.09 without pharmaceuticals and metals; weighted correlation -0.53; 170 Land x division cells -0.15.
+Länder: the observed product mix predicts the Länder pattern (Spearman 0.56), the model does not (-0.46 to -0.66).
+Reading: the first year does not support the model's sector ranking; the largest misses are goods whose tariffs
+came late or were exempted in 2025 (pharmaceuticals, steel and aluminium derivatives) and aircraft. Cars, the
+dominant channel of the district results, match.

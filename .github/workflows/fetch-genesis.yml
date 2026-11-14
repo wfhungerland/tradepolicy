@@ -2,6 +2,8 @@
 # Secrets (repository settings > Secrets and variables > Actions), never in files:
 #   GENESIS_RDB_USER, GENESIS_RDB_PASSWORD             account of www.regionalstatistik.de
 #   GENESIS_DESTATIS_USER, GENESIS_DESTATIS_PASSWORD   account of genesis.destatis.de
+# Tables: 42111-04-02-4 manufacturing sales by district; 71231-01-03-4 local taxes by district (Gewerbesteuer
+# gross, levy, net, multipliers); 51000-0032 and 51000-0034 foreign trade by Land.
 # Results (public statistics, no credentials) are pushed to the branch data-genesis, folder data/genesis.
 name: GENESIS-Daten laden
 
@@ -32,9 +34,9 @@ jobs:
           if [ -z "$GENESIS_USER" ]; then echo "secret GENESIS_RDB_USER missing"; exit 1; fi
           mkdir -p data/genesis
           python tools/server_fetch_kreise.py --out data/genesis --work /tmp/work --tables 42111-04-02-4 --start 2009
+          python tools/server_fetch_kreise.py --out data/genesis --work /tmp/work --tables 71231-01-03-4 --start 2009 || true
           python tools/server_fetch_kreise.py --work /tmp/work --search Gewerbesteuer > data/genesis/search_gewerbesteuer.txt || true
           python tools/server_fetch_kreise.py --work /tmp/work --search Realsteuer > data/genesis/search_realsteuer.txt || true
-          python tools/server_fetch_kreise.py --work /tmp/work --search Auslandsumsatz > data/genesis/search_auslandsumsatz.txt || true
           cat data/genesis/search_*.txt
       - name: Destatis (exports by Land and partner country)
         continue-on-error: true
@@ -44,7 +46,7 @@ jobs:
         run: |
           if [ -z "$GENESIS_USER" ]; then echo "secret GENESIS_DESTATIS_USER missing"; exit 1; fi
           mkdir -p data/genesis
-          python tools/server_fetch_kreise.py --destatis --out data/genesis --work /tmp/work --tables 51000-0034 --start 2008
+          python tools/server_fetch_kreise.py --destatis --out data/genesis --work /tmp/work --tables 51000-0032 51000-0034 --start 2008
       - name: Push results to branch data-genesis
         run: |
           ls -la data/genesis 2>/dev/null || { echo "nothing downloaded"; exit 1; }

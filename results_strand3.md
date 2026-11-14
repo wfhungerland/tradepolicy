@@ -639,6 +639,6 @@ machinery -8.6 % (-18.8 %), chemicals -16.2 % (-11.2 %), other vehicles -42.3 % 
 (model -39 %), metals +9.6 % (-80 %), metal products -0.6 % (-68 %). Spearman across 22 divisions -0.27 (2024-25),
 +0.32 (2023-25), -0.09 without pharmaceuticals and metals; weighted correlation -0.53; 170 Land x division cells -0.15.
 Länder: the observed product mix predicts the Länder pattern (Spearman 0.56), the model does not (-0.46 to -0.66).
-Reading: the first year does not support the model's sector ranking; the largest misses are goods whose tariffs
-came late or were exempted in 2025 (pharmaceuticals, steel and aluminium derivatives) and aircraft. Cars, the
+Reading: the first year does not support the model's sector ranking; the largest misses are pharmaceuticals (plausibly front-loading
+before sector tariffs; not checked), metals (unexplained) and aircraft. Cars, the
 dominant channel of the district results, match.

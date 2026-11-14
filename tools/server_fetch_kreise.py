@@ -26,6 +26,7 @@ import io
 import os
 import re
 import sys
+import urllib.error
 import urllib.parse
 import urllib.request
 import xml.etree.ElementTree as ET
@@ -138,9 +139,17 @@ def rdb_post(path, data):
 
 
 def rdb_search(term):
-    r = rdb_post("find/find", {"term": term, "category": "tables", "pagelength": "50", "language": "de"})
     import json
-    for t in json.loads(r).get("Tables") or []:
+    try:
+        r = rdb_post("find/find", {"term": term, "category": "tables", "pagelength": "50", "language": "de"})
+    except urllib.error.HTTPError as e:            # print the service's answer instead of a traceback
+        print("search failed:", e.code, e.read()[:500].decode("utf-8", "replace"))
+        return
+    d = json.loads(r)
+    tables = d.get("Tables") or []
+    if not tables:
+        print("no tables found; service status:", json.dumps(d.get("Status"), ensure_ascii=False))
+    for t in tables:
         print(t.get("Code"), "|", t.get("Content"))
 
 
@@ -156,12 +165,17 @@ def rdb_tables(out, codes, start=None):
         if r[:1] == b"{" and b'"Code":99' in r:      # job started: poll the result file
             import json, time
             jname = json.loads(r)["Status"]["Content"].split(":")[-1].strip().split()[0]
-            for _ in range(60):
+            for _ in range(90):
                 time.sleep(30)
-                r = rdb_post("data/resultfile", {"name": jname, "area": "all", "format": "ffcsv", "compress": "false", "language": "de"})
+                try:
+                    r = rdb_post("data/resultfile", {"name": jname, "area": "all", "format": "ffcsv", "compress": "false", "language": "de"})
+                except urllib.error.HTTPError as e:    # 404 while the job is still being prepared
+                    if e.code != 404:
+                        raise
+                    r = b"{"
                 if r[:1] != b"{":
                     break
-                print("   waiting for job", jname)
+                print("   waiting for job", jname, flush=True)
         if r[:2] == b"PK":
             with zipfile.ZipFile(io.BytesIO(r)) as z:
                 r = z.read(z.namelist()[0])

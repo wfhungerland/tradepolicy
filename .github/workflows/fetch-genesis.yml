@@ -17,7 +17,7 @@ permissions:
 jobs:
   fetch:
     runs-on: ubuntu-latest
-    timeout-minutes: 60
+    timeout-minutes: 90
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -32,8 +32,9 @@ jobs:
           if [ -z "$GENESIS_USER" ]; then echo "secret GENESIS_RDB_USER missing"; exit 1; fi
           mkdir -p data/genesis
           python tools/server_fetch_kreise.py --out data/genesis --work /tmp/work --tables 42111-04-02-4 --start 2009
-          python tools/server_fetch_kreise.py --work /tmp/work --search Gewerbesteuer > data/genesis/search_gewerbesteuer.txt
-          python tools/server_fetch_kreise.py --work /tmp/work --search Realsteuer > data/genesis/search_realsteuer.txt
+          python tools/server_fetch_kreise.py --work /tmp/work --search Gewerbesteuer > data/genesis/search_gewerbesteuer.txt || true
+          python tools/server_fetch_kreise.py --work /tmp/work --search Realsteuer > data/genesis/search_realsteuer.txt || true
+          python tools/server_fetch_kreise.py --work /tmp/work --search Auslandsumsatz > data/genesis/search_auslandsumsatz.txt || true
           cat data/genesis/search_*.txt
       - name: Destatis (exports by Land and partner country)
         continue-on-error: true

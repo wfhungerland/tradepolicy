@@ -29,7 +29,7 @@ env:
   DESTATIS_TABLES: ${{ inputs.destatis_tables || '51000-0036' }}
   SEARCHES: ${{ inputs.searches || '' }}
   START: ${{ inputs.start || '2019' }}
-  PARAMS: ${{ inputs.params || 'classifyingvariable1=STLAH classifyingkey1=STLAH400' }}
+  PARAMS: ${{ inputs.params || 'classifyingvariable1=STLAH classifyingkey1=STLAH400 regionalvariable=DLANDX regionalkey=01,02,03,04,05,06,07,08,09,10,11,12,13,14,15,16' }}
 
 jobs:
   fetch:

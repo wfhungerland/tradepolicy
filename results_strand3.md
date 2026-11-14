@@ -620,3 +620,16 @@ manufacturing is; the tariff structure adds concentration on export-intensive, h
 - FDI (OECD, BMD4): German outward stock 2024 2,126 bn EUR; US 396 bn (19 %), China 97 bn (5 %);
   since 2013 +144 % and +105 %. Net flows 2013-2024: US 134 bn, China 62 bn. Inward 2023 by
   ultimate investor: US 246 bn, China 14 bn EUR (immediate: 126 and 7 bn).
+GENESIS via GitHub Actions (workflow fetch-genesis.yml, secrets in the repository, results on branch data-genesis,
+2026-11-14): 42111-04-02-4 still ends in 2024 (2025 not yet published). 51000-0032 (exports by Land and country,
+2008-2025): US share of German exports 7.6 % (2008), 9.6 % (2019), 10.9 % (2024), 9.7 % (2025); highest in Bremen
+(21.9 % in 2024), Baden-Württemberg (14.6 %), Saarland, Bayern; lowest Sachsen-Anhalt (4.1 %). US exports 2024-25:
+Hamburg -53 %, Bremen -31 %, Brandenburg -27 %, Baden-Württemberg -12 %, Hessen +27 %. Validation by Land (16):
+Spearman of the modelled % output loss with the change in US exports 2024-25 is +0.66 (with imputed districts +0.46),
+i.e. Länder with a larger modelled loss saw smaller falls in US exports: no support in the first year (short run,
+front-loading, aircraft and pharmaceuticals; the model is a long-run benchmark). US-share variant (`92_us_share_land.py`):
+scaling the NUTS 2 shock by the Land's US share moves the loss to Baden-Württemberg (+35 %), Bayern (+19 %) and Bremen,
+away from NRW (-34 %) and Niedersachsen (-33 %); rank correlation with the district baseline 0.93.
+71231-01-03-4 (local taxes by district, 2016-2024): Gewerbesteuer 2024 EUR 76.5 bn, levy (Umlage) median 8.9 % of
+receipts. Elasticity to manufacturing sales, district and year effects, 2016-2024: gross 0.21 (s.e. 0.07),
+Grundbetrag (base before multipliers) 0.22 (0.08), net of levy 0.19 (0.07), confirming the INKAR estimate of about 0.2.

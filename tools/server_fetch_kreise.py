@@ -162,6 +162,9 @@ def rdb_tables(out, codes, start=None):
         if BASE == DESTATIS:
             q["job"] = "true"                       # large tables are prepared as a job; fetched below
         r = rdb_post("data/tablefile", q)
+        if r[:1] == b"{" and b'"Code":98' in r:      # table too large for a direct call: start a background job
+            q["job"] = "true"
+            r = rdb_post("data/tablefile", q)
         if r[:1] == b"{" and b'"Code":99' in r:      # job started: poll the result file
             import json, time
             jname = json.loads(r)["Status"]["Content"].split(":")[-1].strip().split()[0]

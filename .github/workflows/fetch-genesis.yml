@@ -26,10 +26,11 @@ permissions:
 
 env:
   RDB_TABLES: ${{ inputs.rdb_tables || '' }}
-  DESTATIS_TABLES: ${{ inputs.destatis_tables || '51000-0036' }}
+  DESTATIS_TABLES: ${{ inputs.destatis_tables || '' }}
   SEARCHES: ${{ inputs.searches || '' }}
   START: ${{ inputs.start || '2019' }}
-  PARAMS: ${{ inputs.params || 'classifyingvariable1=STLAH classifyingkey1=STLAH400 regionalvariable=DLANDX regionalkey=01,02,03,04,05,06,07,08,09,10,11,12,13,14,15,16' }}
+  PARAMS: ${{ inputs.params || '' }}
+  US_BY_LAND: ${{ inputs.destatis_tables == '' && 'yes' || '' }}
 
 jobs:
   fetch:
@@ -78,7 +79,20 @@ jobs:
         env:
           GENESIS_USER: ${{ secrets.GENESIS_DESTATIS_USER }}
           GENESIS_PASSWORD: ${{ secrets.GENESIS_DESTATIS_PASSWORD }}
-        run: python tools/server_fetch_kreise.py --destatis --out data/genesis --work /tmp/work --tables $DESTATIS_TABLES --start $START --param $PARAMS
+        run: python tools/server_fetch_kreise.py --destatis --out data/genesis --work /tmp/work --tables $DESTATIS_TABLES --start $START ${PARAMS:+--param $PARAMS}
+      - name: Destatis exports to the US by Land and product group (51000-0036, one call per Land)
+        if: env.US_BY_LAND == 'yes'
+        continue-on-error: true
+        env:
+          GENESIS_USER: ${{ secrets.GENESIS_DESTATIS_USER }}
+          GENESIS_PASSWORD: ${{ secrets.GENESIS_DESTATIS_PASSWORD }}
+        run: |
+          for L in 01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16; do
+            python tools/server_fetch_kreise.py --destatis --out data/genesis --work /tmp/work --tables 51000-0036 --start 2019 \
+              --param classifyingvariable1=STLAH classifyingkey1=STLAH400 regionalvariable=DLANDX regionalkey=$L || true
+            mv data/genesis/rdb_51000-0036.csv data/genesis/rdb_51000-0036_US_$L.csv || true
+          done
+          rm -f data/genesis/rdb_51000-0036.csv
       - name: Push results to branch data-genesis
         run: |
           git config user.name "github-actions"

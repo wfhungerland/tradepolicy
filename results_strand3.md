@@ -642,3 +642,9 @@ Länder: the observed product mix predicts the Länder pattern (Spearman 0.56), 
 Reading: the first year does not support the model's sector ranking; the largest misses are pharmaceuticals (plausibly front-loading
 before sector tariffs; not checked), metals (unexplained) and aircraft. Cars, the
 dominant channel of the district results, match.
+Monthly check to August 2026 (`94_validation_monthly.py`, Destatis 51000-0008, exports to the US by HS chapter mapped
+to ICIO sectors; latest 12 months vs Sep 2023-Aug 2024): total -7.9 % (12 months from April 2025: -11.4 %). Cars -28.5 %
+(model -20.6 %), machinery -5.7 % (-18.8 %), pharmaceuticals +9.5 % (-39 %), chemicals -16.6 % (-11.2 %), other transport
+equipment -45.8 % (+19.7 %), metals +17.7 % (-80 %). Spearman across 18 sectors -0.37 (weighted -0.50), without
+pharmaceuticals and metals -0.31. The picture of the annual check holds 17 months after the tariffs: cars confirm the
+model and are even weaker, the sector ranking otherwise does not.

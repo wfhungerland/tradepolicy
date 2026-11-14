@@ -169,12 +169,13 @@ def rdb_catalogue(selection):
         print(t.get("Code"), "|", " ".join(str(t.get("Content", "")).split()))
 
 
-def rdb_tables(out, codes, start=None):
+def rdb_tables(out, codes, start=None, extra=None):
     out.mkdir(parents=True, exist_ok=True)
     for c in codes:
         q = {"name": c, "area": "all", "format": "ffcsv", "compress": "false", "language": "de"}
         if start:
-            q["startyear"] = str(start)             # otherwise the service returns only recent years
+            q["startyear"] = str(start)
+        q.update(extra or {})                           # e.g. classifyingvariable1=STLAH classifyingkey1=STLAH400             # otherwise the service returns only recent years
         if BASE == DESTATIS:
             q["job"] = "true"                       # large tables are prepared as a job; fetched below
         r = rdb_post("data/tablefile", q)
@@ -209,6 +210,7 @@ def main():
     a.add_argument("--mastr", action="store_true")
     a.add_argument("--search")
     a.add_argument("--catalogue", help="list tables by code pattern, e.g. 51000*")
+    a.add_argument("--param", nargs="*", default=[], help="extra service parameters key=value, e.g. classifyingvariable1=STLAH")
     a.add_argument("--tables", nargs="*")
     a.add_argument("--destatis", action="store_true", help="use GENESIS-Online of Destatis instead of the Regionaldatenbank (Destatis account in GENESIS_USER/GENESIS_PASSWORD)")
     a.add_argument("--start", type=int, help="first year for --tables (default: service default, often only recent years)")
@@ -225,7 +227,7 @@ def main():
     if x.catalogue:
         rdb_catalogue(x.catalogue)
     if x.tables:
-        rdb_tables(out, x.tables, x.start)
+        rdb_tables(out, x.tables, x.start, dict(p.split("=", 1) for p in x.param))
 
 
 if __name__ == "__main__":

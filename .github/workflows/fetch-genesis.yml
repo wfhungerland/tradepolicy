@@ -16,6 +16,7 @@ on:
       destatis_tables: {description: "Destatis tables", required: false, default: ""}
       searches: {description: "Destatis search terms (+ for blanks)", required: false, default: ""}
       start: {description: "First year", required: false, default: "2008"}
+      params: {description: "Extra parameters key=value", required: false, default: ""}
   push:
     branches: [claude/pensive-pascal-6pn12g]
     paths: [.github/workflows/fetch-genesis.yml, tools/server_fetch_kreise.py]
@@ -25,9 +26,10 @@ permissions:
 
 env:
   RDB_TABLES: ${{ inputs.rdb_tables || '' }}
-  DESTATIS_TABLES: ${{ inputs.destatis_tables || '' }}
-  SEARCHES: ${{ inputs.searches || '51000*' }}
-  START: ${{ inputs.start || '2008' }}
+  DESTATIS_TABLES: ${{ inputs.destatis_tables || '51000-0036' }}
+  SEARCHES: ${{ inputs.searches || '' }}
+  START: ${{ inputs.start || '2019' }}
+  PARAMS: ${{ inputs.params || 'classifyingvariable1=STLAH classifyingkey1=STLAH400' }}
 
 jobs:
   fetch:
@@ -76,7 +78,7 @@ jobs:
         env:
           GENESIS_USER: ${{ secrets.GENESIS_DESTATIS_USER }}
           GENESIS_PASSWORD: ${{ secrets.GENESIS_DESTATIS_PASSWORD }}
-        run: python tools/server_fetch_kreise.py --destatis --out data/genesis --work /tmp/work --tables $DESTATIS_TABLES --start $START
+        run: python tools/server_fetch_kreise.py --destatis --out data/genesis --work /tmp/work --tables $DESTATIS_TABLES --start $START --param $PARAMS
       - name: Push results to branch data-genesis
         run: |
           git config user.name "github-actions"

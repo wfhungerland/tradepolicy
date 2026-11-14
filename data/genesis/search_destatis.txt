@@ -1,0 +1,38 @@
+### 51000*
+51000-0001 | Aus- und Einfuhr (Außenhandel): Deutschland, Jahre
+51000-0002 | Aus- und Einfuhr (Außenhandel): Deutschland, Monate
+51000-0003 | Aus- und Einfuhr (Außenhandel): Deutschland, Jahre, Länder
+51000-0004 | Aus- und Einfuhr (Außenhandel): Deutschland, Monate, Länder
+51000-0005 | Aus- und Einfuhr (Außenhandel): Deutschland, Jahre, Warensystematik
+51000-0006 | Aus- und Einfuhr (Außenhandel): Deutschland, Monate, Warensystematik
+51000-0007 | Aus- und Einfuhr (Außenhandel): Deutschland, Jahre, Länder, Warensystematik
+51000-0008 | Aus- und Einfuhr (Außenhandel): Deutschland, Monate, Länder, Warensystematik
+51000-0009 | Aus- und Einfuhr (Außenhandel): Deutschland, Jahre, Land, Warenverzeichnis (4-/6-Steller)
+51000-0010 | Aus- und Einfuhr (Außenhandel): Deutschland, Jahre, Ware (4-/6-Steller), Länder
+51000-0011 | Aus- und Einfuhr (Außenhandel): Deutschland, Monate, Land, Warenverzeichnis (4-/6-Steller)
+51000-0012 | Aus- und Einfuhr (Außenhandel): Deutschland, Monate, Ware (4-/6-Steller), Länder
+51000-0013 | Aus- und Einfuhr (Außenhandel): Deutschland, Jahre, Warenverzeichnis (8-Steller)
+51000-0014 | Aus- und Einfuhr (Außenhandel): Deutschland, Monate, Warenverzeichnis (8-Steller)
+51000-0015 | Aus- und Einfuhr (Außenhandel): Deutschland, Jahre, Land, Warenverzeichnis (8-Steller)
+51000-0016 | Aus- und Einfuhr (Außenhandel): Deutschland, Jahre, Ware (8-Steller), Länder
+51000-0017 | Aus- und Einfuhr (Außenhandel): Deutschland, Monate, Land, Warenverzeichnis (8-Steller)
+51000-0018 | Aus- und Einfuhr (Außenhandel): Deutschland, Monate, Ware (8-Steller), Länder
+51000-0020 | Aus- und Einfuhr (kalender- und saisonbereinigt) (Außenhandel): Deutschland, Monate
+51000-0021 | Aus- und Einfuhr (kalender- und saisonbereinigt) (Außenhandel): Deutschland, Monate, Länder und Ländergruppen
+51000-0030 | Aus- und Einfuhr (Außenhandel): Bundesländer, Jahre
+51000-0031 | Aus- und Einfuhr (Außenhandel): Bundesländer, Monate
+51000-0032 | Aus- und Einfuhr (Außenhandel): Bundesländer, Jahre, Länder
+51000-0033 | Aus- und Einfuhr (Außenhandel): Bundesländer, Monate, Länder
+51000-0034 | Aus- und Einfuhr (Außenhandel): Bundesländer, Jahre, Warensystematik
+51000-0035 | Aus- und Einfuhr (Außenhandel): Bundesländer, Monate, Warensystematik
+51000-0036 | Aus- und Einfuhr (Außenhandel): Bundesländer, Jahre, Länder, Warensystematik
+51000-0037 | Aus- und Einfuhr (Außenhandel): Bundesländer, Monate, Länder, Warensystematik
+51000-0050 | Ein- u. Ausfuhr (Volumen) (Außenhandel): Deutschland, Jahre, Ländergruppen, Warengruppen (EGW 2002: 3-Steller)
+51000-0051 | Ein- u. Ausfuhr (Volumen) (Außenhandel): Deutschland, Monate, Ländergruppen, Warengruppen (EGW 2002: 3-Steller)
+51000-0052 | Ein- u. Ausfuhr (Volumen, Indizes) (Außenhandel): Deutschland, Jahre, Ländergruppen, Güterverzeichnis (GP 2-Steller)
+51000-0053 | Ein- u. Ausfuhr (Volumen, Indizes) (Außenhandel): Deutschland, Monate, Ländergruppen, Güterverzeichnis (GP 2-Steller)
+51000-0054 | Ein- u. Ausfuhr (Volumen, Indizes) (Außenhandel): Deutschland, Jahre, Ländergruppen, Main Industrial Groupings
+51000-0055 | Ein- u. Ausfuhr (Volumen, Indizes) (Außenhandel): Deutschland, Monate, Ländergruppen, Main Industrial Groupings
+51000-0056 | Ein- u. Ausfuhr (Volumen, Indizes) (Außenhandel): Deutschland, Monate, Ländergruppen, Internationales Warenverzeichnis für den Außenhandel (SITC 1-Steller)
+51000-0057 | Ein- u. Ausfuhr (Volumen, Indizes), Terms of Trade (Außenhandel): Deutschland, Jahre, Ländergruppen, Warengruppen (EGW 2002: 1-Steller)
+51000-0058 | Ein- u. Ausfuhr (Volumen, Indizes), Terms of Trade (Außenhandel): Deutschland, Monate, Ländergruppen, Warengruppen (EGW 2002: 1-Steller)

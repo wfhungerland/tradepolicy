@@ -1,0 +1,21 @@
+search failed: 500 <!doctype html>
+
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+
+  <title></title>
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+	<style>
+@font-face {
+  font-family   : 'Statis Sans';
+  src           : url( "/error/StatisSans-Regular.woff2" ) format( "woff2"    ),
+                  url( "/error/StatisSans-Regular.ttf"   ) format( "truetype" );
+  font-weight   : 400;
+  font-style    : normal;
+}
+@font-face {
+  font-family   : 'Statis Sans';
+  src  

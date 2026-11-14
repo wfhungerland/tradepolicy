@@ -153,6 +153,22 @@ def rdb_search(term):
         print(t.get("Code"), "|", t.get("Content"))
 
 
+def rdb_catalogue(selection):
+    """List tables whose code matches selection (e.g. 51000*), via catalogue/tables."""
+    import json
+    try:
+        r = rdb_post("catalogue/tables", {"selection": selection, "area": "all", "pagelength": "1000", "language": "de"})
+    except urllib.error.HTTPError as e:
+        print("catalogue failed:", e.code, e.read()[:300].decode("utf-8", "replace"))
+        return
+    d = json.loads(r)
+    rows = d.get("List") or []
+    if not rows:
+        print("no tables; service status:", json.dumps(d.get("Status"), ensure_ascii=False))
+    for t in rows:
+        print(t.get("Code"), "|", " ".join(str(t.get("Content", "")).split()))
+
+
 def rdb_tables(out, codes, start=None):
     out.mkdir(parents=True, exist_ok=True)
     for c in codes:
@@ -192,6 +208,7 @@ def main():
     a.add_argument("--work", default="/srv/daten/tmp")
     a.add_argument("--mastr", action="store_true")
     a.add_argument("--search")
+    a.add_argument("--catalogue", help="list tables by code pattern, e.g. 51000*")
     a.add_argument("--tables", nargs="*")
     a.add_argument("--destatis", action="store_true", help="use GENESIS-Online of Destatis instead of the Regionaldatenbank (Destatis account in GENESIS_USER/GENESIS_PASSWORD)")
     a.add_argument("--start", type=int, help="first year for --tables (default: service default, often only recent years)")
@@ -205,6 +222,8 @@ def main():
         mastr(out, work)
     if x.search:
         rdb_search(x.search)
+    if x.catalogue:
+        rdb_catalogue(x.catalogue)
     if x.tables:
         rdb_tables(out, x.tables, x.start)
 

@@ -26,7 +26,7 @@ permissions:
 env:
   RDB_TABLES: ${{ inputs.rdb_tables || '' }}
   DESTATIS_TABLES: ${{ inputs.destatis_tables || '' }}
-  SEARCHES: ${{ inputs.searches || '51000* Außenhandel' }}
+  SEARCHES: ${{ inputs.searches || '51000*' }}
   START: ${{ inputs.start || '2008' }}
 
 jobs:
@@ -66,7 +66,8 @@ jobs:
           for s in $SEARCHES; do
             t="${s//+/ }"
             echo "### $t" >> data/genesis/search_destatis.txt
-            python tools/server_fetch_kreise.py --destatis --work /tmp/work --search "$t" >> data/genesis/search_destatis.txt || true
+            if [[ "$t" == *"*" ]]; then opt=--catalogue; else opt=--search; fi
+            python tools/server_fetch_kreise.py --destatis --work /tmp/work $opt "$t" >> data/genesis/search_destatis.txt || true
           done
           cat data/genesis/search_destatis.txt
       - name: Destatis tables
